@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "products": "Sản phẩm",
+    "handbook": "Cẩm nang",
+    "news": "Tin tức",
+    "catalogue": "Thư viện ảnh",
+    "recruitment": "Tuyển dụng",
+    "contact": "Liên hệ"
+  },
+  "header": {
+    "consultBuy": "Tư vấn mua hàng",
+    "slogan": "Công nghệ USA - Chất lượng vượt trội",
+    "companyName": "Công ty CP Công nghệ Sinh học Thú y",
+    "searchPlaceholder": "Tìm kiếm...",
+    "allProducts": "Tất cả sản phẩm"
+  },
+  "common": {
+    "readMore": "Xem thêm",
+    "viewAll": "Xem tất cả",
+    "discover": "Khám phá",
+    "readNews": "Đọc bản tin",
+    "loading": "Đang tải...",
+    "search": "Tìm kiếm",
+    "backHome": "Về trang chủ"
+  },
+  "home": {
+    "about": {
+      "eyebrow": "Về Chúng Tôi",
+      "titleLine1": "Công ty Cổ phần",
+      "titleLine2": "Công Nghệ Sinh Học Thú Y",
+      "paragraph": "Biotech-Vet Pharmaceuticals tự hào là đơn vị dẫn đầu trong ứng dụng công nghệ sinh học Hoa Kỳ vào sản xuất dược phẩm thú y tại Việt Nam. Chúng tôi cam kết mang lại giải pháp y tế tối ưu, giúp nâng cao năng suất chăn nuôi bền vững.",
+      "badgeYears": "Năm Phát Triển Khẳng Định Vị Thế",
+      "feature1Title": "Chất lượng GMP-WHO",
+      "feature1Desc": "Dây chuyền sản xuất hiện đại, quy trình kiểm soát nghiêm ngặt theo tiêu chuẩn quốc tế.",
+      "feature2Title": "Hỗ trợ kỹ thuật 24/7",
+      "feature2Desc": "Đội ngũ chuyên gia giàu kinh nghiệm luôn sẵn sàng đồng hành cùng các chủ trang trại.",
+      "ctaJourney": "Hành trình của chúng tôi",
+      "ctaCatalogue": "Thư viện ảnh & video"
+    },
+    "featured": {
+      "eyebrow": "Sản phẩm chất lượng",
+      "titleA": "Sản Phẩm",
+      "titleB": "Nổi Bật",
+      "sub": "Các dòng dược phẩm thú y bán chạy nhất và được tin dùng rộng rãi trên thị trường",
+      "viewAll": "Tất cả sản phẩm"
+    },
+    "why": {
+      "eyebrow": "Giá trị cốt lõi",
+      "titleA": "Tại Sao Chọn",
+      "titleB": "BINOVET?",
+      "sub": "Sứ mệnh của chúng tôi là cung cấp những giải pháp y tế tối ưu, giúp bảo vệ và nâng cao năng suất đàn vật nuôi tại Việt Nam.",
+      "features": [
+        { "title": "Công nghệ USA", "desc": "Ứng dụng công nghệ tiên tiến từ Hoa Kỳ trong sản xuất dược thú y" },
+        { "title": "Đạt chuẩn GMP", "desc": "Nhà máy đạt chuẩn chất lượng GMP-WHO về sản xuất dược phẩm" },
+        { "title": "200+ Sản phẩm", "desc": "Chất lượng ứng dụng trong chăn nuôi thú y. BTV đã trở thành người bạn đồng hành tin cậy của nhà nông" },
+        { "title": "20+ Năm", "desc": "Năm 2005, BTV thành lập bằng nhiệt huyết, trí tuệ và bằng cả cái tâm của đội ngũ các nhà khoa học đầu ngành Việt Nam trong lĩnh vực chăn nuôi thú y." },
+        { "title": "200+ Khách hàng", "desc": "Đại lý cấp 1, cấp 2 ở gần 30 tỉnh thành trải dài khắp miền Bắc, miền Trung, miền Nam và miền Tây." }
+      ]
+    },
+    "disease": {
+      "titleA": "Kỹ Thuật",
+      "titleB": "Chăn Nuôi",
+      "sub": "Kiến thức chuyên sâu về các bệnh thường gặp, cách phòng chống và phác đồ điều trị an toàn",
+      "cta": "Khám phá",
+      "badge": "Cẩm nang"
+    },
+    "news": {
+      "titleA": "Tin Tức",
+      "titleB": "Nổi Bật",
+      "sub": "Bản tin thị trường chăn nuôi, hoạt động nổi bật của công ty và những cập nhật mới nhất",
+      "cta": "Đọc bản tin"
+    }
+  },
+  "footer": {
+    "headquarters": "Trụ sở",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "website": "Website",
+    "southBranch": "Chi nhánh miền Nam",
+    "productsTitle": "Sản phẩm",
+    "vetOnly": "CHỈ DÙNG TRONG THÚ Y",
+    "allProducts": "Tất cả sản phẩm",
+    "techSupport": "Hỗ trợ kỹ thuật",
+    "connectWithUs": "Kết nối với chúng tôi",
+    "quickLinks": "Liên kết nhanh",
+    "copyright": "Bản quyền thuộc về BINOVET - Công Ty CP Công Nghệ Sinh Học Thú Y. Bảo lưu mọi quyền."
+  }
+}

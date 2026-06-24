@@ -1,0 +1,457 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Brand: refined navy-blue (primary) + terracotta/ember (accent) ────── */
+  --color-primary: #0a4d8c;        /* richer, slightly deeper brand blue */
+  --color-primary-dark: #072e57;   /* deep navy for surfaces / hover */
+  --color-primary-light: #eaf1f9;
+
+  --color-secondary: #d9531f;      /* terracotta / ember — earthy, premium */
+  --color-secondary-light: #f9ece4;
+
+  --color-accent: #d9531f;
+  --color-accent-light: #f9ece4;
+
+  --color-binovet-alt: #f1f5fb;
+  --color-binovet-dark: #06243f; /* deeper, more refined navy ink */
+
+  /* Editorial neutrals — warm, premium, hairline restraint */
+  --color-ink: #0c2236;          /* heading ink */
+  --color-ink-soft: #4a5a6a;     /* body on light */
+  --color-paper: #f7f4ef;        /* warm bone / ivory alt surface */
+  --color-cream: #faf7f1;        /* warm editorial surface */
+  --color-line: #e7e2d8;         /* warm hairline divider */
+  --color-sand: #efe9df;         /* premium warm neutral block */
+  --color-brass: #b08542;        /* subtle metallic accent (hairlines, marks) */
+
+  /* Display serif (signature) + sans */
+  --font-display: var(--font-playfair), 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+
+  /* Refined elevation scale — soft, layered, never heavy */
+  --shadow-sm: 0 1px 2px rgba(12, 34, 54, 0.04), 0 4px 14px -8px rgba(12, 34, 54, 0.10);
+  --shadow-md: 0 6px 20px -10px rgba(12, 34, 54, 0.16), 0 2px 6px -3px rgba(12, 34, 54, 0.08);
+  --shadow-lg: 0 28px 60px -28px rgba(6, 36, 63, 0.30), 0 8px 22px -16px rgba(6, 36, 63, 0.18);
+  --shadow-float: 0 40px 80px -40px rgba(7, 46, 87, 0.40);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #33414f;
+  background: #ffffff;
+  min-height: 100%;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ============================================================
+   EDITORIAL TYPESET — scoped to the public site only (.site-shell)
+   so the admin (antd) UI is untouched.
+   Headings default to the signature display serif; body stays Inter.
+   ============================================================ */
+.site-shell {
+  font-family: var(--font-inter);
+}
+
+/* Sit these in @layer base so they act as defaults — Tailwind text-color
+   utilities (text-white, text-primary, group-hover:text-primary, …) live in
+   the `utilities` layer and must be able to override the heading color.
+   Unlayered, this color would beat every utility and force headings to ink. */
+@layer base {
+  .site-shell h1,
+  .site-shell h2,
+  .site-shell h3,
+  .site-shell h4,
+  .site-shell h5,
+  .site-shell h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+    line-height: 1.1;
+  }
+}
+
+/* Opt-out helpers */
+.site-shell .font-sans,
+.font-sans { font-family: var(--font-sans) !important; }
+.site-shell .font-display,
+.font-display { font-family: var(--font-display) !important; }
+.font-montserrat { font-family: var(--font-montserrat) !important; }
+
+/* ============================================================
+   SIGNATURE — eyebrow label
+   ============================================================ */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-montserrat);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+.eyebrow::before {
+  content: "";
+  width: 1.85rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.eyebrow--center::after {
+  content: "";
+  width: 1.85rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+/* ============================================================
+   SIGNATURE — decorative dividers
+   ============================================================ */
+.divider-diamond {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  color: var(--color-brass);
+}
+.divider-diamond::before,
+.divider-diamond::after {
+  content: "";
+  height: 1px;
+  width: clamp(2.5rem, 8vw, 5rem);
+  background: linear-gradient(90deg, transparent, currentColor);
+  opacity: 0.6;
+}
+.divider-diamond::after {
+  background: linear-gradient(90deg, currentColor, transparent);
+}
+.divider-diamond > span {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: currentColor;
+  border-radius: 1px;
+}
+
+/* Refined heading underline accent */
+.accent-underline {
+  position: relative;
+  display: inline-block;
+}
+.accent-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.55rem;
+  width: 2.75rem;
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--color-secondary);
+}
+.accent-underline--center::after { left: 50%; transform: translateX(-50%); }
+
+/* Thin brass hairline rule */
+.rule-brass {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(176, 133, 66, 0.55), transparent);
+}
+
+/* ============================================================
+   SIGNATURE — background motifs (DNA / molecule / dot grid)
+   ============================================================ */
+.bg-dots {
+  background-image: radial-gradient(rgba(10, 77, 140, 0.10) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+}
+.bg-dots-light {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+}
+.bg-grid-light {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+/* Molecule / bond network — for dark hero & section backgrounds */
+.bg-molecule {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='1.4'%3E%3Cline x1='60' y1='60' x2='150' y2='40'/%3E%3Cline x1='150' y1='40' x2='240' y2='90'/%3E%3Cline x1='150' y1='40' x2='120' y2='150'/%3E%3Cline x1='240' y1='90' x2='270' y2='200'/%3E%3Cline x1='120' y1='150' x2='220' y2='200'/%3E%3Cline x1='120' y1='150' x2='50' y2='220'/%3E%3Cline x1='220' y1='200' x2='270' y2='200'/%3E%3Cline x1='50' y1='220' x2='110' y2='290'/%3E%3Cline x1='220' y1='200' x2='190' y2='280'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Ccircle cx='60' cy='60' r='5'/%3E%3Ccircle cx='150' cy='40' r='6'/%3E%3Ccircle cx='240' cy='90' r='5'/%3E%3Ccircle cx='120' cy='150' r='6'/%3E%3Ccircle cx='270' cy='200' r='4'/%3E%3Ccircle cx='220' cy='200' r='5'/%3E%3Ccircle cx='50' cy='220' r='5'/%3E%3Ccircle cx='110' cy='290' r='4'/%3E%3Ccircle cx='190' cy='280' r='5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 360px 360px;
+}
+/* DNA helix strand — subtle vertical motif */
+.bg-helix {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='240' viewBox='0 0 120 240'%3E%3Cg fill='none' stroke='%230a4d8c' stroke-opacity='0.07' stroke-width='2'%3E%3Cpath d='M30 0 C90 40 90 80 30 120 C-30 160 -30 200 30 240'/%3E%3Cpath d='M90 0 C30 40 30 80 90 120 C150 160 150 200 90 240'/%3E%3Cline x1='38' y1='28' x2='82' y2='28'/%3E%3Cline x1='52' y1='60' x2='68' y2='60'/%3E%3Cline x1='38' y1='92' x2='82' y2='92'/%3E%3Cline x1='38' y1='148' x2='82' y2='148'/%3E%3Cline x1='52' y1='180' x2='68' y2='180'/%3E%3Cline x1='38' y1='212' x2='82' y2='212'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 240px;
+}
+
+/* ============================================================
+   SIGNATURE — refined buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 9px;
+  font-family: var(--font-montserrat);
+  font-weight: 600;
+  font-size: 0.76rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.85rem;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  white-space: nowrap;
+}
+.btn svg { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+.btn:hover svg { transform: translateX(3px); }
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-accent { background: var(--color-secondary); color: #fff; box-shadow: 0 12px 30px -10px rgba(217, 83, 31, 0.45); }
+.btn-accent:hover { background: #c0461a; transform: translateY(-2px); }
+.btn-outline {
+  background: transparent;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+.btn-outline:hover { border-color: var(--color-primary); color: var(--color-primary); transform: translateY(-2px); }
+.btn-ghost-light {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+}
+.btn-ghost-light:hover { background: rgba(255, 255, 255, 0.16); transform: translateY(-2px); }
+
+/* Refined hover underline for inline links */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 0;
+  background: currentColor;
+  transition: width 0.35s ease;
+}
+.link-underline:hover::after { width: 100%; }
+
+/* ============================================================
+   SURFACES — glass + refined card
+   ============================================================ */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.glass-dark {
+  background: rgba(6, 36, 63, 0.55);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.shadow-elegant { box-shadow: var(--shadow-md); }
+.shadow-elegant-lg { box-shadow: var(--shadow-lg); }
+.shadow-float { box-shadow: var(--shadow-float); }
+
+/* Elegant card — the single content-card primitive */
+.card-elegant {
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.5s ease;
+}
+.card-elegant:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(10, 77, 140, 0.22);
+  transform: translateY(-5px);
+}
+
+/* ============================================================
+   FOOTER signature surface
+   ============================================================ */
+.box-footer {
+  background-color: var(--color-binovet-dark);
+  background-image:
+    radial-gradient(60rem 60rem at 85% -10%, rgba(217, 83, 31, 0.16), transparent 60%),
+    radial-gradient(50rem 50rem at 0% 110%, rgba(10, 77, 140, 0.42), transparent 55%),
+    linear-gradient(160deg, #06243f 0%, #041829 100%);
+}
+
+/* ============================================================
+   Premium helpers
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(10, 77, 140, 0.25);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(10, 77, 140, 0.45); }
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.text-gradient-brand {
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Editorial prose tuning for article bodies */
+.prose-editorial { color: #3c4856; line-height: 1.92; font-size: 1.06rem; }
+.prose-editorial h2,
+.prose-editorial h3,
+.prose-editorial h4 { font-family: var(--font-display); color: var(--color-ink); margin-top: 2em; margin-bottom: 0.6em; letter-spacing: -0.015em; }
+.prose-editorial h2 { font-size: 1.7em; }
+.prose-editorial h3 { font-size: 1.35em; }
+.prose-editorial p { margin-bottom: 1.3em; }
+.prose-editorial a { color: var(--color-primary); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.prose-editorial a:hover { color: var(--color-secondary); }
+.prose-editorial img { border-radius: 14px; margin: 1.85em auto; box-shadow: var(--shadow-md); }
+.prose-editorial ul,
+.prose-editorial ol { margin: 1.3em 0; padding-left: 1.4em; }
+.prose-editorial ul { list-style: none; padding-left: 0; }
+.prose-editorial ul > li { position: relative; padding-left: 1.6rem; margin-bottom: 0.6em; }
+.prose-editorial ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+  background: var(--color-secondary);
+}
+.prose-editorial ol > li { margin-bottom: 0.6em; }
+.prose-editorial blockquote {
+  border-left: 3px solid var(--color-brass);
+  padding: 0.2rem 0 0.2rem 1.4rem;
+  font-style: italic;
+  font-family: var(--font-display);
+  font-size: 1.15em;
+  color: var(--color-ink);
+  margin: 1.7em 0;
+}
+
+.ant-table-container {
+  max-height: calc(100vh - 270px);
+  overflow-y: scroll;
+}
+@media print {
+  .no-print,
+  header,
+  footer,
+  aside,
+  nav,
+  .breadcrumb-container,
+  .related-articles,
+  .suggested-products,
+  .newsletter-box,
+  button,
+  .article-footer,
+  .floating-contact,
+  #preloader,
+  .antd-message-container,
+  .fixed,
+  .sticky {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .lg\:col-span-3 {
+    width: 100% !important;
+    grid-column: span 1 / span 1 !important;
+  }
+
+  article {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .prose {
+    max-width: 100% !important;
+  }
+}
+
+.admin-table .ant-table-thead > tr > th {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-primary-dark) !important;
+  font-weight: 700;
+}
+
+/* ============================================================
+   ADMIN — colored (navy) sidebar
+   ============================================================ */
+/* light scrollbar inside the dark sider */
+.admin-sider-scroll::-webkit-scrollbar { width: 6px; }
+.admin-sider-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+}
+.admin-sider-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.38); }
+
+/* terracotta brand accent on the active nav item (replaces antd's default indicator) */
+.admin-sider-menu.ant-menu-inline .ant-menu-item-selected::after { display: none !important; }
+.admin-sider-menu.ant-menu-inline .ant-menu-item-selected {
+  box-shadow: inset 3px 0 0 0 var(--color-secondary);
+  font-weight: 600;
+}
+
+/* Pagination — active page sits on a navy fill (itemActiveBg), so the number
+   must be white; antd otherwise keeps it navy (colorPrimary) → invisible. */
+.ant-pagination-item-active a,
+.ant-pagination-item-active:hover a,
+.ant-pagination-item-active:focus a {
+  color: #fff !important;
+}

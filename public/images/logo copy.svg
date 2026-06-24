@@ -1,0 +1,19 @@
+<svg width="260" height="64" viewBox="0 0 260 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BINOVET">
+  <defs>
+    <linearGradient id="bvBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a63c4"/>
+      <stop offset="1" stop-color="#034ea2"/>
+    </linearGradient>
+  </defs>
+  <!-- Emblem -->
+  <rect x="2" y="6" width="52" height="52" rx="15" fill="url(#bvBlue)"/>
+  <rect x="2" y="6" width="52" height="52" rx="15" fill="none" stroke="#ffffff" stroke-opacity="0.10"/>
+  <!-- medical cross -->
+  <path d="M28 18h0a4 4 0 0 1 4 4v6h6a4 4 0 0 1 0 8h-6v6a4 4 0 0 1-8 0v-6h-6a4 4 0 0 1 0-8h6v-6a4 4 0 0 1 4-4z" fill="#ffffff"/>
+  <!-- orange accent dot -->
+  <circle cx="43" cy="19" r="6" fill="#f15a22"/>
+  <circle cx="43" cy="19" r="6" fill="#f15a22" stroke="#ffffff" stroke-opacity="0.25"/>
+  <!-- Wordmark -->
+  <text x="68" y="33" font-family="Montserrat, 'Segoe UI', Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="-0.5" fill="#0a2540">BIOTECH<tspan fill="#f15a22">VET</tspan></text>
+  <text x="69" y="49" font-family="Montserrat, 'Segoe UI', Arial, sans-serif" font-size="8.5" font-weight="700" letter-spacing="3" fill="#5b7088">VETERINARY · USA TECH</text>
+</svg>

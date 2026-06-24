@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id                 BigInt   @id @default(autoincrement())
+  slug               String   @unique
+  name               String
+  nameEn             String?
+  categoryId         BigInt
+  image              String   @default("")
+  images             String[] @default([])
+  featured           Boolean  @default(false)
+  registrationNumber String?
+  description        String?
+  descriptionEn      String?
+  specifications     Json     @default("[]")
+  specificationsEn   Json     @default("[]")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("products")
+}
+
+model Category {
+  id     BigInt  @id @default(autoincrement())
+  name   String
+  nameEn String?
+  slug   String  @unique
+
+  @@map("categories")
+}
+
+model Article {
+  id          BigInt   @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  titleEn     String?
+  category    String
+  animalTag   String?
+  publishDate String
+  thumbnail   String   @default("")
+  excerpt     String   @default("")
+  excerptEn   String?
+  content     String   @default("")
+  contentEn   String?
+  featured    Boolean  @default(false)
+  isDraft     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("articles")
+}
+
+model Job {
+  id            BigInt   @id @default(autoincrement())
+  slug          String   @unique
+  title         String
+  titleEn       String?
+  location      String
+  locationEn    String?
+  date          String
+  description   String   @default("")
+  descriptionEn String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("jobs")
+}
+
+model Banner {
+  id      BigInt  @id @default(autoincrement())
+  image   String  @default("")
+  title   String
+  titleEn String?
+  link    String  @default("")
+  status Boolean @default(true)
+  order  Int     @default(0)
+
+  @@map("banners")
+}
+
+model NavMenu {
+  id       BigInt  @id @default(autoincrement())
+  name     String
+  nameEn   String?
+  link     String
+  parent   BigInt?
+  position String  @default("header")
+  order    Int     @default(0)
+  status   Boolean @default(true)
+  hasMega  Boolean @default(false)
+  isButton Boolean @default(false)
+
+  @@map("nav_menus")
+}
+
+model Setting {
+  id    BigInt @id @default(1)
+  data  Json   @default("{}")
+
+  @@map("settings")
+}
+
+model AnimalTag {
+  id            BigInt @id @default(autoincrement())
+  name          String
+  nameEn        String?
+  slug          String @unique
+  icon          String @default("")
+  description   String @default("")
+  descriptionEn String?
+
+  @@map("animal_tags")
+}
+
+model MediaImage {
+  id       BigInt  @id @default(autoincrement())
+  url      String
+  title    String
+  order    Int     @default(0)
+  status   String  @default("active")
+  featured Boolean @default(false)
+
+  @@map("media_images")
+}
+
+model MediaVideo {
+  id        BigInt  @id @default(autoincrement())
+  url       String
+  title     String
+  thumbnail String  @default("")
+  order     Int     @default(0)
+  status    String  @default("active")
+  featured  Boolean @default(false)
+
+  @@map("media_videos")
+}

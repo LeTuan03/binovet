@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "handbook": "Know-How",
+    "news": "News",
+    "catalogue": "Slide Gallery",
+    "recruitment": "Careers",
+    "contact": "Contact"
+  },
+  "header": {
+    "consultBuy": "Sales consultation",
+    "slogan": "USA Technology - Superior Quality",
+    "companyName": "Veterinary Biotechnology JSC",
+    "searchPlaceholder": "Search...",
+    "allProducts": "All products"
+  },
+  "common": {
+    "readMore": "Read more",
+    "viewAll": "View all",
+    "discover": "Discover",
+    "readNews": "Read article",
+    "loading": "Loading...",
+    "search": "Search",
+    "backHome": "Back to home"
+  },
+  "home": {
+    "about": {
+      "eyebrow": "About Us",
+      "titleLine1": "Joint Stock Company",
+      "titleLine2": "Veterinary Biotechnology",
+      "paragraph": "Biotech-Vet Pharmaceuticals is proud to be a leader in applying American biotechnology to veterinary pharmaceutical production in Vietnam. We are committed to delivering optimal healthcare solutions that boost sustainable livestock productivity.",
+      "badgeYears": "Years Building Our Leadership",
+      "feature1Title": "GMP-WHO Quality",
+      "feature1Desc": "A modern production line with rigorous control processes meeting international standards.",
+      "feature2Title": "24/7 Technical Support",
+      "feature2Desc": "A team of experienced experts always ready to accompany farm owners.",
+      "ctaJourney": "Our journey",
+      "ctaCatalogue": "Photo & video gallery"
+    },
+    "featured": {
+      "eyebrow": "Quality products",
+      "titleA": "Featured",
+      "titleB": "Products",
+      "sub": "Our best-selling veterinary pharmaceutical lines, widely trusted across the market",
+      "viewAll": "All products"
+    },
+    "why": {
+      "eyebrow": "Core values",
+      "titleA": "Why Choose",
+      "titleB": "BINOVET?",
+      "sub": "Our mission is to deliver optimal medical solutions that protect and improve the productivity of livestock herds in Vietnam.",
+      "features": [
+        { "title": "USA Technology", "desc": "Advanced American technology applied to veterinary pharmaceutical production" },
+        { "title": "GMP Certified", "desc": "Factory meeting GMP-WHO quality standards for pharmaceutical manufacturing" },
+        { "title": "200+ Products", "desc": "Quality solutions for animal husbandry. BTV has become a trusted companion for farmers" },
+        { "title": "20+ Years", "desc": "Founded in 2005 with the passion, intelligence and dedication of Vietnam's leading scientists in veterinary husbandry." },
+        { "title": "200+ Customers", "desc": "Tier-1 and tier-2 distributors across nearly 30 provinces spanning the North, Central, South and Mekong Delta regions." }
+      ]
+    },
+    "disease": {
+      "titleA": "Husbandry",
+      "titleB": "Techniques",
+      "sub": "In-depth knowledge of common diseases, prevention methods and safe treatment protocols",
+      "cta": "Discover",
+      "badge": "Know-How"
+    },
+    "news": {
+      "titleA": "Featured",
+      "titleB": "News",
+      "sub": "Livestock market bulletins, company highlights and the latest updates",
+      "cta": "Read article"
+    }
+  },
+  "footer": {
+    "headquarters": "Head office",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "southBranch": "Southern branch",
+    "productsTitle": "Products",
+    "vetOnly": "FOR VETERINARY USE ONLY",
+    "allProducts": "All products",
+    "techSupport": "Technical support",
+    "connectWithUs": "Connect with us",
+    "quickLinks": "Quick links",
+    "copyright": "Copyright BINOVET - Veterinary Biotechnology JSC. All rights reserved."
+  }
+}

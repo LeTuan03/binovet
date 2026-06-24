@@ -1,0 +1,26 @@
+<svg width="900" height="700" viewBox="0 0 900 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ab" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a63c4"/>
+      <stop offset="0.55" stop-color="#034ea2"/>
+      <stop offset="1" stop-color="#0a2540"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.15" r="0.9">
+      <stop offset="0" stop-color="#f15a22" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f15a22" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="700" fill="url(#ab)"/>
+  <rect width="900" height="700" fill="url(#glow)"/>
+  <g stroke="#ffffff" stroke-opacity="0.12" fill="none" stroke-width="2">
+    <circle cx="240" cy="250" r="120"/>
+    <circle cx="240" cy="250" r="180"/>
+    <circle cx="680" cy="520" r="90"/>
+  </g>
+  <g opacity="0.95">
+    <path d="M450 250h0a26 26 0 0 1 26 26v40h40a26 26 0 0 1 0 52h-40v40a26 26 0 0 1-52 0v-40h-40a26 26 0 0 1 0-52h40v-40a26 26 0 0 1 26-26z" fill="#ffffff" fill-opacity="0.95"/>
+    <circle cx="520" cy="248" r="26" fill="#f15a22"/>
+  </g>
+  <text x="60" y="630" font-family="Montserrat, Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff" fill-opacity="0.9">BIOTECH·VET</text>
+  <text x="60" y="664" font-family="Montserrat, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="2" fill="#ffffff" fill-opacity="0.6">VETERINARY TECHNOLOGY</text>
+</svg>

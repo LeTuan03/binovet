@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://binovet.com.vn/sitemap.xml
+
+# Cho phép tất cả bot truy cập
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
