@@ -146,7 +146,7 @@ export default function Header() {
           <div className="flex justify-between items-center" suppressHydrationWarning>
             {/* Logo */}
             <Link href={localePath(locale, '/')} className="shrink-0 flex items-center gap-3">
-              <img src="/images/logo.png" alt="BINOVET" className={`transition-all duration-300 ${isScrolled ? 'h-10' : 'h-12 md:h-[52px]'}`} />
+              <img src="/images/logo.png" alt="BINOVET" className={`transition-all duration-300 pl-2 ${isScrolled ? 'h-10' : 'h-12 md:h-[52px] scale-150'}`} />
             </Link>
 
             {/* Desktop Nav */}

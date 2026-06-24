@@ -170,7 +170,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-white/45 text-[0.8rem]">
           <p>&copy; {new Date().getFullYear()} {t('footer.copyright')}</p>
-          <p className="font-montserrat tracking-[0.18em] uppercase text-[0.66rem]">Biotech-Vet · GMP-WHO</p>
+          <p className="font-montserrat tracking-[0.18em] uppercase text-[0.66rem]">BinoVet · GMP-WHO</p>
         </div>
       </div>
     </footer>

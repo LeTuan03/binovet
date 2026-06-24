@@ -7,6 +7,7 @@ import { ChevronRight, ArrowLeft, ArrowRight, ShieldCheck, FileText } from 'luci
 import { Metadata } from 'next';
 
 import ProductGallery from '@/components/shared/ProductGallery';
+import ProductSpecifications from '@/components/shared/ProductSpecifications';
 import { productSchema } from '@/lib/schema';
 import Script from 'next/script';
 import { resolveLocale, localePath } from '@/lib/i18n/config';
@@ -161,37 +162,25 @@ export default async function ProductDetailPage({ params }: Readonly<{ params: P
             {product.description && (
               <p className="text-base text-ink-soft leading-relaxed whitespace-pre-wrap line-clamp-4 mb-8">{product.description}</p>
             )}
-            <Link href={localePath(locale, '/lien-he')} className="btn btn-accent">
+            {/* <Link href={localePath(locale, '/lien-he')} className="btn btn-accent">
               {locale === 'en' ? 'Contact to order' : 'Liên hệ đặt hàng'}
               <ArrowRight size={16} />
-            </Link>
+            </Link> */}
           </div>
 
-          {/* Specifications — stacked cards */}
-          <div className="max-w-3xl mx-auto space-y-6">
-            {Array.isArray(product.specifications) && product.specifications.length > 0 ? (
-              (product.specifications as any[]).map((spec: any) => (
-                <section key={spec.title} className="card-elegant p-7 md:p-8">
-                  <h2 className="font-display text-xl font-semibold text-ink flex items-center gap-3.5 pb-4 mb-5 border-b border-line">
-                    <span className="shrink-0 w-10 h-10 rounded-xl bg-primary/8 text-primary flex items-center justify-center">
-                      <FileText size={18} />
-                    </span>
-                    {spec.title}
-                  </h2>
-                  <div className="leading-relaxed text-ink-soft whitespace-pre-wrap">
-                    {spec.content}
-                  </div>
-                </section>
-              ))
-            ) : (
+          {/* Specifications — collapsible accordion */}
+          {Array.isArray(product.specifications) && product.specifications.length > 0 ? (
+            <ProductSpecifications specifications={product.specifications as { title: string; content: string }[]} />
+          ) : (
+            <div className="max-w-3xl mx-auto">
               <div className="card-elegant p-12 text-center">
                 <span className="mx-auto mb-5 w-12 h-12 rounded-xl bg-primary/8 text-primary flex items-center justify-center">
                   <FileText size={22} />
                 </span>
                 <p className="text-ink-soft">{locale === 'en' ? 'This product has no detailed specifications yet.' : 'Sản phẩm này chưa có thông số kỹ thuật chi tiết.'}</p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Related products row */}
