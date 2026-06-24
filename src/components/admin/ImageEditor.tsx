@@ -167,14 +167,13 @@ export default function ImageEditor({ visible, imageUrl, onSave, onCancel }: Ima
       title="Chỉnh sửa ảnh"
       open={visible}
       onCancel={handleCancel}
-      width="100vw"
-      style={{ maxWidth: '100vw', top: 0, padding: 0, borderRadius: 0 }}
-      styles={{ body: { padding: '24px' } }}
+      width={2000}
+      centered
       footer={[
-        <Button key="cancel" onClick={handleCancel}>
+        <Button key="cancel" size='small' onClick={handleCancel}>
           Hủy
         </Button>,
-        <Button key="save" type="primary" onClick={handleSave}>
+        <Button key="save" type="primary" size='small' onClick={handleSave}>
           Lưu chỉnh sửa
         </Button>,
       ]}
@@ -197,104 +196,102 @@ export default function ImageEditor({ visible, imageUrl, onSave, onCancel }: Ima
         </div>
 
         {/* Controls */}
-        <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
 
-          {/* Action Buttons */}
-          <Row gutter={16}>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<ZoomInOutlined />}
-                onClick={() => setZoom(Math.min(zoom + 10, 200))}
-                className="rounded-lg"
-              >
-                Phóng to
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<ZoomInOutlined rotate={180} />}
-                onClick={() => setZoom(Math.max(zoom - 10, 50))}
-                className="rounded-lg"
-              >
-                Thu nhỏ
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<RotateLeftOutlined />}
-                onClick={() => setRotation((r) => (r - 90 + 360) % 360)}
-                className="rounded-lg"
-              >
-                Xoay trái 90°
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<RotateRightOutlined />}
-                onClick={() => setRotation((r) => (r + 90) % 360)}
-                className="rounded-lg"
-              >
-                Xoay phải 90°
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<SwapOutlined />}
-                onClick={() => setFlipX(!flipX)}
-                type={flipX ? 'primary' : 'default'}
-                className="rounded-lg"
-              >
-                Lật ngang
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                icon={<SwapOutlined rotate={90} />}
-                onClick={() => setFlipY(!flipY)}
-                type={flipY ? 'primary' : 'default'}
-                className="rounded-lg"
-              >
-                Lật dọc
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                onClick={() => {
-                  setCropping(!cropping);
-                  setCropStart({ x: 0, y: 0 });
-                  setCropEnd({ x: 0, y: 0 });
-                }}
-                type={cropping ? 'primary' : 'default'}
-                className="rounded-lg"
-              >
-                {cropping ? 'Xong cắt' : 'Cắt ảnh'}
-              </Button>
-            </Col>
-            <Col xs={12} sm={6}>
-              <Button
-                block
-                danger
-                onClick={resetEditor}
-                className="rounded-lg"
-              >
-                Đặt lại
-              </Button>
-            </Col>
-          </Row>
+        {/* Action Buttons */}
+        <Row gutter={[ 16, 8 ]}>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<ZoomInOutlined />}
+              onClick={() => setZoom(Math.min(zoom + 10, 200))}
+              className="rounded-lg"
+            >
+              Phóng to
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<ZoomInOutlined rotate={180} />}
+              onClick={() => setZoom(Math.max(zoom - 10, 50))}
+              className="rounded-lg"
+            >
+              Thu nhỏ
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<RotateLeftOutlined />}
+              onClick={() => setRotation((r) => (r - 90 + 360) % 360)}
+              className="rounded-lg"
+            >
+              Xoay trái 90°
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<RotateRightOutlined />}
+              onClick={() => setRotation((r) => (r + 90) % 360)}
+              className="rounded-lg"
+            >
+              Xoay phải 90°
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<SwapOutlined />}
+              onClick={() => setFlipX(!flipX)}
+              type={flipX ? 'primary' : 'default'}
+              className="rounded-lg"
+            >
+              Lật ngang
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              icon={<SwapOutlined rotate={90} />}
+              onClick={() => setFlipY(!flipY)}
+              type={flipY ? 'primary' : 'default'}
+              className="rounded-lg"
+            >
+              Lật dọc
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              onClick={() => {
+                setCropping(!cropping);
+                setCropStart({ x: 0, y: 0 });
+                setCropEnd({ x: 0, y: 0 });
+              }}
+              type={cropping ? 'primary' : 'default'}
+              className="rounded-lg"
+            >
+              {cropping ? 'Xong cắt' : 'Cắt ảnh'}
+            </Button>
+          </Col>
+          <Col xs={12} sm={6}>
+            <Button
+              block
+              danger
+              onClick={resetEditor}
+              className="rounded-lg"
+            >
+              Đặt lại
+            </Button>
+          </Col>
+        </Row>
 
-          {cropping && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
-              <strong>Hướng dẫn cắt:</strong> Kéo chuột trên ảnh để chọn vùng cắt, sau đó nhấn "Xong cắt"
-            </div>
-          )}
-        </div>
+        {cropping && (
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+            <strong>Hướng dẫn cắt:</strong> Kéo chuột trên ảnh để chọn vùng cắt, sau đó nhấn "Xong cắt"
+          </div>
+        )}
       </div>
     </Modal>
   );

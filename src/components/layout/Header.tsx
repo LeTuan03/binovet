@@ -11,7 +11,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useLocale } from '@/lib/i18n/LocaleProvider';
 import { localePath, switchLocalePath, type Locale } from '@/lib/i18n/config';
 import { localize } from '@/lib/i18n/localize';
-import { NavMenu, Category, Setting } from '@/types';
+import { NavMenu, Category, Setting, AnimalTag } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
@@ -24,6 +24,7 @@ export default function Header() {
 
   const [menus, setMenus] = useState<NavMenu[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [animalTags, setAnimalTags] = useState<AnimalTag[]>([]);
   const [settings, setSettings] = useState<Setting | null>(null);
 
   const switchLocale = (next: Locale) => {
@@ -48,19 +49,22 @@ export default function Header() {
 
     const fetchData = async () => {
       try {
-        const [menusRes, settingsRes, categoriesRes] = await Promise.all([
+        const [menusRes, settingsRes, categoriesRes, animalTagsRes] = await Promise.all([
           fetch('/api/data/menus'),
           fetch('/api/data/settings'),
           fetch('/api/data/categories'),
+          fetch('/api/data/animal-tags'),
         ]);
         const menusData = await menusRes.json();
         const settingsData = await settingsRes.json();
         const categoriesData = await categoriesRes.json();
+        const animalTagsData = await animalTagsRes.json();
         if (Array.isArray(menusData)) {
           setMenus(menusData.filter((m: any) => m.position === 'header' || m.position === 'both'));
         }
         setSettings(settingsData);
         if (Array.isArray(categoriesData)) setCategories(categoriesData);
+        if (Array.isArray(animalTagsData)) setAnimalTags(animalTagsData);
       } catch (error) {
         console.error('Failed to fetch header data', error);
       }
@@ -71,6 +75,41 @@ export default function Header() {
   }, []);
 
   const nameOf = (m: any) => localize(m, locale).name as string;
+
+  // Resolve the sub-items for a top-level menu. "Products" and "Know-How" pull
+  // their lists from the API (categories / animal-tags) instead of hard-coded
+  // child nav-menu rows; every other menu uses its explicit children.
+  const childLinksFor = (menu: NavMenu): { id: string; href: string; label: string }[] => {
+    const link = menu.link || '';
+
+    // Sản phẩm → product categories  (/san-pham/danh-muc/{slug})
+    if (menu.hasMega || link === '/san-pham') {
+      return categories.map((cat) => ({
+        id: `cat-${cat.id}`,
+        href: localePath(locale, `/san-pham/danh-muc/${cat.slug}`),
+        label: localize(cat, locale).name as string,
+      }));
+    }
+
+    // Cẩm nang → animal tags  (/cam-nang-chan-nuoi/{slug})
+    if (link.startsWith('/cam-nang-chan-nuoi')) {
+      return animalTags.map((tag) => ({
+        id: `tag-${tag.id}`,
+        href: localePath(locale, `/cam-nang-chan-nuoi/${tag.slug}`),
+        label: localize(tag, locale).name as string,
+      }));
+    }
+
+    // Everything else → explicit child nav-menu rows
+    return menus
+      .filter((m) => String(m.parent) === String(menu.id) && m.status)
+      .sort((a, b) => a.order - b.order)
+      .map((child) => ({
+        id: `menu-${child.id}`,
+        href: localePath(locale, child.link),
+        label: nameOf(child),
+      }));
+  };
 
   const navLinkBase =
     "relative px-3.5 py-2 text-[0.72rem] font-bold uppercase tracking-[0.15em] text-binovet-dark/80 hover:text-primary transition-colors font-montserrat after:content-[''] after:absolute after:left-3.5 after:right-3.5 after:-bottom-0.5 after:h-px after:bg-secondary after:scale-x-0 after:origin-left after:transition-transform after:duration-300 hover:after:scale-x-100";
@@ -155,10 +194,8 @@ export default function Header() {
                 .filter(m => m.status && (m.parent === null || m.parent === undefined))
                 .sort((a, b) => a.order - b.order)
                 .map((menu) => {
-                  const children = menus
-                    .filter(m => String(m.parent) === String(menu.id) && m.status)
-                    .sort((a, b) => a.order - b.order);
-                  const hasChildren = children.length > 0;
+                  const childLinks = childLinksFor(menu);
+                  const hasChildren = childLinks.length > 0;
 
                   if (menu.hasMega) {
                     return (
@@ -195,15 +232,15 @@ export default function Header() {
                         </Link>
                         <div className="absolute top-full left-0 w-[260px] bg-white shadow-[0_30px_60px_-20px_rgba(6,36,63,0.28)] rounded-2xl py-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all translate-y-2 group-hover:translate-y-0 border border-line z-50 overflow-hidden">
                           <div className="px-2 space-y-0.5">
-                            {children.map((child) => (
+                            {childLinks.map((child) => (
                               <Link
                                 key={child.id}
-                                href={localePath(locale, child.link)}
+                                href={child.href}
                                 className="flex items-center gap-3 px-4 py-3 hover:bg-paper rounded-xl transition-all group/subitem"
                               >
                                 <div className="w-1.5 h-1.5 rounded-full bg-primary/25 group-hover/subitem:bg-secondary group-hover/subitem:scale-150 transition-all"></div>
                                 <span className="text-[0.82rem] font-medium text-ink-soft leading-snug group-hover/subitem:text-primary transition-colors">
-                                  {nameOf(child)}
+                                  {child.label}
                                 </span>
                               </Link>
                             ))}
@@ -289,10 +326,6 @@ export default function Header() {
                   .filter(m => m.status && m.parent === null)
                   .sort((a, b) => a.order - b.order)
                   .map((menu) => {
-                    const children = menus
-                      .filter(m => String(m.parent) === String(menu.id) && m.status)
-                      .sort((a, b) => a.order - b.order);
-
                     if (menu.isButton) {
                       return (
                         <Link
@@ -311,8 +344,7 @@ export default function Header() {
                         href={localePath(locale, menu.link)}
                         label={nameOf(menu)}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        childrenItems={children}
-                        locale={locale}
+                        childLinks={childLinksFor(menu)}
                       />
                     );
                   })}
@@ -334,9 +366,9 @@ function DropdownItem({ href, label }: { href: string, label: string }) {
   );
 }
 
-function MobileNavItem({ href, label, onClick, childrenItems, locale }: { href: string, label: string, onClick: () => void, childrenItems?: NavMenu[], locale: Locale }) {
+function MobileNavItem({ href, label, onClick, childLinks }: { href: string, label: string, onClick: () => void, childLinks?: { id: string, href: string, label: string }[] }) {
   const [isOpen, setIsOpen] = useState(false);
-  const hasChildren = childrenItems && childrenItems.length > 0;
+  const hasChildren = childLinks && childLinks.length > 0;
 
   if (!hasChildren) {
     return (
@@ -363,15 +395,15 @@ function MobileNavItem({ href, label, onClick, childrenItems, locale }: { href: 
             className="overflow-hidden bg-paper rounded-xl mb-4"
           >
             <div className="flex flex-col py-2">
-              {childrenItems.map((child) => (
+              {childLinks.map((child) => (
                 <Link
                   key={child.id}
-                  href={localePath(locale, child.link)}
+                  href={child.href}
                   className="px-6 py-3 text-sm font-medium text-ink-soft hover:text-primary transition-colors flex items-center gap-3"
                   onClick={onClick}
                 >
                   <div className="w-1 h-1 rounded-full bg-primary/30"></div>
-                  {localize(child, locale).name as string}
+                  {child.label}
                 </Link>
               ))}
             </div>

@@ -18,7 +18,7 @@ export default function LoginLayout({
           colorInfo: '#0a4d8c',
           colorLink: '#0a4d8c',
           borderRadius: 12,
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif",
           colorTextHeading: '#0c2236',
           colorText: '#33414f',
         },

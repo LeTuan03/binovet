@@ -55,7 +55,7 @@ async function main() {
   await mk({ name: 'Trang chủ', nameEn: 'Home', link: '/', order: 1 });
   const about = await mk({ name: 'Giới thiệu', nameEn: 'About Us', link: '/gioi-thieu', order: 2 });
   await mk({ name: 'Sản phẩm', nameEn: 'Products', link: '/san-pham', order: 3, hasMega: true });
-  const knowhow = await mk({ name: 'Cẩm nang', nameEn: 'Know-How', link: '/cam-nang-chan-nuoi', order: 4 });
+  await mk({ name: 'Cẩm nang', nameEn: 'Know-How', link: '/cam-nang-chan-nuoi', order: 4 });
   await mk({ name: 'Thư viện ảnh', nameEn: 'Slide Gallery', link: '/thu-vien', order: 5 });
   const news = await mk({ name: 'Tin tức', nameEn: 'News', link: '/tin-tuc', order: 6 });
   await mk({ name: 'Liên hệ', nameEn: 'Contact', link: '/lien-he', order: 7, isButton: true });
@@ -66,10 +66,8 @@ async function main() {
   await child(about.id, { name: 'Cơ sở vật chất', nameEn: 'Our Facilities', link: '/gioi-thieu?tab=co-so', order: 3 });
   await child(about.id, { name: 'Hồ sơ năng lực', nameEn: 'Corporation Profile', link: '/gioi-thieu?tab=co-cau', order: 4 });
 
-  // Know-How submenu → animal types (matches the animal tags)
-  await child(knowhow.id, { name: 'Heo', nameEn: 'Swine', link: '/cam-nang-chan-nuoi/heo', order: 1 });
-  await child(knowhow.id, { name: 'Gia cầm', nameEn: 'Poultry', link: '/cam-nang-chan-nuoi/gia-cam', order: 2 });
-  await child(knowhow.id, { name: 'Trâu bò', nameEn: 'Cattle', link: '/cam-nang-chan-nuoi/trau-bo', order: 3 });
+  // Know-How submenu is rendered dynamically: the header fetches the animal-tags
+  // list and maps each tag to /cam-nang-chan-nuoi/{slug}, so no child rows here.
 
   // News submenu
   await child(news.id, { name: 'Tin nội bộ', nameEn: 'Corporate News', link: '/tin-tuc-noi-bo', order: 1 });

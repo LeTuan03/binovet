@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           colorLink: '#0a4d8c',
           colorLinkHover: '#072e57',
           borderRadius: 10,
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif",
           colorBgBase: '#ffffff',
           colorTextHeading: '#0c2236',
           colorText: '#33414f',

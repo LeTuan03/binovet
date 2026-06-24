@@ -10,6 +10,7 @@ import {
   Spin,
   App,
   Space,
+  Segmented,
 } from 'antd';
 import {
   HistoryOutlined,
@@ -23,7 +24,7 @@ import {
 } from '@ant-design/icons';
 import { adminFetch } from '@/lib/api';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
-import { aboutDefaults, mergeAbout } from '@/app/[locale]/(main)/gioi-thieu/aboutDefaults';
+import { aboutDefaults, aboutDefaultsEn, mergeAbout } from '@/app/[locale]/(main)/gioi-thieu/aboutDefaults';
 import ImageUpload from '@/components/admin/ImageUpload';
 
 const { TextArea } = Input;
@@ -33,6 +34,7 @@ export default function AdminAboutPage() {
   const { setLoading: setGlobalLoading } = useAdminLoading();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState<'vi' | 'en'>('vi');
 
   React.useEffect(() => {
     const fetchSettings = async () => {
@@ -40,11 +42,13 @@ export default function AdminAboutPage() {
       try {
         const res = await adminFetch('/api/data/settings');
         const data = await res.json();
-        const merged = mergeAbout(data?.aboutPage);
-        form.setFieldsValue({ aboutPage: merged });
+        form.setFieldsValue({
+          aboutPage: mergeAbout(data?.aboutPage, 'vi'),
+          aboutPageEn: mergeAbout(data?.aboutPageEn, 'en'),
+        });
       } catch (e) {
         msg.error('Không thể tải nội dung trang Giới thiệu');
-        form.setFieldsValue({ aboutPage: aboutDefaults });
+        form.setFieldsValue({ aboutPage: aboutDefaults, aboutPageEn: aboutDefaultsEn });
       } finally {
         setLoading(false);
       }
@@ -52,26 +56,27 @@ export default function AdminAboutPage() {
     fetchSettings();
   }, [form]);
 
-  const handleSave = () => {
-    form.validateFields().then(async (values) => {
-      setGlobalLoading(true);
-      try {
-        const res = await adminFetch('/api/data/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ aboutPage: values.aboutPage }),
-        });
-        if (res.ok) {
-          msg.success('Cập nhật trang Giới thiệu thành công!');
-        } else {
-          throw new Error();
-        }
-      } catch (e) {
-        msg.error('Lỗi khi lưu nội dung');
-      } finally {
-        setGlobalLoading(false);
+  const handleSave = async () => {
+    // getFieldsValue(true) returns BOTH languages — including the form items that
+    // are currently unmounted because the other language tab is showing.
+    const all = form.getFieldsValue(true);
+    setGlobalLoading(true);
+    try {
+      const res = await adminFetch('/api/data/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ aboutPage: all.aboutPage, aboutPageEn: all.aboutPageEn }),
+      });
+      if (res.ok) {
+        msg.success('Cập nhật trang Giới thiệu thành công!');
+      } else {
+        throw new Error();
       }
-    });
+    } catch (e) {
+      msg.error('Lỗi khi lưu nội dung');
+    } finally {
+      setGlobalLoading(false);
+    }
   };
 
   if (loading) {
@@ -83,14 +88,32 @@ export default function AdminAboutPage() {
   }
 
   const inputCls = 'rounded-xl';
+  // Which language's content the form is currently editing. Switching only swaps
+  // the field-name prefix; antd preserves the hidden language's values in the store.
+  const prefix = lang === 'en' ? 'aboutPageEn' : 'aboutPage';
 
   return (
     <div className="space-y-6">
-      <div>
-        <Breadcrumb items={[{ title: 'Admin' }, { title: 'Trang Giới thiệu' }]} />
-        <h1 className="text-2xl font-semibold text-[#0c2236] mt-2 tracking-tight">
-          Nội dung Trang Giới thiệu
-        </h1>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Breadcrumb items={[{ title: 'Admin' }, { title: 'Trang Giới thiệu' }]} />
+          <h1 className="text-2xl font-semibold text-[#0c2236] mt-2 tracking-tight">
+            Nội dung Trang Giới thiệu
+          </h1>
+        </div>
+        <div className="flex flex-col items-start gap-1.5">
+          <span className="text-xs uppercase tracking-wide text-gray-500 font-semibold">
+            Ngôn ngữ nội dung
+          </span>
+          <Segmented
+            value={lang}
+            onChange={(v) => setLang(v as 'vi' | 'en')}
+            options={[
+              { label: 'Tiếng Việt', value: 'vi' },
+              { label: 'English', value: 'en' },
+            ]}
+          />
+        </div>
       </div>
 
       <div className="bg-white p-2 rounded-2xl shadow-sm border border-gray-100 min-h-[600px]">
@@ -106,15 +129,15 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'lichSu', 'title']}
+                      name={[prefix,'lichSu', 'title']}
                       label="Tiêu đề"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'lichSu', 'intro']}
+                      name={[prefix,'lichSu', 'intro']}
                       label="Đoạn mở đầu"
                     >
                       <TextArea rows={3} className={inputCls} />
@@ -124,7 +147,7 @@ export default function AdminAboutPage() {
                       <div className="font-semibold mb-3 uppercase text-xs tracking-wide text-gray-500">
                         Mốc thời gian
                       </div>
-                      <Form.List name={['aboutPage', 'lichSu', 'timeline']}>
+                      <Form.List name={[prefix,'lichSu', 'timeline']}>
                         {(fields, { add, remove }) => (
                           <Space direction="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
@@ -184,46 +207,46 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'gioiThieu', 'title']}
+                      name={[prefix,'gioiThieu', 'title']}
                       label="Tiêu đề"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'gioiThieu', 'paragraph1']}
+                      name={[prefix,'gioiThieu', 'paragraph1']}
                       label="Đoạn 1"
                     >
                       <TextArea rows={4} className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'gioiThieu', 'paragraph2']}
+                      name={[prefix,'gioiThieu', 'paragraph2']}
                       label="Đoạn 2"
                     >
                       <TextArea rows={3} className={inputCls} />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-4">
                       <Form.Item
-                        name={['aboutPage', 'gioiThieu', 'stat1Number']}
+                        name={[prefix,'gioiThieu', 'stat1Number']}
                         label="Chỉ số 1 - Số"
                       >
                         <Input size="large" className={inputCls} />
                       </Form.Item>
                       <Form.Item
-                        name={['aboutPage', 'gioiThieu', 'stat1Label']}
+                        name={[prefix,'gioiThieu', 'stat1Label']}
                         label="Chỉ số 1 - Nhãn"
                       >
                         <Input size="large" className={inputCls} />
                       </Form.Item>
                       <Form.Item
-                        name={['aboutPage', 'gioiThieu', 'stat2Number']}
+                        name={[prefix,'gioiThieu', 'stat2Number']}
                         label="Chỉ số 2 - Số"
                       >
                         <Input size="large" className={inputCls} />
                       </Form.Item>
                       <Form.Item
-                        name={['aboutPage', 'gioiThieu', 'stat2Label']}
+                        name={[prefix,'gioiThieu', 'stat2Label']}
                         label="Chỉ số 2 - Nhãn"
                       >
                         <Input size="large" className={inputCls} />
@@ -241,46 +264,46 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'tamNhin', 'visionTitle']}
+                      name={[prefix,'tamNhin', 'visionTitle']}
                       label="Tiêu đề Tầm nhìn"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'tamNhin', 'visionText']}
+                      name={[prefix,'tamNhin', 'visionText']}
                       label="Nội dung Tầm nhìn"
                     >
                       <TextArea rows={4} className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'tamNhin', 'missionTitle']}
+                      name={[prefix,'tamNhin', 'missionTitle']}
                       label="Tiêu đề Sứ mệnh"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'tamNhin', 'missionText']}
+                      name={[prefix,'tamNhin', 'missionText']}
                       label="Nội dung Sứ mệnh"
                     >
                       <TextArea rows={4} className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'tamNhin', 'quoteText']}
+                      name={[prefix,'tamNhin', 'quoteText']}
                       label="Câu trích dẫn"
                     >
                       <TextArea rows={3} className={inputCls} />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-4">
                       <Form.Item
-                        name={['aboutPage', 'tamNhin', 'quoteAuthor']}
+                        name={[prefix,'tamNhin', 'quoteAuthor']}
                         label="Tác giả trích dẫn"
                       >
                         <Input size="large" className={inputCls} />
                       </Form.Item>
                       <Form.Item
-                        name={['aboutPage', 'tamNhin', 'quoteRole']}
+                        name={[prefix,'tamNhin', 'quoteRole']}
                         label="Chức danh / Tổ chức"
                       >
                         <Input size="large" className={inputCls} />
@@ -298,15 +321,15 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'thanhTuu', 'heading']}
+                      name={[prefix,'thanhTuu', 'heading']}
                       label="Tiêu đề chính"
                     >
                       <Input size="large" className={inputCls} placeholder="VD: Thành tựu" />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'thanhTuu', 'title']}
+                      name={[prefix,'thanhTuu', 'title']}
                       label="Mô tả"
                     >
                       <TextArea rows={4} className={inputCls} />
@@ -316,7 +339,7 @@ export default function AdminAboutPage() {
                       <div className="font-semibold mb-3 uppercase text-xs tracking-wide text-gray-500">
                         Danh sách ảnh thành tựu
                       </div>
-                      <Form.List name={['aboutPage', 'thanhTuu', 'images']}>
+                      <Form.List name={[prefix,'thanhTuu', 'images']}>
                         {(fields, { add, remove }) => (
                           <Space direction="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
@@ -390,27 +413,27 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'coSo', 'title']}
+                      name={[prefix,'coSo', 'title']}
                       label="Tiêu đề"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'coSo', 'intro']}
+                      name={[prefix,'coSo', 'intro']}
                       label="Mô tả"
                     >
                       <TextArea rows={3} className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'coSo', 'cardTitle']}
+                      name={[prefix,'coSo', 'cardTitle']}
                       label="Tiêu đề thẻ ảnh"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'coSo', 'cardText']}
+                      name={[prefix,'coSo', 'cardText']}
                       label="Mô tả thẻ ảnh"
                     >
                       <Input size="large" className={inputCls} />
@@ -420,7 +443,7 @@ export default function AdminAboutPage() {
                       <div className="font-semibold mb-3 uppercase text-xs tracking-wide text-gray-500">
                         Chỉ số nổi bật
                       </div>
-                      <Form.List name={['aboutPage', 'coSo', 'stats']}>
+                      <Form.List name={[prefix,'coSo', 'stats']}>
                         {(fields, { add, remove }) => (
                           <Space direction="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
@@ -478,15 +501,15 @@ export default function AdminAboutPage() {
                   </span>
                 ),
                 children: (
-                  <div className="p-8">
+                  <div className="p-8 max-h-[calc(100vh-270px)] overflow-y-auto">
                     <Form.Item
-                      name={['aboutPage', 'coCau', 'title']}
+                      name={[prefix,'coCau', 'title']}
                       label="Tiêu đề"
                     >
                       <Input size="large" className={inputCls} />
                     </Form.Item>
                     <Form.Item
-                      name={['aboutPage', 'coCau', 'intro']}
+                      name={[prefix,'coCau', 'intro']}
                       label="Mô tả"
                     >
                       <TextArea rows={3} className={inputCls} />
@@ -496,7 +519,7 @@ export default function AdminAboutPage() {
                       <div className="font-semibold mb-3 uppercase text-xs tracking-wide text-gray-500">
                         Sơ đồ vai trò (theo thứ tự)
                       </div>
-                      <Form.List name={['aboutPage', 'coCau', 'roles']}>
+                      <Form.List name={[prefix,'coCau', 'roles']}>
                         {(fields, { add, remove }) => (
                           <Space direction="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
@@ -536,7 +559,7 @@ export default function AdminAboutPage() {
                     </div>
 
                     <Form.Item
-                      name={['aboutPage', 'coCau', 'quoteText']}
+                      name={[prefix,'coCau', 'quoteText']}
                       label="Câu trích dẫn"
                       className="mt-6"
                     >

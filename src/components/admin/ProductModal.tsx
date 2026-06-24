@@ -23,6 +23,140 @@ interface ProductModalProps {
   onCancel: () => void;
 }
 
+// Cấu hình theo từng ngôn ngữ — gom toàn bộ nội dung dịch (tên, mô tả, thông số)
+// vào cùng một tab để admin không nhầm lẫn giữa các ngôn ngữ.
+const LANG_CONFIG = {
+  vi: {
+    flag: '🇻🇳',
+    tabLabel: 'Tiếng Việt',
+    banner: 'Đang nhập nội dung TIẾNG VIỆT — đây là bản hiển thị mặc định trên website.',
+    bannerClass: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+    nameField: 'name',
+    descField: 'description',
+    specField: 'specifications',
+    nameLabel: 'Tên sản phẩm',
+    namePlaceholder: 'VD: Vắc-xin phòng bệnh dại',
+    descLabel: 'Mô tả ngắn',
+    descPlaceholder: 'Nhập mô tả ngắn về sản phẩm...',
+    nameRequired: true,
+    specSectionLabel: 'Thông số kỹ thuật',
+    specTitleLabel: 'Tên thông số',
+    specTitlePlaceholder: 'VD: THÀNH PHẦN',
+    specContentLabel: 'Nội dung chi tiết',
+    specContentPlaceholder: 'Nhập chi tiết thông số...',
+    addSpecLabel: 'Thêm thông số / thuộc tính',
+    specTitleRequiredMsg: 'Nhập tên thông số',
+    specContentRequiredMsg: 'Nhập nội dung',
+  },
+  en: {
+    flag: '🇬🇧',
+    tabLabel: 'English',
+    banner: 'Đang nhập nội dung TIẾNG ANH — để trống sẽ tự động dùng bản Tiếng Việt.',
+    bannerClass: 'bg-blue-50 border-blue-200 text-blue-700',
+    nameField: 'nameEn',
+    descField: 'descriptionEn',
+    specField: 'specificationsEn',
+    nameLabel: 'Tên sản phẩm (Tiếng Anh)',
+    namePlaceholder: 'e.g. Rabies vaccine',
+    descLabel: 'Mô tả ngắn (Tiếng Anh)',
+    descPlaceholder: 'Short product description in English...',
+    nameRequired: false,
+    specSectionLabel: 'Thông số kỹ thuật (Tiếng Anh)',
+    specTitleLabel: 'Tên thông số (Tiếng Anh)',
+    specTitlePlaceholder: 'e.g. COMPOSITION',
+    specContentLabel: 'Nội dung chi tiết (Tiếng Anh)',
+    specContentPlaceholder: 'Enter spec details in English...',
+    addSpecLabel: 'Add specification / attribute',
+    specTitleRequiredMsg: 'Enter a spec title',
+    specContentRequiredMsg: 'Enter the description',
+  },
+} as const;
+
+type LangCfg = (typeof LANG_CONFIG)[keyof typeof LANG_CONFIG];
+
+// Panel nội dung cho 1 ngôn ngữ: tên + mô tả + danh sách thông số.
+const LangPanel: React.FC<{ cfg: LangCfg }> = ({ cfg }) => (
+  <div className="pt-1">
+    <Form.Item
+      name={cfg.nameField}
+      label={cfg.nameLabel}
+      rules={cfg.nameRequired ? [{ required: true, message: 'Vui lòng nhập tên sản phẩm' }] : undefined}
+    >
+      <Input className="rounded-xl py-2 font-bold" placeholder={cfg.namePlaceholder} />
+    </Form.Item>
+
+    <Form.Item name={cfg.descField} label={cfg.descLabel}>
+      <TextArea rows={3} className="rounded-xl" placeholder={cfg.descPlaceholder} />
+    </Form.Item>
+
+    <Divider className="!my-6">
+      <span className="text-[11px] font-black uppercase tracking-widest text-primary">{cfg.specSectionLabel}</span>
+    </Divider>
+
+    <Form.List name={cfg.specField}>
+      {(fields, { add, remove }) => (
+        <div className="space-y-4">
+          {fields.map(({ key, name, ...restField }) => (
+            <div key={key} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
+              <Row gutter={16}>
+                <Col span={24}>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'title']}
+                    label={cfg.specTitleLabel}
+                    rules={[{ required: true, message: cfg.specTitleRequiredMsg }]}
+                  >
+                    <Input placeholder={cfg.specTitlePlaceholder} className="rounded-xl font-bold text-primary" />
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'content']}
+                    label={cfg.specContentLabel}
+                    rules={[{ required: true, message: cfg.specContentRequiredMsg }]}
+                  >
+                    <TextArea rows={4} placeholder={cfg.specContentPlaceholder} className="rounded-xl" />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Button
+                type="text"
+                danger
+                icon={<DeleteOutlined />}
+                onClick={() => remove(name)}
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              />
+            </div>
+          ))}
+          <Button
+            type="dashed"
+            onClick={() => add()}
+            block
+            icon={<PlusOutlined />}
+            className="rounded-xl h-12 border-2 border-dashed border-gray-200 text-gray-400 hover:text-primary hover:border-primary transition-all uppercase tracking-wider text-[12px] font-bold"
+          >
+            {cfg.addSpecLabel}
+          </Button>
+        </div>
+      )}
+    </Form.List>
+  </div>
+);
+
+// Nhãn tiêu đề cho từng khối — giúp phân biệt rõ vùng "dùng chung" và vùng "theo ngôn ngữ".
+const SectionLabel: React.FC<{ children: React.ReactNode; hint?: string }> = ({ children, hint }) => (
+  <div className="flex items-center gap-3 mt-4">
+    <span className="text-[12px] font-black uppercase tracking-widest text-binovet-dark">{children}</span>
+    {hint && (
+      <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full uppercase tracking-wider">
+        {hint}
+      </span>
+    )}
+    <div className="flex-1 h-px bg-gray-100" />
+  </div>
+);
+
 const ProductModal: React.FC<ProductModalProps> = ({
   open,
   editingId,
@@ -61,58 +195,27 @@ const ProductModal: React.FC<ProductModalProps> = ({
       cancelButtonProps={{ className: "rounded-xl h-11 px-8 font-bold uppercase tracking-widest text-[11px]" }}
     >
       <Form form={form} layout="vertical" className="mt-6 px-4 pb-8">
-        <Row gutter={24}>
-          <Col span={20}>
-            <Tabs
-              items={[
-                {
-                  key: 'vi',
-                  label: '🇻🇳 Tiếng Việt',
-                  forceRender: true,
-                  children: (
-                    <Row gutter={24}>
-                      <Col span={24}>
-                        <Form.Item name="name" label="Tên sản phẩm" rules={[{ required: true }]}>
-                          <Input className="rounded-xl py-2 font-bold" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item name="description" label="Miêu tả">
-                          <TextArea rows={3} className="rounded-xl" placeholder="Nhập miêu tả ngắn về sản phẩm..." />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-                {
-                  key: 'en',
-                  label: '🇬🇧 English',
-                  forceRender: true,
-                  children: (
-                    <Row gutter={24}>
-                      <Col span={24}>
-                        <Form.Item name="nameEn" label="Tên sản phẩm (EN)">
-                          <Input className="rounded-xl py-2 font-bold" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={24}>
-                        <Form.Item name="descriptionEn" label="Mô tả (EN)">
-                          <TextArea rows={3} className="rounded-xl" placeholder="Short product description in English..." />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ),
-                },
-              ]}
-            />
-          </Col>
-          <Col span={4}>
-             <Form.Item name="featured" label="Nổi bật" valuePropName="checked">
-                <Switch className="bg-gray-200" />
-             </Form.Item>
-          </Col>
-        </Row>
+        {/* ===== KHỐI 1: Nội dung theo ngôn ngữ ===== */}
+        <SectionLabel>Nội dung theo ngôn ngữ</SectionLabel>
+        <Tabs
+          items={[
+            {
+              key: 'vi',
+              label: <span className="font-bold">{LANG_CONFIG.vi.flag} {LANG_CONFIG.vi.tabLabel}</span>,
+              forceRender: true,
+              children: <LangPanel cfg={LANG_CONFIG.vi} />,
+            },
+            {
+              key: 'en',
+              label: <span className="font-bold">{LANG_CONFIG.en.flag} {LANG_CONFIG.en.tabLabel}</span>,
+              forceRender: true,
+              children: <LangPanel cfg={LANG_CONFIG.en} />,
+            },
+          ]}
+        />
 
+        {/* ===== KHỐI 2: Thông tin chung (dùng chung cho cả 2 ngôn ngữ) ===== */}
+        <SectionLabel hint="Dùng chung 2 ngôn ngữ">Thông tin chung</SectionLabel>
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item name="categoryId" label="Danh mục" rules={[{ required: true }]}>
@@ -129,15 +232,19 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item name="featured" label="Sản phẩm nổi bật" valuePropName="checked" tooltip="Bật để hiển thị sản phẩm ở khu vực nổi bật trên trang chủ">
+          <Switch className="bg-gray-200" />
+        </Form.Item>
 
+        {/* ===== KHỐI 3: Hình ảnh (dùng chung) ===== */}
+        <SectionLabel hint="Dùng chung 2 ngôn ngữ">Hình ảnh sản phẩm</SectionLabel>
         <Row gutter={24}>
           <Col span={24}>
-             <Form.Item name="image" label="Hình ảnh chính sản phẩm">
-                <ImageUpload label="Chọn ảnh chính" />
-             </Form.Item>
+            <Form.Item name="image" label="Hình ảnh chính sản phẩm">
+              <ImageUpload label="Chọn ảnh chính" />
+            </Form.Item>
           </Col>
         </Row>
-
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item name="images" label={
@@ -152,120 +259,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </Form.Item>
           </Col>
         </Row>
-
-        <Divider>
-          <span className="text-[11px] font-black uppercase tracking-widest text-primary">Thông số sản phẩm</span>
-        </Divider>
-
-        <Form.List name="specifications">
-          {(fields, { add, remove }) => (
-            <div className="space-y-4">
-              {fields.map(({ key, name, ...restField }) => (
-                <div key={key} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'title']}
-                        label="Tên thông số (VD: THÀNH PHẦN)"
-                        rules={[{ required: true, message: 'Nhập tên thông số' }]}
-                      >
-                        <Input placeholder="Nhập tiêu đề..." className="rounded-xl font-bold text-primary" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'content']}
-                        label="Mô tả chi tiết"
-                        rules={[{ required: true, message: 'Nhập mô tả' }]}
-                      >
-                        <TextArea
-                          rows={4}
-                          placeholder="Nhập chi tiết thông số..."
-                          className="rounded-xl"
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Button
-                    type="text"
-                    danger
-                    icon={<DeleteOutlined />}
-                    onClick={() => remove(name)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
-              ))}
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                block
-                icon={<PlusOutlined />}
-                className="rounded-xl h-12 border-2 border-dashed border-gray-200 text-gray-400 hover:text-primary hover:border-primary transition-all"
-              >
-                THÊM THUỘC TÍNH / THÔNG SỐ
-              </Button>
-            </div>
-          )}
-        </Form.List>
-
-        <Divider>
-          <span className="text-[11px] font-black uppercase tracking-widest text-primary">Thông số sản phẩm (EN)</span>
-        </Divider>
-
-        <Form.List name="specificationsEn">
-          {(fields, { add, remove }) => (
-            <div className="space-y-4">
-              {fields.map(({ key, name, ...restField }) => (
-                <div key={key} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'title']}
-                        label="Spec title (e.g. COMPOSITION)"
-                        rules={[{ required: true, message: 'Enter a spec title' }]}
-                      >
-                        <Input placeholder="Enter title..." className="rounded-xl font-bold text-primary" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={24}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'content']}
-                        label="Detailed description"
-                        rules={[{ required: true, message: 'Enter the description' }]}
-                      >
-                        <TextArea
-                          rows={4}
-                          placeholder="Enter spec details in English..."
-                          className="rounded-xl"
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Button
-                    type="text"
-                    danger
-                    icon={<DeleteOutlined />}
-                    onClick={() => remove(name)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
-                </div>
-              ))}
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                block
-                icon={<PlusOutlined />}
-                className="rounded-xl h-12 border-2 border-dashed border-gray-200 text-gray-400 hover:text-primary hover:border-primary transition-all"
-              >
-                ADD ENGLISH SPEC / ATTRIBUTE
-              </Button>
-            </div>
-          )}
-        </Form.List>
       </Form>
     </Modal>
   );

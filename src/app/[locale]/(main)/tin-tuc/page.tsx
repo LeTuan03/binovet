@@ -104,7 +104,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
              <div className="box-footer relative overflow-hidden p-8 rounded-2xl text-white">
                 <div className="bg-molecule absolute inset-0 opacity-50 pointer-events-none" />
                 <div className="relative z-10">
-                <h3 className="font-display font-semibold text-lg mb-6 border-b border-white/10 pb-4">{locale === 'en' ? 'Categories' : 'Chuyên mục'}</h3>
+                <h3 className="font-display font-semibold text-lg mb-6 border-b border-white/10 pb-4 text-white">{locale === 'en' ? 'Categories' : 'Chuyên mục'}</h3>
                 <div className="space-y-2">
                    <Link href={localePath(locale, '/tin-tuc-noi-bo')} className="flex items-center justify-between gap-3 group rounded-xl px-3 py-2.5 -mx-3 hover:bg-white/5 transition-colors">
                       <div className="flex items-center gap-3.5">

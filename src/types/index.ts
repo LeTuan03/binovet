@@ -122,6 +122,7 @@ export interface AboutPageContent {
     quoteText?: string;
   };
   thanhTuu?: {
+    heading?: string;
     title?: string;
     images?: ({ url: string; title?: string; subtitle?: string } | string)[];
   };
@@ -134,7 +135,10 @@ export interface Setting {
   address?: string | null;
   intro_slogan?: string | null;
   social?: any;
+  /** Vietnamese (canonical) About page content. */
   aboutPage?: AboutPageContent;
+  /** English About page content (edited independently in the admin). */
+  aboutPageEn?: AboutPageContent;
 }
 
 export interface AnimalTag {

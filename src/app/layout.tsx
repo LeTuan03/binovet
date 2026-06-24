@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Inter, Montserrat, Playfair_Display } from 'next/font/google';
+import { Be_Vietnam_Pro } from 'next/font/google';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import ContentProtection from "@/components/shared/ContentProtection";
 import { organizationSchema, localBusinessSchema } from "@/lib/schema";
@@ -8,25 +8,15 @@ import NextTopLoader from 'nextjs-toploader';
 import Preloader from "@/components/shared/Preloader";
 import "./globals.css";
 
-const inter = Inter({
+// Single, professional Vietnamese-first typeface used across the whole system
+// (headings, body and labels). Purpose-built for Vietnamese diacritics, which
+// reads cleaner and more corporate than the previous Inter/Playfair pairing.
+const beVietnamPro = Be_Vietnam_Pro({
   subsets: ['latin', 'vietnamese'],
   display: 'swap',
-  variable: '--font-inter',
-});
-
-const montserrat = Montserrat({
-  subsets: ['latin', 'vietnamese'],
-  display: 'swap',
-  variable: '--font-montserrat',
-});
-
-// Signature display serif — gives headings an editorial, premium feel.
-const playfair = Playfair_Display({
-  subsets: ['latin', 'vietnamese'],
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
-  variable: '--font-playfair',
+  variable: '--font-be-vietnam',
 });
 
 export const viewport = {
@@ -104,7 +94,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${inter.variable} ${montserrat.variable} ${playfair.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="vi" className={beVietnamPro.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Remove browser extension attributes (e.g. Bitdefender bis_skin_checked) before React hydration */}
         <script
@@ -162,7 +152,7 @@ export default function RootLayout({
         />
         <meta name="theme-color" content="#0a4d8c" />
       </head>
-      <body className={`${inter.className} antialiased min-h-screen`} suppressHydrationWarning>
+      <body className={`${beVietnamPro.className} antialiased min-h-screen`} suppressHydrationWarning>
         <NextTopLoader
           color="#d9531f"
           initialPosition={0.08}

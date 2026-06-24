@@ -261,29 +261,19 @@ function AdminBannersPageContent() {
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
-        <div className="p-8">
-          <div className="flex items-center gap-3 mb-8 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-700 shadow-sm">
-            <PictureOutlined className="text-xl" />
-            <div className="text-xs font-bold leading-relaxed">
-              <span className="uppercase tracking-wide block mb-1 opacity-70">Gợi ý kỹ thuật:</span>
-              Kích thước banner tối ưu cho trang chủ là <span className="text-primary font-black">1920x800 pixel</span>. Hãy đảm bảo hình ảnh có độ phân giải cao để hiển thị tốt nhất trên màn hình lớn.
-            </div>
-          </div>
-
-          <Table size="small" sticky
-            columns={columns}
-            dataSource={filteredData}
-            rowKey="id"
-            loading={loading}
-            className="admin-table"
-            pagination={{
-              current: page,
-              pageSize: 5,
-              className: "p-6 border-t border-gray-50",
-              onChange: (p) => updateUrl({ page: p })
-            }}
-          />
-        </div>
+        <Table size="small" sticky
+          columns={columns}
+          dataSource={filteredData}
+          rowKey="id"
+          loading={loading}
+          className="admin-table"
+          pagination={{
+            current: page,
+            pageSize: 6,
+            className: "p-6 border-t border-gray-50",
+            onChange: (p) => updateUrl({ page: p })
+          }}
+        />
       </div>
 
       <Modal

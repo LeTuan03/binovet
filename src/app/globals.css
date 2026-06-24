@@ -24,14 +24,19 @@
   --color-sand: #efe9df;         /* premium warm neutral block */
   --color-brass: #b08542;        /* subtle metallic accent (hairlines, marks) */
 
-  /* Display serif (signature) + sans */
-  --font-display: var(--font-playfair), 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  /* Single professional Vietnamese-first typeface (Be Vietnam Pro) for the whole
+     system — headings, body and labels all resolve to it. */
+  --font-display: var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-sans: var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif;
 }
 
 :root {
-  --font-inter: 'Inter', sans-serif;
-  --font-montserrat: 'Montserrat', sans-serif;
+  /* Legacy aliases kept so the ~40 components / inline styles that still reference
+     --font-inter / --font-montserrat / --font-playfair resolve to the new system
+     font without renaming every call site. */
+  --font-inter: var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-montserrat: var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-playfair: var(--font-be-vietnam), 'Be Vietnam Pro', system-ui, sans-serif;
 
   /* Refined elevation scale — soft, layered, never heavy */
   --shadow-sm: 0 1px 2px rgba(12, 34, 54, 0.04), 0 4px 14px -8px rgba(12, 34, 54, 0.10);
@@ -51,7 +56,7 @@ html, body {
 }
 
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-be-vietnam), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #33414f;
@@ -69,12 +74,12 @@ body {
 }
 
 /* ============================================================
-   EDITORIAL TYPESET — scoped to the public site only (.site-shell)
-   so the admin (antd) UI is untouched.
-   Headings default to the signature display serif; body stays Inter.
+   TYPESET — scoped to the public site only (.site-shell).
+   The whole system uses one professional sans (Be Vietnam Pro);
+   headings just render heavier + tighter than body.
    ============================================================ */
 .site-shell {
-  font-family: var(--font-inter);
+  font-family: var(--font-be-vietnam), system-ui, sans-serif;
 }
 
 /* Sit these in @layer base so they act as defaults — Tailwind text-color
@@ -88,11 +93,11 @@ body {
   .site-shell h4,
   .site-shell h5,
   .site-shell h6 {
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    font-family: var(--font-be-vietnam), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--color-ink);
-    line-height: 1.1;
+    line-height: 1.15;
   }
 }
 
@@ -334,6 +339,34 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* Hero overlay legibility — soft halo behind display text over imagery */
+.hero-text-shadow {
+  text-shadow: 0 1px 2px rgba(4, 20, 38, 0.35), 0 14px 40px rgba(4, 20, 38, 0.45);
+}
+
+/* Gentle vertical float — for floating medallions / accents */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+.float-slow { animation: floatY 6s ease-in-out infinite; }
+
+/* Subtle brass top accent for premium section bands */
+.rule-brass-top {
+  position: relative;
+}
+.rule-brass-top::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(3rem, 18vw, 9rem);
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, var(--color-brass), transparent);
 }
 
 /* Editorial prose tuning for article bodies */

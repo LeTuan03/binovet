@@ -42,7 +42,12 @@ export default function AboutContent() {
     let cancelled = false;
     fetch('/api/data/settings')
       .then(res => (res.ok ? res.json() : null))
-      .then(data => { if (!cancelled && data) setContent(mergeAbout(data?.aboutPage, locale)); })
+      .then(data => {
+        if (!cancelled && data) {
+          const stored = locale === 'en' ? data?.aboutPageEn : data?.aboutPage;
+          setContent(mergeAbout(stored, locale));
+        }
+      })
       .catch(() => { });
     return () => { cancelled = true; };
   }, [locale, en]);
