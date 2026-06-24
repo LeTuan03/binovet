@@ -6,5 +6,5 @@
     <rect x="-60" y="-30" width="120" height="60" fill="#034ea2" fill-opacity="0.08"/>
     <path d="M-18 0h36M0 -18v36" stroke="#f15a22" stroke-width="10" stroke-linecap="round"/>
   </g>
-  <text x="300" y="500" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#9bb0c7">BIOTECH·VET</text>
+  <text x="300" y="500" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#9bb0c7">BINOVET</text>
 </svg>

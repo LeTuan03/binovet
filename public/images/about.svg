@@ -21,6 +21,6 @@
     <path d="M450 250h0a26 26 0 0 1 26 26v40h40a26 26 0 0 1 0 52h-40v40a26 26 0 0 1-52 0v-40h-40a26 26 0 0 1 0-52h40v-40a26 26 0 0 1 26-26z" fill="#ffffff" fill-opacity="0.95"/>
     <circle cx="520" cy="248" r="26" fill="#f15a22"/>
   </g>
-  <text x="60" y="630" font-family="Montserrat, Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff" fill-opacity="0.9">BIOTECH·VET</text>
+  <text x="60" y="630" font-family="Montserrat, Arial, sans-serif" font-size="30" font-weight="800" fill="#ffffff" fill-opacity="0.9">BINOVET</text>
   <text x="60" y="664" font-family="Montserrat, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="2" fill="#ffffff" fill-opacity="0.6">VETERINARY TECHNOLOGY</text>
 </svg>
