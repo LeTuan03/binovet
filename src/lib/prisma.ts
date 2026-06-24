@@ -8,7 +8,14 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const pool = new Pool({ connectionString });
+// Giới hạn pool nhỏ: Supabase pooler có giới hạn client. Trên serverless (Netlify)
+// mỗi instance giữ tối đa `max` kết nối → tránh lỗi "max clients reached".
+const pool = new Pool({
+  connectionString,
+  max: 3,
+  idleTimeoutMillis: 10_000,
+  connectionTimeoutMillis: 10_000,
+});
 const adapter = new PrismaPg(pool);
 
 export const prisma =
