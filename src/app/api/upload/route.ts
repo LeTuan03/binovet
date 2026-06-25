@@ -78,6 +78,20 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Không có Supabase client. Trên production (Netlify) filesystem là read-only
+    // → fail rõ ràng thay vì ném ENOENT khó hiểu.
+    const isServerless = !!process.env.NETLIFY || process.env.NODE_ENV === 'production';
+    if (isServerless) {
+      console.error('Upload misconfig: SUPABASE_SERVICE_ROLE_KEY chưa được set trên server.');
+      return NextResponse.json(
+        {
+          message:
+            'Storage chưa được cấu hình: thiếu SUPABASE_SERVICE_ROLE_KEY trên môi trường server (Netlify).',
+        },
+        { status: 500 },
+      );
+    }
+
     // ── Local dev fallback: filesystem (public/uploads) ─────────────
     const isUploadsBucket = bucket === 'uploads' || !bucket;
     const bucketDir = isUploadsBucket ? UPLOAD_DIR : path.join(UPLOAD_DIR, bucket);
