@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs';
+import { getSupabaseAdmin, STORAGE_BUCKET } from '@/lib/supabase-server';
 
-// Configuration
+// Route handler chạy trên Node runtime (cần fs cho fallback local + Buffer).
+export const runtime = 'nodejs';
+
+// Thư mục lưu file khi chạy local dev (filesystem ghi được).
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
-
-// Ensure upload directory exists
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    
+
     // Create a sanitized file name (strip diacritics & non URL-safe chars)
     const timestamp = Date.now();
     const dotIdx = file.name.lastIndexOf('.');
@@ -45,12 +44,44 @@ export async function POST(req: NextRequest) {
     const safeExt = rawExt.replaceAll(/[^a-zA-Z0-9]/g, '').toLowerCase();
     const originalName = safeExt ? `${safeBase}.${safeExt}` : safeBase;
     const fileName = `${timestamp}-${originalName}`;
-    
-    // For local development, we save to public/uploads
-    // We can also support subdirectories based on "bucket"
+
+    // ── Production: Supabase Storage ────────────────────────────────
+    // Netlify serverless có filesystem read-only → phải lưu lên object storage.
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      // App dùng nhiều "bucket" (uploads/images/general) → map thành thư mục
+      // con bên trong 1 Supabase Storage bucket duy nhất.
+      const objectPath = `${bucket}/${fileName}`;
+
+      const { error } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .upload(objectPath, buffer, {
+          contentType: file.type || 'application/octet-stream',
+          cacheControl: '31536000',
+          upsert: false,
+        });
+
+      if (error) {
+        console.error('Supabase Storage upload error:', error);
+        return NextResponse.json({ message: error.message }, { status: 500 });
+      }
+
+      const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(objectPath);
+      const url = data.publicUrl;
+
+      return NextResponse.json({
+        success: true,
+        url,
+        name: fileName,
+        size: file.size,
+        type: file.type,
+      });
+    }
+
+    // ── Local dev fallback: filesystem (public/uploads) ─────────────
     const isUploadsBucket = bucket === 'uploads' || !bucket;
     const bucketDir = isUploadsBucket ? UPLOAD_DIR : path.join(UPLOAD_DIR, bucket);
-    
+
     if (!fs.existsSync(bucketDir)) {
       fs.mkdirSync(bucketDir, { recursive: true });
     }
@@ -58,18 +89,17 @@ export async function POST(req: NextRequest) {
     const filePath = path.join(bucketDir, fileName);
     fs.writeFileSync(filePath, buffer);
 
-    // Return the URL that can be accessed via Next.js static serving
     const relativePath = isUploadsBucket ? fileName : `${bucket}/${fileName}`;
     const url = `/uploads/${relativePath}`;
 
     console.log(`File saved to ${filePath}, URL: ${url}`);
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       url,
       name: fileName,
       size: file.size,
-      type: file.type
+      type: file.type,
     });
   } catch (error: any) {
     console.error('Upload API error:', error);
