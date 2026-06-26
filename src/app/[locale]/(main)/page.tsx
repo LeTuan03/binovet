@@ -8,8 +8,10 @@ import {
 import { productService, articleService, bannerService, mediaService, settingService, categoryService } from '@/services';
 import { ProductSummary, ArticleSummary, Category } from '@/types';
 import BannerSlider from '@/components/home/BannerSlider';
+import CategoryMarquee from '@/components/home/CategoryMarquee';
 import IntroVideo from '@/components/home/IntroVideo';
-import FadeUp from '@/components/shared/FadeUp';
+import Reveal from '@/components/shared/Reveal';
+import { StaggerGroup, StaggerItem } from '@/components/shared/Stagger';
 import CountUp from '@/components/shared/CountUp';
 import SectionHeading from '@/components/shared/SectionHeading';
 import Monogram from '@/components/shared/Monogram';
@@ -95,6 +97,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   const hotline = (settings as any)?.hotline1 || '024 6686 1629';
 
+  // Product-line ticker beneath the hero — real category names, curated fallback.
+  const marqueeFallback = en
+    ? ['Antibiotics', 'Veterinary vaccines', 'Antiparasitics', 'Vitamins & minerals', 'Disinfectants', 'Veterinary equipment', 'Animal feed', 'Respiratory', 'Digestive', 'Biologicals']
+    : ['Thuốc kháng sinh', 'Vaccine thú y', 'Thuốc ký sinh trùng', 'Vitamin & khoáng chất', 'Thuốc sát trùng', 'Dụng cụ thú y', 'Thức ăn chăn nuôi', 'Thuốc hô hấp', 'Thuốc tiêu hóa', 'Chế phẩm sinh học'];
+  const marqueeItems = categories.length ? categories.map((c) => c.name) : marqueeFallback;
+
   return (
     <div className="w-full bg-white">
       {/* ════════ 1 · Cinematic hero ════════ */}
@@ -113,13 +121,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         fallbackTitle={en ? "Vietnam's leading veterinary medicine brand" : 'Thương hiệu dược thú y hàng đầu Việt Nam'}
       />
 
+      {/* ════════ 2 · Product-line ticker ════════ */}
+      <CategoryMarquee items={marqueeItems} />
+
       {/* ════════ 3 · Company introduction + film ════════ */}
       <section className="py-24 lg:py-28 bg-white overflow-hidden relative">
         <div className="container mx-auto px-4 relative z-10">
-          <FadeUp>
             <div className="flex flex-col lg:flex-row gap-14 lg:gap-20 items-center">
               {/* Film + experience medallion — left */}
-              <div className="w-full lg:w-1/2 relative">
+              <Reveal direction="left" distance={64} className="w-full lg:w-1/2 relative">
                 <IntroVideo
                   video={introVideo ? { url: introVideo.url, thumbnail: introVideo.thumbnail, title: introVideo.title } : null}
                   youtubeUrl={(settings as any)?.social?.youtube}
@@ -135,10 +145,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </span>
                   </div>
                 </div>
-              </div>
+              </Reveal>
 
               {/* Heading, intro & feature cards — right */}
-              <div className="w-full lg:w-1/2">
+              <Reveal direction="right" delay={0.1} distance={64} className="w-full lg:w-1/2">
                 <span className="eyebrow mb-5">{en ? 'About us' : 'Về chúng tôi'}</span>
                 <h2 className="font-display font-semibold leading-[1.1] tracking-tight text-4xl lg:text-[2.9rem] text-ink">
                   {h.about.titleLine1} <span className="text-primary italic">{h.about.titleLine2}</span>
@@ -175,9 +185,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     {en ? 'Photo & video gallery' : 'Thư viện ảnh & video'}
                   </Link>
                 </div>
-              </div>
+              </Reveal>
             </div>
-          </FadeUp>
         </div>
       </section>
 
@@ -186,7 +195,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section className="py-24 lg:py-28 bg-paper border-t border-line relative overflow-hidden">
           <div className="absolute inset-0 bg-helix opacity-60 pointer-events-none" />
           <div className="container mx-auto px-4 relative z-10">
-            <FadeUp className="mb-16">
+            <Reveal direction="down" className="mb-16">
               <SectionHeading
                 align="center"
                 divider
@@ -196,11 +205,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 subtitle={en ? 'A curated selection of our most trusted veterinary pharmaceutical lines.' : 'Tuyển chọn những dòng dược phẩm thú y được tin dùng rộng rãi nhất.'}
                 titleClassName="text-3xl lg:text-4xl"
               />
-            </FadeUp>
+            </Reveal>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7">
-              {featuredProducts.map((p, i) => (
-                <FadeUp key={p.id} delay={(i % 4) * 0.08}>
+            <StaggerGroup className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7" stagger={0.1}>
+              {featuredProducts.map((p) => (
+                <StaggerItem key={p.id}>
                   <Link href={localePath(locale, `/san-pham/${p.slug}`)} className="card-elegant overflow-hidden group flex flex-col h-full">
                     <div className="relative aspect-square bg-white overflow-hidden flex items-center justify-center">
                       {p.featured && (
@@ -230,9 +239,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                       </span>
                     </div>
                   </Link>
-                </FadeUp>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGroup>
 
             <div className="text-center mt-14">
               <Link href={localePath(locale, '/san-pham')} className="btn btn-primary">
@@ -246,7 +255,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* ════════ 5 · Product category lines ════════ */}
       <section className="py-24 lg:py-28 bg-white relative border-t border-line">
         <div className="container mx-auto px-4">
-          <FadeUp className="mb-16">
+          <Reveal direction="down" className="mb-16">
             <SectionHeading
               align="center"
               divider
@@ -256,11 +265,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
               subtitle={en ? 'A complete portfolio across every farming need — built on GMP-WHO standards.' : 'Danh mục đầy đủ cho mọi nhu cầu chăn nuôi — đạt tiêu chuẩn GMP-WHO.'}
               titleClassName="text-3xl lg:text-4xl"
             />
-          </FadeUp>
+          </Reveal>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" stagger={0.12}>
             {categories.map((cat, i) => (
-              <FadeUp key={cat.id} delay={(i % 3) * 0.1}>
+              <StaggerItem key={cat.id}>
                 <Link
                   href={localePath(locale, `/san-pham/danh-muc/${cat.slug}`)}
                   className="card-elegant overflow-hidden group flex flex-col h-full"
@@ -291,9 +300,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                     </h3>
                   </div>
                 </Link>
-              </FadeUp>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
 
           <div className="text-center mt-12">
             <Link href={localePath(locale, '/san-pham')} className="btn btn-outline">
@@ -308,16 +317,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <div className="absolute inset-0 bg-molecule opacity-70" />
         <div className="absolute inset-0 bg-[radial-gradient(40rem_40rem_at_80%_-10%,rgba(217,83,31,0.18),transparent_60%),radial-gradient(40rem_40rem_at_0%_110%,rgba(10,77,140,0.45),transparent_55%)]" />
         <div className="container mx-auto px-4 relative z-10">
-          <FadeUp className="mb-14 text-center">
+          <Reveal direction="down" className="mb-14 text-center">
             <span className="eyebrow eyebrow--center text-secondary mb-4 justify-center">{en ? 'By the numbers' : 'Những con số'}</span>
             <h2 className="font-display font-semibold text-white text-3xl lg:text-4xl">
               {en ? 'A track record farmers ' : 'Thành tựu được nhà nông '}
               <span className="text-secondary italic">{en ? 'trust' : 'tin tưởng'}</span>
             </h2>
-          </FadeUp>
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
-            {stats.map((s, i) => (
-              <FadeUp key={s.label} delay={i * 0.08}>
+          </Reveal>
+          <StaggerGroup className="grid grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6" stagger={0.1}>
+            {stats.map((s) => (
+              <StaggerItem key={s.label}>
                 <div className="flex flex-col items-center text-center group">
                   <div className="glass-dark w-16 h-16 rounded-2xl flex items-center justify-center text-secondary mb-5 transition-transform duration-500 group-hover:-translate-y-1">
                     {s.icon}
@@ -325,9 +334,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   <CountUp value={s.value} className="font-display text-4xl lg:text-5xl font-semibold text-white mb-2" />
                   <div className="text-[0.8rem] lg:text-[0.85rem] text-white/65 uppercase tracking-[0.16em] font-montserrat">{s.label}</div>
                 </div>
-              </FadeUp>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGroup>
         </div>
       </section>
 
@@ -335,7 +344,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {latestNews.length > 0 && (
         <section className="py-24 lg:py-28 bg-white overflow-hidden relative">
           <div className="container mx-auto px-4 relative z-10">
-            <FadeUp className="mb-16">
+            <Reveal direction="down" className="mb-16">
               <SectionHeading
                 align="center"
                 divider
@@ -345,7 +354,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 subtitle={h.news.sub}
                 titleClassName="text-3xl lg:text-4xl"
               />
-            </FadeUp>
+            </Reveal>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
               {/* Lead story — large */}
@@ -353,7 +362,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 const a = latestNews[0];
                 const href = localePath(locale, `/bai-viet/${a.slug}`);
                 return (
-                  <FadeUp>
+                  <Reveal direction="left" distance={56}>
                     <article className="group h-full flex flex-col">
                       <Link href={href} className="block aspect-[16/10] overflow-hidden rounded-2xl shadow-elegant-lg">
                         <img
@@ -376,7 +385,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                         </Link>
                       </div>
                     </article>
-                  </FadeUp>
+                  </Reveal>
                 );
               })()}
 
@@ -385,7 +394,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 {latestNews.slice(1).map((a, i) => {
                   const href = localePath(locale, `/bai-viet/${a.slug}`);
                   return (
-                    <FadeUp key={a.id} delay={i * 0.1}>
+                    <Reveal key={a.id} direction="right" delay={i * 0.1} distance={56}>
                       <article className="group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 first:pt-0">
                         <Link href={href} className="block aspect-[4/3] overflow-hidden rounded-xl shadow-elegant">
                           <img
@@ -404,7 +413,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                           </Link>
                         </div>
                       </article>
-                    </FadeUp>
+                    </Reveal>
                   );
                 })}
               </div>

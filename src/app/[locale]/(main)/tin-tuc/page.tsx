@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { articleService, settingService } from '@/services';
 import { ArticleSummary } from '@/types';
 // import { articles } from '@/lib/data'; // Removed static import
-import FadeUp from '@/components/shared/FadeUp';
+import Reveal from '@/components/shared/Reveal';
 import { Calendar, ChevronRight, Newspaper, Users, Globe, Headset, Phone, Mail } from 'lucide-react';
 import PageHero from '@/components/shared/PageHero';
 import { Metadata } from 'next';
@@ -67,7 +67,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
           {/* Main Feed */}
           <div className="lg:col-span-2 space-y-8 lg:space-y-10">
              {allNews.map((a: ArticleSummary, index: number) => (
-               <FadeUp key={a.id} delay={index * 0.1}>
+               <Reveal key={a.id} direction="left" distance={56} delay={index * 0.1}>
                <article className="card-elegant group flex flex-col md:flex-row gap-8 p-6">
                   <Link href={localePath(locale, `/bai-viet/${a.slug}`)} className="w-full md:w-2/5 aspect-[16/10] relative overflow-hidden rounded-2xl shrink-0">
                      <img src={a.thumbnail} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -94,12 +94,12 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                      </Link>
                   </div>
                </article>
-               </FadeUp>
+               </Reveal>
              ))}
           </div>
 
           {/* Side Panels */}
-          <aside className="lg:col-span-1 space-y-8 lg:sticky lg:top-28 lg:self-start">
+          <Reveal direction="right" distance={56} className="lg:col-span-1 space-y-8 lg:sticky lg:top-28 lg:self-start">
              {/* Category Stats */}
              <div className="box-footer relative overflow-hidden p-8 rounded-2xl text-white">
                 <div className="bg-molecule absolute inset-0 opacity-50 pointer-events-none" />
@@ -157,7 +157,7 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                    </div>
                 </div>
              </div>
-          </aside>
+          </Reveal>
         </div>
       </div>
     </div>

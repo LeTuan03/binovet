@@ -353,6 +353,15 @@ body {
 }
 .float-slow { animation: floatY 6s ease-in-out infinite; }
 
+/* Marquee ticker — seamless horizontal scroll of product-line labels.
+   The set is rendered twice and shifted -50% so the loop has no gap. */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee var(--marquee-duration, 30s) linear infinite; }
+.marquee-wrapper:hover .animate-marquee { animation-play-state: paused; }
+
 /* Subtle brass top accent for premium section bands */
 .rule-brass-top {
   position: relative;

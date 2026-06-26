@@ -4,6 +4,7 @@ import React from 'react';
 import { Phone, Mail, MapPin, Send, MessageSquare } from 'lucide-react';
 import { FacebookOutlined, YoutubeOutlined } from '@ant-design/icons';
 import PageHero from '@/components/shared/PageHero';
+import Reveal from '@/components/shared/Reveal';
 import { useLocale } from '@/lib/i18n/LocaleProvider';
 
 export default function ContactContent({ settings }: { settings: any }) {
@@ -58,7 +59,7 @@ export default function ContactContent({ settings }: { settings: any }) {
          <div className="container mx-auto px-4 py-16 lg:py-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20">
                {/* Information Column */}
-               <div className="space-y-12">
+               <Reveal direction="left" distance={56} className="space-y-12">
                   <div>
                      <span className="eyebrow mb-4">{locale === 'en' ? 'Get in touch' : 'Liên hệ'}</span>
                      <h2 className="text-3xl font-semibold text-ink accent-underline pb-3">{locale === 'en' ? 'Head Office Information' : 'Thông Tin Trụ Sở'}</h2>
@@ -145,10 +146,10 @@ export default function ContactContent({ settings }: { settings: any }) {
                         </a>
                      )}
                   </div>
-               </div>
+               </Reveal>
 
                {/* Form Column */}
-               <div className="card-elegant p-10 md:p-14 relative overflow-hidden lg:sticky lg:top-24 self-start">
+               <Reveal direction="right" distance={56} delay={0.1} className="card-elegant p-10 md:p-14 relative overflow-hidden lg:sticky lg:top-24 self-start">
                   <div className="flex items-center gap-4 mb-10">
                      <div className="w-12 h-12 rounded-xl bg-primary/8 text-primary flex items-center justify-center">
                         <MessageSquare size={24} strokeWidth={1.75} />
@@ -182,11 +183,11 @@ export default function ContactContent({ settings }: { settings: any }) {
                            <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> {locale === 'en' ? 'Send request now' : 'Gửi yêu cầu ngay'}
                         </button>
                      </form>
-               </div>
+               </Reveal>
             </div>
 
             {/* SLOGAN */}
-            <div className="bg-binovet-dark text-white p-12 lg:p-20 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center text-center mt-20 lg:mt-28 shadow-elegant-lg">
+            <Reveal direction="up" className="bg-binovet-dark text-white p-12 lg:p-20 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center text-center mt-20 lg:mt-28 shadow-elegant-lg">
                <div className="absolute inset-0 bg-molecule opacity-60" />
                <div className="relative z-10 flex flex-col items-center">
                   <div className="divider-diamond mb-6"><span /></div>
@@ -197,10 +198,10 @@ export default function ContactContent({ settings }: { settings: any }) {
                      {locale === 'en' ? 'With BiotechVet - Enhancing the value of Vietnamese livestock farming' : 'Cùng BiotechVet - Nâng cao giá trị chăn nuôi Việt Nam'}
                   </p>
                </div>
-            </div>
+            </Reveal>
 
             {/* Google Maps */}
-            <div className="mt-20 lg:mt-28 w-full h-[500px] rounded-2xl overflow-hidden border border-line shadow-elegant">
+            <Reveal direction="up" className="mt-20 lg:mt-28 w-full h-[500px] rounded-2xl overflow-hidden border border-line shadow-elegant">
                <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727.9957!2d105.8652!3d20.8305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCụm+CN+Li%C3%AAn+Ph%C6%B0%C6%A1ng%2C+X%C3%A3+H%E1%BB%93ng+V%C3%A2n%2C+Th%C6%B0%E1%BB%9Dng+T%C3%ADn%2C+H%C3%A0+N%E1%BB%99i!5e0!3m2!1svi!2svn!4v1700000000000"
                   width="100%"
@@ -211,7 +212,7 @@ export default function ContactContent({ settings }: { settings: any }) {
                   referrerPolicy="no-referrer-when-downgrade"
                   title={locale === 'en' ? 'BiotechVet map - Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi' : 'Bản đồ BiotechVet - Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội'}
                />
-            </div>
+            </Reveal>
          </div>
       </div>
    );

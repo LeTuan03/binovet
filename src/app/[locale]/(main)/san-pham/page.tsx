@@ -4,6 +4,7 @@ import { productService, categoryService } from '@/services';
 import { Category, ProductSummary } from '@/types';
 import Pagination from '@/components/shared/Pagination';
 import FadeUp from '@/components/shared/FadeUp';
+import Reveal from '@/components/shared/Reveal';
 import ProductSearch from '@/components/shared/ProductSearch';
 import PageHero from '@/components/shared/PageHero';
 import { Metadata } from 'next';
@@ -116,7 +117,7 @@ export default async function ProductsPage({ params: routeParams, searchParams }
 
       <div className="container mx-auto px-4 py-16 lg:py-24 flex flex-col lg:flex-row gap-8 lg:gap-12">
         {/* Sidebar Filters */}
-        <aside className="w-full lg:w-1/4">
+        <Reveal direction="left" distance={56} className="w-full lg:w-1/4">
           <div className="lg:sticky lg:top-24 space-y-6">
             {/* Search Bar */}
             <div className="card-elegant p-6">
@@ -151,11 +152,11 @@ export default async function ProductsPage({ params: routeParams, searchParams }
               </ul>
             </div>
           </div>
-        </aside>
+        </Reveal>
 
         {/* Product Grid */}
         <main className="w-full lg:w-3/4">
-          <div className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center bg-paper p-5 rounded-2xl border border-line gap-4">
+          <Reveal direction="down" className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center bg-paper p-5 rounded-2xl border border-line gap-4">
             <div className="text-ink-soft text-sm leading-relaxed">
               {searchTerm ? (
                 <span>{locale === 'en' ? 'Search results for' : 'Kết quả tìm kiếm cho'}: <strong className="text-secondary">&ldquo;{searchTerm}&rdquo;</strong> &middot; </span>
@@ -163,7 +164,7 @@ export default async function ProductsPage({ params: routeParams, searchParams }
               {locale === 'en' ? 'Showing' : 'Hiển thị'} <strong className="text-ink">{paginatedProducts.length}</strong> {locale === 'en' ? 'of' : 'trên'} <strong className="text-ink">{totalItems}</strong> {locale === 'en' ? 'products' : 'sản phẩm'} {activeCategory && (locale === 'en' ? `in ${activeCategory.name}` : `trong ${activeCategory.name}`)}
             </div>
             <ProductSort />
-          </div>
+          </Reveal>
 
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">

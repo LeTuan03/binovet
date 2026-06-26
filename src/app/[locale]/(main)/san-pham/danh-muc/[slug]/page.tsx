@@ -9,6 +9,7 @@ import Pagination from '@/components/shared/Pagination';
 import ProductSearch from '@/components/shared/ProductSearch';
 import ProductSort from '@/components/shared/ProductSort';
 import FadeUp from '@/components/shared/FadeUp';
+import Reveal from '@/components/shared/Reveal';
 import PageHero from '@/components/shared/PageHero';
 import { resolveLocale, localePath } from '@/lib/i18n/config';
 import { localizeAll } from '@/lib/i18n/localize';
@@ -81,7 +82,7 @@ export default async function CategoryPage({ params, searchParams }: Readonly<{
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Sidebar */}
-          <aside className="w-full lg:w-1/4">
+          <Reveal direction="left" distance={56} className="w-full lg:w-1/4">
             <div className="lg:sticky lg:top-24 space-y-6">
               {/* Search Bar */}
               <div className="card-elegant p-6">
@@ -115,12 +116,12 @@ export default async function CategoryPage({ params, searchParams }: Readonly<{
                 </Link>
               </div>
             </div>
-          </aside>
+          </Reveal>
 
           {/* Product Grid */}
           <main className="w-full lg:w-3/4">
             {/* Header Controls */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 bg-paper p-5 rounded-2xl border border-line gap-4">
+            <Reveal direction="down" className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 bg-paper p-5 rounded-2xl border border-line gap-4">
               <div className="text-sm text-ink-soft leading-relaxed">
                 {searchTerm ? (
                   <span>{locale === 'en' ? 'Search results for' : 'Kết quả tìm kiếm cho'}: <strong className="text-secondary">&ldquo;{searchTerm}&rdquo;</strong> &middot; </span>
@@ -128,7 +129,7 @@ export default async function CategoryPage({ params, searchParams }: Readonly<{
                 {locale === 'en' ? 'Showing' : 'Hiển thị'} <strong className="text-ink">{paginatedProducts.length}</strong> {locale === 'en' ? 'of' : 'trên'} <strong className="text-ink">{totalItems}</strong> {locale === 'en' ? 'products' : 'sản phẩm'}
               </div>
               <ProductSort />
-            </div>
+            </Reveal>
 
             {filteredProducts.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">

@@ -23,16 +23,32 @@ const sectionDefs = [
   { id: 'co-cau', label: 'Cơ cấu', labelEn: 'Structure', icon: Users },
 ];
 
-const reveal = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, ease: 'easeOut' as const },
-};
+type RevealDir = 'up' | 'down' | 'left' | 'right';
 
 export default function AboutContent() {
   const { locale } = useLocale();
   const en = locale === 'en';
+
+  // Directional scroll-reveal props for the inline motion blocks:
+  // `up` rises, `down` drops in (trượt xuống), `left`/`right` slide sideways
+  // (trượt sang). NOTE: intentionally NOT branched on `useReducedMotion()` —
+  // that diverges between server (animated) and client (static) and trips a
+  // hydration mismatch that can freeze content invisible. Framer Motion's
+  // default keeps it playing; ambient CSS loops are calmed in globals.css.
+  const anim = (direction: RevealDir = 'up', delay = 0) => {
+    const distance = 48;
+    const from =
+      direction === 'up' ? { y: distance }
+      : direction === 'down' ? { y: -distance }
+      : direction === 'left' ? { x: -distance }
+      : { x: distance };
+    return {
+      initial: { opacity: 0, ...from },
+      whileInView: { opacity: 1, x: 0, y: 0 },
+      viewport: { once: true, amount: 0.2 },
+      transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+    };
+  };
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const [content, setContent] = useState(en ? aboutDefaultsEn : aboutDefaults);
@@ -131,7 +147,7 @@ export default function AboutContent() {
       <section id="gioi-thieu" className="scroll-mt-32 py-16 lg:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div {...reveal}>
+            <motion.div {...anim('left', 0.05)}>
               <SectionHeading
                 eyebrow={en ? 'Overview' : 'Giới thiệu'}
                 title={content.gioiThieu.title}
@@ -161,7 +177,7 @@ export default function AboutContent() {
               </div>
             </motion.div>
 
-            <motion.div {...reveal} className="relative mb-10 lg:mb-0">
+            <motion.div {...anim('right', 0.15)} className="relative mb-10 lg:mb-0">
               <div className="relative rounded-2xl overflow-hidden border border-line shadow-elegant-lg group">
                 <img
                   src="/images/about.svg"
@@ -189,7 +205,7 @@ export default function AboutContent() {
       {/* ── 2. History (timeline) ───────────────────────────────────── */}
       <section id="lich-su" className="scroll-mt-32 py-16 lg:py-24 bg-paper border-t border-line">
         <div className="container mx-auto px-4">
-          <motion.div {...reveal}>
+          <motion.div {...anim('down')}>
             <SectionHeading
               align="center"
               divider
@@ -206,7 +222,7 @@ export default function AboutContent() {
               {content.lichSu.timeline.map((item, index) => (
                 <motion.div
                   key={`${item.year}-${index}`}
-                  {...reveal}
+                  {...anim(index % 2 === 0 ? 'right' : 'left')}
                   className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
                 >
                   <div className="absolute left-[-33px] md:left-1/2 w-4 h-4 rounded-full bg-secondary border-4 border-paper shadow-sm md:-translate-x-1/2 z-10" />
@@ -228,7 +244,7 @@ export default function AboutContent() {
         <div className="absolute inset-0 bg-molecule opacity-60 pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(36rem_36rem_at_85%_-10%,rgba(217,83,31,0.18),transparent_60%),radial-gradient(40rem_40rem_at_0%_120%,rgba(10,77,140,0.45),transparent_55%)] pointer-events-none" />
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div {...reveal}>
+          <motion.div {...anim('down')}>
             <SectionHeading
               theme="dark"
               align="center"
@@ -238,14 +254,14 @@ export default function AboutContent() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8 mt-14 max-w-5xl mx-auto">
-            <motion.div {...reveal} className="glass-dark rounded-2xl p-9 lg:p-10">
+            <motion.div {...anim('left', 0.05)} className="glass-dark rounded-2xl p-9 lg:p-10">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-secondary mb-7">
                 <Target size={28} />
               </div>
               <h3 className="text-2xl font-semibold text-white mb-4">{content.tamNhin.visionTitle}</h3>
               <p className="text-white/75 leading-relaxed whitespace-pre-line">{content.tamNhin.visionText}</p>
             </motion.div>
-            <motion.div {...reveal} className="glass-dark rounded-2xl p-9 lg:p-10">
+            <motion.div {...anim('right', 0.15)} className="glass-dark rounded-2xl p-9 lg:p-10">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center text-secondary mb-7">
                 <Heart size={28} />
               </div>
@@ -254,7 +270,7 @@ export default function AboutContent() {
             </motion.div>
           </div>
 
-          <motion.div {...reveal} className="max-w-3xl mx-auto text-center mt-16">
+          <motion.div {...anim('up')} className="max-w-3xl mx-auto text-center mt-16">
             <Quote className="w-10 h-10 text-secondary/70 mx-auto mb-5" />
             <p className="font-display text-xl lg:text-2xl text-white leading-relaxed whitespace-pre-line">{content.tamNhin.quoteText}</p>
             <div className="mt-7 flex items-center justify-center gap-4">
@@ -272,7 +288,7 @@ export default function AboutContent() {
       <section id="co-so" className="scroll-mt-32 py-16 lg:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div {...reveal} className="order-2 lg:order-1">
+            <motion.div {...anim('left', 0.05)} className="order-2 lg:order-1">
               <SectionHeading eyebrow={en ? 'Facilities' : 'Cơ sở'} title={content.coSo.title} />
               <div className="prose-editorial max-w-none mt-7">
                 <p className="whitespace-pre-line">{content.coSo.intro}</p>
@@ -287,7 +303,7 @@ export default function AboutContent() {
               </div>
             </motion.div>
 
-            <motion.div {...reveal} className="order-1 lg:order-2">
+            <motion.div {...anim('right', 0.15)} className="order-1 lg:order-2">
               <div className="relative rounded-2xl overflow-hidden border border-line shadow-elegant-lg group aspect-[4/3]">
                 <img src="/images/about.svg" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Nhà máy GMP" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#06243f] via-[#06243f]/35 to-transparent flex flex-col justify-end p-8 text-white">
@@ -304,7 +320,7 @@ export default function AboutContent() {
       {/* ── 5. Achievements ─────────────────────────────────────────── */}
       <section id="thanh-tuu" className="scroll-mt-32 py-16 lg:py-24 bg-cream border-t border-line">
         <div className="container mx-auto px-4">
-          <motion.div {...reveal}>
+          <motion.div {...anim('down')}>
             <SectionHeading
               align="center"
               divider
@@ -316,7 +332,7 @@ export default function AboutContent() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-14">
             {content.thanhTuu.images.map((image, i) => (
-              <motion.div key={`${image.title}-${i}`} {...reveal} className="card-elegant p-8 flex flex-col items-center text-center">
+              <motion.div key={`${image.title}-${i}`} {...anim('up', (i % 3) * 0.1)} className="card-elegant p-8 flex flex-col items-center text-center">
                 <div className="w-full aspect-square flex items-center justify-center mb-6">
                   {image.url ? (
                     <img src={image.url} className="max-w-full max-h-full object-contain" alt={image.title || `Thành tựu ${i + 1}`} />
@@ -343,7 +359,7 @@ export default function AboutContent() {
       {/* ── 6. Organisational structure ─────────────────────────────── */}
       <section id="co-cau" className="scroll-mt-32 py-16 lg:py-24 bg-white border-t border-line">
         <div className="container mx-auto px-4">
-          <motion.div {...reveal}>
+          <motion.div {...anim('down')}>
             <SectionHeading
               align="center"
               eyebrow={en ? 'Organisation' : 'Tổ chức'}
@@ -352,7 +368,7 @@ export default function AboutContent() {
             />
           </motion.div>
 
-          <motion.div {...reveal} className="flex flex-col items-center mt-14">
+          <motion.div {...anim('up')} className="flex flex-col items-center mt-14">
             {content.coCau.roles.map((role, i) => {
               const tone = i === 0
                 ? 'bg-binovet-dark text-white'
@@ -370,7 +386,7 @@ export default function AboutContent() {
             })}
           </motion.div>
 
-          <motion.div {...reveal} className="max-w-4xl mx-auto mt-16">
+          <motion.div {...anim('up')} className="max-w-4xl mx-auto mt-16">
             <div className="card-elegant bg-cream p-9 md:p-12 flex flex-col md:flex-row items-center gap-8">
               <div className="w-24 h-24 shrink-0 rounded-2xl bg-white border border-line flex items-center justify-center p-4">
                 <img src="/images/logo.png" className="w-full h-full object-contain opacity-70" alt="binovet" />
