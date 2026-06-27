@@ -78,15 +78,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Không có Supabase client. Trên production (Netlify) filesystem là read-only
-    // → fail rõ ràng thay vì ném ENOENT khó hiểu.
-    const isServerless = !!process.env.NETLIFY || process.env.NODE_ENV === 'production';
-    if (isServerless) {
-      console.error('Upload misconfig: SUPABASE_SERVICE_ROLE_KEY chưa được set trên server.');
+    // Không có Supabase client → lưu file vào ổ đĩa local (public/uploads).
+    // Chỉ những nền tảng serverless có filesystem read-only (Netlify/Vercel) mới
+    // không ghi được → fail rõ ràng. Server self-hosted (PM2) ghi file bình thường.
+    const isReadOnlyFs = !!process.env.NETLIFY || !!process.env.VERCEL;
+    if (isReadOnlyFs) {
+      console.error('Upload misconfig: nền tảng serverless có filesystem read-only, cần object storage.');
       return NextResponse.json(
         {
           message:
-            'Storage chưa được cấu hình: thiếu SUPABASE_SERVICE_ROLE_KEY trên môi trường server (Netlify).',
+            'Storage chưa được cấu hình: nền tảng serverless có filesystem read-only, cần object storage.',
         },
         { status: 500 },
       );
