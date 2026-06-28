@@ -133,7 +133,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <IntroVideo
                   video={introVideo ? { url: introVideo.url, thumbnail: introVideo.thumbnail, title: introVideo.title } : null}
                   youtubeUrl={(settings as any)?.social?.youtube}
-                  poster="/images/about.svg"
+                  poster="/images/about.webp"
                   label={en ? 'Company film' : 'Phim giới thiệu'}
                 />
                 {/* floating experience medallion */}
