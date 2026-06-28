@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import {
   ArrowRight, ArrowUpRight, BadgeCheck, Headset, Award, Package, Building2, MapPin, Users,
-  FlaskConical, ShieldCheck, PhoneCall, Sparkles,
+  FlaskConical, ShieldCheck, PhoneCall,
 } from 'lucide-react';
 import { productService, articleService, bannerService, mediaService, settingService, categoryService } from '@/services';
 import { ProductSummary, ArticleSummary, Category } from '@/types';
@@ -133,7 +133,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <IntroVideo
                   video={introVideo ? { url: introVideo.url, thumbnail: introVideo.thumbnail, title: introVideo.title } : null}
                   youtubeUrl={(settings as any)?.social?.youtube}
-                  poster="/images/about.svg"
+                  poster="/images/about.webp"
                   label={en ? 'Company film' : 'Phim giới thiệu'}
                 />
                 {/* floating experience medallion */}
