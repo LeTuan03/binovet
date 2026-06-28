@@ -111,14 +111,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         eyebrow={en ? 'Veterinary biotechnology' : 'Công nghệ sinh học thú y'}
         subtitle={
           en
-            ? 'Over 20 years pioneering American biotechnology in Vietnamese veterinary medicine — every line manufactured to GMP-WHO standards.'
-            : 'Hơn 20 năm tiên phong đưa công nghệ sinh học Hoa Kỳ vào dược thú y Việt Nam — mỗi sản phẩm đạt chuẩn GMP-WHO.'
+            ? 'Partnering with the global livestock industry — high-quality animal health solutions, every line manufactured to GMP-WHO standards.'
+            : 'Đồng hành cùng ngành chăn nuôi toàn cầu — giải pháp chăm sóc sức khỏe vật nuôi chất lượng cao, mỗi sản phẩm đạt chuẩn GMP-WHO.'
         }
         ctaLabel={en ? 'Explore products' : 'Khám phá sản phẩm'}
         secondaryLabel={en ? 'Talk to an expert' : 'Liên hệ tư vấn'}
         secondaryHref={contactHref}
         scrollLabel={en ? 'Scroll' : 'Cuộn xuống'}
-        fallbackTitle={en ? "Vietnam's leading veterinary medicine brand" : 'Thương hiệu dược thú y hàng đầu Việt Nam'}
+        fallbackTitle={en ? 'Partnering with the Global Livestock Industry' : 'Đồng hành cùng ngành chăn nuôi toàn cầu'}
       />
 
       {/* ════════ 2 · Product-line ticker ════════ */}
@@ -212,11 +212,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 <StaggerItem key={p.id}>
                   <Link href={localePath(locale, `/san-pham/${p.slug}`)} className="card-elegant overflow-hidden group flex flex-col h-full">
                     <div className="relative aspect-square bg-white overflow-hidden flex items-center justify-center">
-                      {p.featured && (
-                        <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 bg-white/90 backdrop-blur text-secondary text-[0.6rem] font-bold uppercase tracking-[0.14em] px-2.5 py-1 rounded-full border border-line font-montserrat">
-                          <Sparkles size={11} /> {en ? 'Featured' : 'Nổi bật'}
-                        </span>
-                      )}
                       <img
                         src={p.image || '/images/default-product.svg'}
                         alt={p.name}
@@ -395,7 +390,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   const href = localePath(locale, `/bai-viet/${a.slug}`);
                   return (
                     <Reveal key={a.id} direction="right" delay={i * 0.1} distance={56}>
-                      <article className="group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 first:pt-0">
+                      <article className={`group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 ${i === 0 ? 'pt-0' : ''} ${i === latestNews.length - 1 ? 'pb-0' : ''}`}>
                         <Link href={href} className="block aspect-[4/3] overflow-hidden rounded-xl shadow-elegant">
                           <img
                             src={a?.thumbnail || '/images/default-article.svg'}

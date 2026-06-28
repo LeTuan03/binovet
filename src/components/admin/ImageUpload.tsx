@@ -5,7 +5,7 @@ import { Upload, App as AntdApp, Image as AntImage } from 'antd';
 import { PlusOutlined, DeleteOutlined, LoadingOutlined, EyeOutlined, EditOutlined } from '@ant-design/icons';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { uploadFile } from '@/lib/storage-provider';
+import { uploadFile, deleteFile } from '@/lib/storage-provider';
 import ImageEditor from './ImageEditor';
 
 interface ImageUploadProps {
@@ -33,35 +33,19 @@ const optimizeImage = async (file: File, options: {
   quality?: number;
   maxWidth?: number;
   maxHeight?: number;
-  targetAspectRatio?: number;
 }): Promise<File | Blob> => {
-  const { quality = 0.82, maxWidth = 1920, maxHeight = 1080, targetAspectRatio } = options;
+  const { quality = 0.82, maxWidth = 1920, maxHeight = 1080 } = options;
 
   try {
     const bitmap = await createImageBitmap(file);
     const canvas = document.createElement('canvas');
 
-    // Vùng nguồn (mặc định là toàn bộ ảnh)
-    let srcX = 0;
-    let srcY = 0;
-    let srcW = bitmap.width;
-    let srcH = bitmap.height;
+    // Giữ trọn vẹn ảnh gốc, KHÔNG center-crop (chỉ resize nếu vượt kích thước)
+    const srcX = 0;
+    const srcY = 0;
+    const srcW = bitmap.width;
+    const srcH = bitmap.height;
 
-    // Nếu có target aspect ratio -> center-crop để ép tỉ lệ ảnh đầu ra
-    if (targetAspectRatio && targetAspectRatio > 0) {
-      const currentRatio = bitmap.width / bitmap.height;
-      if (currentRatio > targetAspectRatio) {
-        // Ảnh gốc rộng hơn -> cắt bớt 2 bên
-        srcW = bitmap.height * targetAspectRatio;
-        srcX = (bitmap.width - srcW) / 2;
-      } else if (currentRatio < targetAspectRatio) {
-        // Ảnh gốc cao hơn -> cắt bớt trên/dưới
-        srcH = bitmap.width / targetAspectRatio;
-        srcY = (bitmap.height - srcH) / 2;
-      }
-    }
-
-    // Tỉ lệ thực tế sau khi crop
     const ratio = srcW / srcH;
     let width = srcW;
     let height = srcH;
@@ -128,17 +112,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   const [editorVisible, setEditorVisible] = useState(false);
   const [editingImageUrl, setEditingImageUrl] = useState<string>('');
 
-  // Parse "1920/800" hoặc "16/9" thành số (width / height). Trả về undefined nếu không hợp lệ.
-  const parsedAspectRatio = React.useMemo(() => {
-    if (!aspectRatio) return undefined;
-    const parts = aspectRatio.split('/');
-    if (parts.length !== 2) return undefined;
-    const w = parseFloat(parts[0]);
-    const h = parseFloat(parts[1]);
-    if (!w || !h) return undefined;
-    return w / h;
-  }, [aspectRatio]);
-
   const beforeUpload = (file: RcFile) => {
     const isJpgOrPng =
       file.type === 'image/jpeg' ||
@@ -172,12 +145,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
       const rawFile = file.originFileObj || file;
 
-      // Thực hiện tối ưu hóa ảnh (center-crop về đúng aspectRatio nếu có)
+      // Tối ưu hóa ảnh: chỉ resize, giữ trọn vẹn nội dung (không cắt theo tỉ lệ)
       const resultFile = await optimizeImage(rawFile, {
         quality,
         maxWidth,
         maxHeight,
-        targetAspectRatio: parsedAspectRatio,
       });
 
       // Thông báo cho component cha về file đã xử lý (để lấy size, name,...)
@@ -201,10 +173,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const onRemove = (e: React.MouseEvent) => {
+  const onRemove = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    const urlToDelete = imageUrl;
     setImageUrl(undefined);
     onChange?.('');
+    if (urlToDelete) {
+      try {
+        await deleteFile(urlToDelete);
+      } catch (error) {
+        console.error('Delete file error:', error);
+        messageApi.error('Xóa file trên máy chủ thất bại!');
+      }
+    }
   };
 
   const handleEditImage = (e: React.MouseEvent) => {
@@ -259,7 +240,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 <img
                   src={imageUrl}
                   alt="preview"
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-contain rounded-xl"
                 />
                 <div
                   className="absolute inset-0 bg-black/40 opacity-0 

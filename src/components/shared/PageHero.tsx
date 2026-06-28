@@ -20,6 +20,9 @@ interface PageHeroProps {
   align?: 'left' | 'center';
   /** optional background image (rendered faint behind the dark wash) */
   image?: string;
+  /** optional showcase image rendered to the right (switches to a 2-column layout) */
+  sideImage?: string;
+  sideImageAlt?: string;
   children?: React.ReactNode;
 }
 
@@ -38,13 +41,21 @@ export default function PageHero({
   variant = 'dark',
   align = 'center',
   image,
+  sideImage,
+  sideImageAlt = '',
   children,
 }: PageHeroProps) {
   const dark = variant === 'dark';
-  const centered = align === 'center';
+  const hasSide = !!sideImage;
+  // A side image forces a left-aligned, two-column layout regardless of `align`.
+  const centered = align === 'center' && !hasSide;
   const homeLabel = locale === 'en' ? 'Home' : 'Trang chủ';
 
   const crumbs: Crumb[] = [{ label: homeLabel, href: '/' }, ...breadcrumb];
+
+  let textColClass = 'max-w-3xl';
+  if (centered) textColClass = 'max-w-3xl mx-auto text-center';
+  else if (hasSide) textColClass = 'max-w-2xl';
 
   return (
     <section
@@ -72,10 +83,12 @@ export default function PageHero({
         <div className="absolute inset-0 bg-dots opacity-50 pointer-events-none" />
       )}
 
-      {/* monogram watermark */}
-      <div className="absolute -right-10 top-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
-        <Monogram size={320} withText text={locale === 'en' ? 'BINOVET · HIGH-TECH VETERINARY · ' : undefined} tone={dark ? 'light' : 'brand'} className={dark ? 'opacity-[0.09]' : 'opacity-[0.07]'} />
-      </div>
+      {/* monogram watermark — suppressed when a side image occupies the right */}
+      {!hasSide && (
+        <div className="absolute -right-10 top-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
+          <Monogram size={320} withText text={locale === 'en' ? 'BINOVET · HIGH-TECH VETERINARY · ' : undefined} tone={dark ? 'light' : 'brand'} className={dark ? 'opacity-[0.09]' : 'opacity-[0.07]'} />
+        </div>
+      )}
 
       <div className="container mx-auto px-4 relative z-10 py-16 lg:py-24">
         {/* breadcrumb */}
@@ -105,32 +118,47 @@ export default function PageHero({
           })}
         </nav>
 
-        <div className={centered ? 'max-w-3xl mx-auto text-center' : 'max-w-3xl'}>
-          {eyebrow && (
-            <span className={`eyebrow ${centered ? 'eyebrow--center' : ''} mb-5`}>{eyebrow}</span>
-          )}
-          <h1
-            className={`font-display font-semibold leading-[1.08] tracking-tight text-4xl md:text-5xl lg:text-6xl ${
-              dark ? 'text-white!' : 'text-ink!'
-            }`}
-          >
-            {title}
-          </h1>
-          {subtitle && (
-            <p
-              className={`mt-6 text-lg leading-relaxed ${centered ? 'mx-auto' : ''} max-w-2xl ${
-                dark ? 'text-white/75' : 'text-ink-soft'
+        <div className={hasSide ? 'grid lg:grid-cols-2 gap-10 lg:gap-16 items-center' : ''}>
+          <div className={textColClass}>
+            {eyebrow && (
+              <span className={`eyebrow ${centered ? 'eyebrow--center' : ''} mb-5`}>{eyebrow}</span>
+            )}
+            <h1
+              className={`font-display font-semibold leading-[1.08] tracking-tight text-4xl md:text-5xl lg:text-6xl ${
+                dark ? 'text-white!' : 'text-ink!'
               }`}
             >
-              {subtitle}
-            </p>
-          )}
+              {title}
+            </h1>
+            {subtitle && (
+              <p
+                className={`mt-6 text-lg leading-relaxed ${centered ? 'mx-auto' : ''} max-w-2xl ${
+                  dark ? 'text-white/75' : 'text-ink-soft'
+                }`}
+              >
+                {subtitle}
+              </p>
+            )}
 
-          <div className={`divider-diamond mt-8 ${centered ? '' : 'justify-start [&::before]:hidden'}`}>
-            <span />
+            <div className={`divider-diamond mt-8 ${centered ? '' : 'justify-start [&::before]:hidden'}`}>
+              <span />
+            </div>
+
+            {children}
           </div>
 
-          {children}
+          {hasSide && (
+            <div className="relative hidden lg:block">
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-elegant-lg group">
+                <img
+                  src={sideImage}
+                  alt={sideImageAlt}
+                  className="w-full h-[340px] xl:h-[420px] object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-binovet-dark/50 via-binovet-dark/10 to-transparent" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

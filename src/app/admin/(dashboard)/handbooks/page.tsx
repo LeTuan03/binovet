@@ -11,7 +11,7 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { adminFetch } from '@/lib/api';
-import { Article, ArticleSummary, AnimalTag } from '@/types';
+import { Article, ArticleSummary } from '@/types';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
 
 function HandbookManagementContent() {
@@ -24,7 +24,6 @@ function HandbookManagementContent() {
   const page = parseInt(searchParams.get('page') || '1');
 
   const [data, setData] = useState<ArticleSummary[]>([]);
-  const [animalTags, setAnimalTags] = useState<AnimalTag[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -34,14 +33,9 @@ function HandbookManagementContent() {
   const fetchData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const [artRes, tagRes] = await Promise.all([
-        adminFetch('/api/data/articles?summary=1'),
-        adminFetch('/api/data/animal-tags')
-      ]);
+      const artRes = await adminFetch('/api/data/articles?summary=1');
       const artData = await artRes.json();
-      const tagData = await tagRes.json();
       setData(artData);
-      setAnimalTags(tagData);
     } catch (error) {
       msg.error('Không thể tải dữ liệu');
     } finally {
@@ -232,21 +226,6 @@ function HandbookManagementContent() {
       },
     },
     {
-      title: 'Loài vật',
-      dataIndex: 'animalTag',
-      key: 'animalTag',
-      render: (tag: string) => {
-        if (!tag) return <span className="text-gray-300 italic text-[0.7rem]">-</span>;
-        const animal = animalTags.find((a: AnimalTag) => a.slug === tag);
-        return (
-          <div className="flex items-center gap-1">
-            <span className="text-lg">{animal?.icon}</span>
-            <span className="text-xs font-bold text-gray-500">{animal?.name || tag}</span>
-          </div>
-        );
-      }
-    },
-    {
       title: 'Ngày đăng',
       dataIndex: 'publishDate',
       key: 'publishDate',
@@ -352,32 +331,15 @@ function HandbookManagementContent() {
         className="rounded-2xl top-[40px]"
       >
         <Form form={form} layout="vertical" className="mt-8">
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item name="category" label="Chuyên mục" initialValue="cam-nang" rules={[{ required: true }]}>
-                <Select
-                  className="rounded-xl"
-                  disabled
-                  options={[
-                    { label: 'Cẩm nang chăn nuôi', value: 'cam-nang' },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="animalTag" label="Loài vật liên quan">
-                <Select
-                  className="rounded-xl"
-                  placeholder="Chọn loài vật"
-                  allowClear
-                  options={animalTags.map(tag => ({
-                    label: <span>{tag.icon} {tag.name}</span>,
-                    value: tag.slug
-                  }))}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item name="category" label="Chuyên mục" initialValue="cam-nang" rules={[{ required: true }]}>
+            <Select
+              className="rounded-xl"
+              disabled
+              options={[
+                { label: 'Cẩm nang chăn nuôi', value: 'cam-nang' },
+              ]}
+            />
+          </Form.Item>
 
           <Row gutter={24}>
             <Col span={14}>

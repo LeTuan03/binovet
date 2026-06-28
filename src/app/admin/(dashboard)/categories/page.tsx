@@ -2,18 +2,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Table, Button, Space, Modal, Form, Input, Tabs, Tooltip, Row, Col, App } from 'antd';
-import {
-  PlusOutlined, EditOutlined, DeleteOutlined,
-  AppstoreOutlined, TagsOutlined, SearchOutlined
-} from '@ant-design/icons';
-// import { categories as initialCategories, animalTags as initialAnimalTags } from '@/lib/data'; // Removed static imports
+import { Table, Button, Space, Modal, Form, Input, Tooltip, App } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import { motion } from 'framer-motion';
 import { adminFetch } from '@/lib/api';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
 
-function CategoryAndTagManagementContent() {
+function CategoryManagementContent() {
   const { modal, message } = App.useApp();
   const { setLoading: setGlobalLoading } = useAdminLoading();
   const router = useRouter();
@@ -21,10 +17,8 @@ function CategoryAndTagManagementContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
-  const activeTab = searchParams.get('tab') || '1';
 
   const [categories, setCategories] = useState<any[]>([]);
-  const [animalTags, setAnimalTags] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
@@ -34,14 +28,9 @@ function CategoryAndTagManagementContent() {
   const fetchData = React.useCallback(async () => {
     setLoading(true);
     try {
-      const [catRes, tagRes] = await Promise.all([
-        adminFetch('/api/data/categories'),
-        adminFetch('/api/data/animal-tags')
-      ]);
+      const catRes = await adminFetch('/api/data/categories');
       const catData = await catRes.json();
-      const tagData = await tagRes.json();
       setCategories(catData);
-      setAnimalTags(tagData);
     } catch (error) {
       message.error('Không thể tải dữ liệu');
     } finally {
@@ -61,14 +50,7 @@ function CategoryAndTagManagementContent() {
     );
   }, [categories, query]);
 
-  const filteredAnimalTags = useMemo(() => {
-    return animalTags.filter(item =>
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.slug.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [animalTags, query]);
-
-  const updateUrl = (params: { q?: string; page?: number; tab?: string }) => {
+  const updateUrl = (params: { q?: string; page?: number }) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
 
     if (params.q !== undefined) {
@@ -81,16 +63,7 @@ function CategoryAndTagManagementContent() {
       newSearchParams.set('page', params.page.toString());
     }
 
-    if (params.tab !== undefined) {
-      newSearchParams.set('tab', params.tab);
-      newSearchParams.set('page', '1'); // Reset to page 1 on tab change
-    }
-
     router.push(`${pathname}?${newSearchParams.toString()}`);
-  };
-
-  const onTabChange = (key: string) => {
-    updateUrl({ tab: key });
   };
 
   const showModal = (record?: any) => {
@@ -106,13 +79,12 @@ function CategoryAndTagManagementContent() {
 
   const handleOk = () => {
     form.validateFields().then(async (values) => {
-      const dataType = activeTab === '1' ? 'categories' : 'animal-tags';
       const action = editingItem ? 'update' : 'create';
 
       // Save to API
       setGlobalLoading(true);
       try {
-        const res = await adminFetch(`/api/data/${dataType}`, {
+        const res = await adminFetch('/api/data/categories', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -120,7 +92,6 @@ function CategoryAndTagManagementContent() {
             data: {
               ...values,
               slug: values.slug || values.name.toLowerCase().replaceAll(' ', '-').replaceAll(/[^\w-]/g, ''),
-              ...(activeTab === '2' ? { icon: values.icon || '🐾' } : {}),
             },
             id: editingItem?.id
           }),
@@ -145,14 +116,13 @@ function CategoryAndTagManagementContent() {
   const handleDelete = (id: number) => {
     modal.confirm({
       title: 'Xác nhận xóa',
-      content: 'Việc xóa phân loại này có thể ảnh hưởng đến hiển thị của các sản phẩm/bài viết liên quan. Bạn có chắc chắn?',
+      content: 'Việc xóa danh mục này có thể ảnh hưởng đến hiển thị của các sản phẩm liên quan. Bạn có chắc chắn?',
       okText: 'Xóa',
       okType: 'danger',
       onOk: async () => {
-        const dataType = activeTab === '1' ? 'categories' : 'animal-tags';
         setGlobalLoading(true);
         try {
-          const res = await adminFetch(`/api/data/${dataType}`, {
+          const res = await adminFetch('/api/data/categories', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -191,58 +161,16 @@ function CategoryAndTagManagementContent() {
       render: (text: string) => <span className="font-semibold text-binovet-dark">{text}</span>
     },
     {
+      title: 'Tên danh mục (EN)',
+      dataIndex: 'nameEn',
+      key: 'nameEn',
+      render: (text: string) => <span className="text-gray-500">{text || <span className="text-gray-300 italic">—</span>}</span>
+    },
+    {
       title: 'Slug (URL)',
       dataIndex: 'slug',
       key: 'slug',
       render: (text: string) => <code className="text-[10px] text-primary bg-emerald-50 px-2 py-1 rounded-md border border-emerald-100 font-bold">{text}</code>
-    },
-    {
-      title: 'Thao tác',
-      key: 'action',
-      align: 'right' as const,
-      render: (_: any, record: any) => (
-        <Space size="small">
-          <Tooltip title="Chỉnh sửa">
-            <Button icon={<EditOutlined />} type="text" onClick={() => showModal(record)} className="text-blue-500 hover:bg-blue-50 w-9 h-9 flex items-center justify-center rounded-xl transition-all" />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <Button icon={<DeleteOutlined />} type="text" danger onClick={() => handleDelete(record.id)} className="hover:bg-red-50 w-9 h-9 flex items-center justify-center rounded-xl transition-all" />
-          </Tooltip>
-        </Space>
-      ),
-    },
-  ];
-
-  const tagColumns = [
-    {
-      title: 'Icon',
-      dataIndex: 'icon',
-      key: 'icon',
-      width: 80,
-      render: (icon: string) => (
-        <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-xl shadow-sm border border-gray-100">
-          {icon}
-        </div>
-      )
-    },
-    {
-      title: 'Tên loài vật',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text: string) => <span className="font-semibold text-binovet-dark">{text}</span>
-    },
-    {
-      title: 'Slug',
-      dataIndex: 'slug',
-      key: 'slug',
-      render: (text: string) => <code className="text-[10px] text-gray-500 bg-gray-50 px-2 py-1 rounded-md font-bold">{text}</code>
-    },
-    {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
-      ellipsis: true,
-      render: (text: string) => <span className="text-gray-400 text-xs italic">{text || 'Chưa có mô tả...'}</span>
     },
     {
       title: 'Thao tác',
@@ -268,68 +196,32 @@ function CategoryAndTagManagementContent() {
       className="space-y-6 pb-0"
     >
       <AdminPageHeader
-        title="Phân loại & Tag"
+        title="Danh mục sản phẩm"
         breadcrumbItems={[
           { title: 'Admin', href: '/admin' },
-          { title: 'Phân loại' },
+          { title: 'Danh mục' },
         ]}
         onSearch={(val) => updateUrl({ q: val })}
         primaryAction={{
-          label: activeTab === '1' ? 'Thêm Danh mục' : 'Thêm Loài vật',
+          label: 'Thêm Danh mục',
           onClick: () => showModal(),
           icon: <PlusOutlined />
         }}
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
-        <Tabs
-          activeKey={activeTab}
-          onChange={onTabChange}
-          className="admin-tabs custom-admin-tabs"
-          items={[
-            {
-              key: '1',
-              label: <span className="flex items-center gap-2 font-semibold px-4 uppercase text-[11px] tracking-wide"><AppstoreOutlined /> Danh mục Sản phẩm</span>,
-              children: (
-                <div className="pt-2">
-                  <Table size="small" sticky
-                    columns={categoryColumns}
-                    dataSource={filteredCategories}
-                    rowKey="id"
-                    loading={loading}
-                    className="admin-table"
-                    pagination={{
-                      current: page,
-                      pageSize: 10,
-                      className: "p-6 border-t border-gray-50",
-                      onChange: (p) => updateUrl({ page: p })
-                    }}
-                  />
-                </div>
-              ),
-            },
-            {
-              key: '2',
-              label: <span className="flex items-center gap-2 font-semibold px-4 uppercase text-[11px] tracking-wide"><TagsOutlined /> Loài vật (Handbook)</span>,
-              children: (
-                <div className="pt-2">
-                  <Table size="small" sticky
-                    columns={tagColumns}
-                    dataSource={filteredAnimalTags}
-                    rowKey="id"
-                    loading={loading}
-                    className="admin-table"
-                    pagination={{
-                      current: page,
-                      pageSize: 10,
-                      className: "p-6 border-t border-gray-50",
-                      onChange: (p) => updateUrl({ page: p })
-                    }}
-                  />
-                </div>
-              ),
-            },
-          ]}
+        <Table size="small" sticky
+          columns={categoryColumns}
+          dataSource={filteredCategories}
+          rowKey="id"
+          loading={loading}
+          className="admin-table"
+          pagination={{
+            current: page,
+            pageSize: 10,
+            className: "p-6 border-t border-gray-50",
+            onChange: (p) => updateUrl({ page: p })
+          }}
         />
       </div>
 
@@ -340,7 +232,7 @@ function CategoryAndTagManagementContent() {
               {editingItem ? <EditOutlined /> : <PlusOutlined />}
             </div>
             <span className="text-2xl font-semibold tracking-tight text-[#0c2236]">
-              {editingItem ? 'Chỉnh sửa' : 'Thêm mới'} Phân loại
+              {editingItem ? 'Chỉnh sửa' : 'Thêm mới'} Danh mục
             </span>
           </div>
         }
@@ -362,34 +254,15 @@ function CategoryAndTagManagementContent() {
         cancelButtonProps={{ className: "rounded-xl h-11 px-8 font-semibold uppercase tracking-wide text-[11px]" }}
       >
         <Form form={form} layout="vertical" className="mt-6 px-4">
-          <Form.Item name="name" label="Tên gọi" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
-            <Input className="rounded-xl py-3 px-4 font-bold" placeholder="Ví dụ: Gà, Heo, Thuốc bổ..." />
+          <Form.Item name="name" label="Tên danh mục" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
+            <Input className="rounded-xl py-3 px-4 font-bold" placeholder="Ví dụ: Thuốc tiêm, Thuốc bột..." />
           </Form.Item>
-          <Form.Item name="nameEn" label="Tên gọi (EN)">
-            <Input className="rounded-xl py-3 px-4 font-bold" placeholder="Ex: Chicken, Pig, Supplements..." />
+          <Form.Item name="nameEn" label="Tên danh mục (EN)">
+            <Input className="rounded-xl py-3 px-4 font-bold" placeholder="Ex: Injectables, Powder medicines..." />
           </Form.Item>
           <Form.Item name="slug" label="Slug (URL - Tùy chọn)" help={<span className="text-[10px] opacity-60 uppercase font-semibold tracking-wide mt-1 inline-block">Để trống hệ thống sẽ tự sinh dựa trên tên gọi.</span>}>
-            <Input className="rounded-xl py-2 px-4" placeholder="vi-du-ga" />
+            <Input className="rounded-xl py-2 px-4" placeholder="thuoc-tiem" />
           </Form.Item>
-          {activeTab === '2' && (
-            <Row gutter={20}>
-              <Col span={6}>
-                <Form.Item name="icon" label="Biểu tượng" initialValue="🐾">
-                  <Input className="rounded-xl py-2 px-4 text-center text-xl h-[48px]" />
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-                <Form.Item name="description" label="Mô tả ngắn">
-                  <Input.TextArea rows={1} className="rounded-xl p-3 h-[48px]" placeholder="Mô tả cho loài vật này..." />
-                </Form.Item>
-              </Col>
-              <Col span={24}>
-                <Form.Item name="descriptionEn" label="Mô tả ngắn (EN)">
-                  <Input.TextArea rows={1} className="rounded-xl p-3 h-[48px]" placeholder="Short description for this animal..." />
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
         </Form>
       </Modal>
     </motion.div>
@@ -397,10 +270,10 @@ function CategoryAndTagManagementContent() {
 }
 
 
-export default function CategoryAndTagManagement() {
+export default function CategoryManagement() {
   return (
     <React.Suspense fallback={<div className="p-8 text-center text-gray-500">Đang tải dữ liệu...</div>}>
-      <CategoryAndTagManagementContent />
+      <CategoryManagementContent />
     </React.Suspense>
   );
 }

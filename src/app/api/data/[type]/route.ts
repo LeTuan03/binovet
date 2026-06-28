@@ -4,7 +4,6 @@ import {
   productService,
   categoryService,
   articleService,
-  animalTagService,
   menuService,
   settingService,
   bannerService,
@@ -43,9 +42,6 @@ export async function GET(
         break;
       case 'articles':
         data = summary ? await articleService.getAllSummary() : await articleService.getAll();
-        break;
-      case 'animal-tags':
-        data = await animalTagService.getAll();
         break;
       case 'menus':
         data = await menuService.getAll();
@@ -106,7 +102,6 @@ export async function POST(
         case 'products': return productService;
         case 'categories': return categoryService;
         case 'articles': return articleService;
-        case 'animal-tags': return animalTagService;
         case 'menus': return menuService;
         case 'banners': return bannerService;
         default: return null;

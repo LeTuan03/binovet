@@ -63,8 +63,8 @@ export default function Footer() {
             </div>
           </div>
           <div className="divider-diamond text-secondary w-full max-w-xs"><span /></div>
-          <p className="font-display italic text-white/80 text-lg text-center md:text-right max-w-sm">
-            {locale === 'en' ? 'Quality is our commitment.' : 'Chất lượng là cam kết của chúng tôi.'}
+          <p className="font-display italic text-white/80 text-lg text-center md:text-right">
+            {t('header.slogan')}
           </p>
         </div>
       </div>
@@ -84,9 +84,9 @@ export default function Footer() {
             </Link>
             <p className="font-semibold text-white/90">{settings?.companyName || 'Công Ty CP Công Nghệ Sinh Học Thú Y'}</p>
             <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.headquarters')}:</strong> {settings?.addressHN || 'Cụm CN Liên Phương, Xã Hồng Vân, Hà Nội'}</p>
-            <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.phone')}:</strong> <a href={`tel:${settings?.hotline1}`} className="hover:text-secondary transition-colors">{settings?.hotline1 || '024 66861629'}</a> | <a href={`tel:${settings?.hotline2}`} className="hover:text-secondary transition-colors">{settings?.hotline2 || '097 499 9204'}</a></p>
+            <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.phone')}:</strong> <a href={`tel:${settings?.hotline1}`} className="hover:text-secondary transition-colors">{settings?.hotline1 || '0915 999 831'}</a> | <a href={`tel:${settings?.hotline2}`} className="hover:text-secondary transition-colors">{settings?.hotline2 || '024 3371 8653'}</a></p>
             <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.email')}:</strong> <a href={`mailto:${settings?.email}`} className="hover:text-secondary transition-colors">{settings?.email || 'pkd.binovet@gmail.com'}</a></p>
-            <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.website')}:</strong> www.binovet.com.vn</p>
+            <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.website')}:</strong> <a href={settings?.website || 'https://binovet.com/'} target="_blank" rel="noopener" className="hover:text-secondary transition-colors">{(settings?.website || 'https://binovet.com/').replace(/^https?:\/\//, '').replace(/\/$/, '')}</a></p>
             {settings?.addressHCM && (
               <p className="mt-4 pt-4 border-t border-white/10 text-white/70">
                 <strong className="text-white/80 font-semibold">{t('footer.southBranch')}:</strong><br />
@@ -127,9 +127,12 @@ export default function Footer() {
           >
             <h3 className={heading}>{t('footer.techSupport')}</h3>
             <div className="mb-6">
-              <p className="text-white font-semibold mb-1">{settings?.support?.doctorName || 'Ths.Bs Phùng Thanh Sơn'}</p>
+              <p className="text-white font-semibold mb-0.5">{settings?.support?.doctorName || 'ThS.BS Phùng Thanh Sơn'}</p>
+              <p className="text-white/55 text-xs uppercase tracking-[0.14em] font-montserrat mb-2">
+                {locale === 'en' ? 'Technical Director' : (settings?.support?.doctorRole || 'Giám đốc Kỹ thuật')}
+              </p>
               <p className="text-white/70">Email: <a href={`mailto:${settings?.support?.doctorEmail}`} className="hover:text-secondary transition-colors">{settings?.support?.doctorEmail || 'thanhson256@gmail.com'}</a></p>
-              <p className="text-white/70">{t('footer.phone')}: <a href={`tel:${settings?.support?.doctorPhone}`} className="hover:text-secondary transition-colors">{settings?.support?.doctorPhone || '0984 051 978'}</a></p>
+              <p className="text-white/70">{t('footer.phone')}: <a href={`tel:${settings?.support?.doctorPhone}`} className="hover:text-secondary transition-colors">{settings?.support?.doctorPhone || '0984 051 798'}</a></p>
             </div>
             <div className="pt-4 border-t border-white/10">
               <h4 className="text-white/90 font-semibold mb-4 uppercase text-[0.68rem] tracking-[0.2em] font-montserrat">{t('footer.connectWithUs')}</h4>
@@ -170,7 +173,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-white/45 text-[0.8rem]">
           <p>&copy; {new Date().getFullYear()} {t('footer.copyright')}</p>
-          <p className="font-montserrat tracking-[0.18em] uppercase text-[0.66rem]">BinoVet · GMP-WHO</p>
+          <p className="font-montserrat tracking-[0.18em] uppercase text-[0.66rem]">Binovet · GMP-WHO</p>
         </div>
       </div>
     </footer>

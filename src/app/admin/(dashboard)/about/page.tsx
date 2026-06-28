@@ -149,7 +149,7 @@ export default function AdminAboutPage() {
                       </div>
                       <Form.List name={[prefix,'lichSu', 'timeline']}>
                         {(fields, { add, remove }) => (
-                          <Space direction="vertical" className="w-full" size="middle">
+                          <Space orientation="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
                               <div
                                 key={field.key}
@@ -289,6 +289,63 @@ export default function AdminAboutPage() {
                     >
                       <TextArea rows={4} className={inputCls} />
                     </Form.Item>
+
+                    <Form.Item
+                      name={[prefix,'tamNhin', 'coreTitle']}
+                      label="Tiêu đề Giá trị cốt lõi"
+                    >
+                      <Input size="large" className={inputCls} placeholder="VD: Giá trị cốt lõi" />
+                    </Form.Item>
+                    <div className="mt-2 mb-6">
+                      <div className="font-semibold mb-3 uppercase text-xs tracking-wide text-gray-500">
+                        Danh sách giá trị cốt lõi
+                      </div>
+                      <Form.List name={[prefix,'tamNhin', 'coreValues']}>
+                        {(fields, { add, remove }) => (
+                          <Space orientation="vertical" className="w-full" size="middle">
+                            {fields.map((field) => (
+                              <div
+                                key={field.key}
+                                className="p-4 border border-gray-100 rounded-2xl bg-gray-50/40 flex items-start gap-3"
+                              >
+                                <div className="flex-1 space-y-2">
+                                  <Form.Item
+                                    name={[field.name, 'title']}
+                                    label="Tên giá trị"
+                                    className="!mb-0"
+                                  >
+                                    <Input size="large" className={inputCls} placeholder="VD: Chất lượng quốc tế (Global Quality)" />
+                                  </Form.Item>
+                                  <Form.Item
+                                    name={[field.name, 'desc']}
+                                    label="Mô tả"
+                                    className="!mb-0"
+                                  >
+                                    <TextArea rows={3} className={inputCls} />
+                                  </Form.Item>
+                                </div>
+                                <Button
+                                  danger
+                                  type="text"
+                                  icon={<DeleteOutlined />}
+                                  onClick={() => remove(field.name)}
+                                  className="mt-7"
+                                />
+                              </div>
+                            ))}
+                            <Button
+                              type="dashed"
+                              icon={<PlusOutlined />}
+                              onClick={() => add({ title: '', desc: '' })}
+                              className="rounded-xl"
+                            >
+                              Thêm giá trị
+                            </Button>
+                          </Space>
+                        )}
+                      </Form.List>
+                    </div>
+
                     <Form.Item
                       name={[prefix,'tamNhin', 'quoteText']}
                       label="Câu trích dẫn"
@@ -341,7 +398,7 @@ export default function AdminAboutPage() {
                       </div>
                       <Form.List name={[prefix,'thanhTuu', 'images']}>
                         {(fields, { add, remove }) => (
-                          <Space direction="vertical" className="w-full" size="middle">
+                          <Space orientation="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
                               <div
                                 key={field.key}
@@ -445,7 +502,7 @@ export default function AdminAboutPage() {
                       </div>
                       <Form.List name={[prefix,'coSo', 'stats']}>
                         {(fields, { add, remove }) => (
-                          <Space direction="vertical" className="w-full" size="middle">
+                          <Space orientation="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
                               <div
                                 key={field.key}
@@ -521,7 +578,7 @@ export default function AdminAboutPage() {
                       </div>
                       <Form.List name={[prefix,'coCau', 'roles']}>
                         {(fields, { add, remove }) => (
-                          <Space direction="vertical" className="w-full" size="middle">
+                          <Space orientation="vertical" className="w-full" size="middle">
                             {fields.map((field) => (
                               <div
                                 key={field.key}

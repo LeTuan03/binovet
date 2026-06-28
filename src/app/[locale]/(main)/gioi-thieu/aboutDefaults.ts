@@ -20,6 +20,8 @@ export type AboutContentResolved = {
     visionText: string;
     missionTitle: string;
     missionText: string;
+    coreTitle: string;
+    coreValues: { title: string; desc: string }[];
     quoteText: string;
     quoteAuthor: string;
     quoteRole: string;
@@ -80,12 +82,35 @@ export const aboutDefaults: AboutContentResolved = {
     ],
   },
   tamNhin: {
-    visionTitle: 'Tầm nhìn chiến lược',
+    visionTitle: 'Tầm nhìn',
     visionText:
-      'Trở thành Tập đoàn dược phẩm với hệ sinh thái công nghệ sinh học và dược phẩm toàn diện, mang lại hiệu quả thiết thực và bền vững trong chăn nuôi, vươn tầm quốc tế.',
-    missionTitle: 'Sứ mệnh cao cả',
+      'Trở thành thương hiệu thuốc thú y toàn cầu, tiên phong cung cấp các giải pháp chăm sóc sức khỏe động vật chất lượng cao, góp phần nâng cao hiệu quả chăn nuôi và đồng hành cùng sự phát triển bền vững của ngành nông nghiệp trên thế giới.',
+    missionTitle: 'Sứ mệnh',
     missionText:
-      'Bảo vệ sức khỏe cho con người và vật nuôi thông qua các sản phẩm hữu hiệu; góp phần bảo vệ môi trường và phát triển cộng đồng chăn nuôi bền vững.',
+      'Binovet cam kết nghiên cứu, phát triển và cung cấp các sản phẩm thuốc thú y, dinh dưỡng và giải pháp chăm sóc sức khỏe vật nuôi đạt tiêu chuẩn quốc tế. Chúng tôi không ngừng đổi mới công nghệ, nâng cao chất lượng sản phẩm và mở rộng hợp tác toàn cầu nhằm mang đến những giải pháp hiệu quả, an toàn và bền vững cho khách hàng và đối tác trên toàn thế giới.',
+    coreTitle: 'Giá trị cốt lõi',
+    coreValues: [
+      {
+        title: 'Chất lượng quốc tế (Global Quality)',
+        desc: 'Mọi sản phẩm của Binovet được nghiên cứu, sản xuất và kiểm soát theo các tiêu chuẩn quốc tế, đảm bảo hiệu quả, an toàn và ổn định.',
+      },
+      {
+        title: 'Đổi mới sáng tạo (Innovation)',
+        desc: 'Không ngừng đầu tư vào nghiên cứu và phát triển (R&D), ứng dụng công nghệ sinh học hiện đại để tạo ra những giải pháp thú y tiên tiến.',
+      },
+      {
+        title: 'Uy tín & Trách nhiệm (Integrity)',
+        desc: 'Xây dựng niềm tin bằng chất lượng, sự minh bạch và trách nhiệm trong mọi hoạt động đối với khách hàng, đối tác và cộng đồng.',
+      },
+      {
+        title: 'Hợp tác toàn cầu (Global Partnership)',
+        desc: 'Phát triển các mối quan hệ hợp tác bền vững với nhà phân phối và đối tác quốc tế, cùng kiến tạo giá trị và thúc đẩy sự phát triển của ngành chăn nuôi.',
+      },
+      {
+        title: 'Phát triển bền vững (Sustainability)',
+        desc: 'Hướng đến sự hài hòa giữa hiệu quả kinh tế, sức khỏe vật nuôi, bảo vệ môi trường và sự phát triển lâu dài của ngành chăn nuôi toàn cầu.',
+      },
+    ],
     quoteText:
       '"Chất lượng là danh dự, sự hài lòng của bà con là thước đo thành công của Binovet."',
     quoteAuthor: 'Ban Lãnh Đạo',
@@ -184,12 +209,35 @@ export const aboutDefaultsEn: AboutContentResolved = {
     ],
   },
   tamNhin: {
-    visionTitle: 'Strategic Vision',
+    visionTitle: 'Vision',
     visionText:
-      'To become a pharmaceutical group with a comprehensive biotechnology and pharmaceutical ecosystem, delivering practical and sustainable value in livestock farming and reaching international markets.',
-    missionTitle: 'Our Mission',
+      'To become a global veterinary pharmaceutical brand, pioneering high-quality animal health solutions that improve livestock productivity and accompany the sustainable development of agriculture worldwide.',
+    missionTitle: 'Mission',
     missionText:
-      'To protect the health of people and animals through effective products, while helping to safeguard the environment and build a sustainable livestock community.',
+      'Binovet is committed to researching, developing and supplying veterinary medicines, nutrition and animal health solutions that meet international standards. We continuously innovate our technology, raise product quality and expand global cooperation to deliver effective, safe and sustainable solutions for customers and partners around the world.',
+    coreTitle: 'Core Values',
+    coreValues: [
+      {
+        title: 'Global Quality',
+        desc: 'Every Binovet product is researched, manufactured and controlled to international standards, ensuring efficacy, safety and consistency.',
+      },
+      {
+        title: 'Innovation',
+        desc: 'We continuously invest in research and development (R&D) and apply modern biotechnology to create advanced veterinary solutions.',
+      },
+      {
+        title: 'Integrity',
+        desc: 'We build trust through quality, transparency and responsibility in every activity with our customers, partners and community.',
+      },
+      {
+        title: 'Global Partnership',
+        desc: 'We develop sustainable partnerships with distributors and international partners to co-create value and advance the livestock industry.',
+      },
+      {
+        title: 'Sustainability',
+        desc: 'We strive for harmony between economic efficiency, animal health, environmental protection and the long-term growth of the global livestock industry.',
+      },
+    ],
     quoteText:
       '"Quality is our honour, and the satisfaction of farmers is the true measure of Binovet\'s success."',
     quoteAuthor: 'Board of Leadership',
@@ -262,7 +310,14 @@ export function mergeAbout(
           ? d.lichSu.timeline
           : base.lichSu.timeline,
     } as AboutContentResolved['lichSu'],
-    tamNhin: { ...base.tamNhin, ...(d.tamNhin || {}) } as AboutContentResolved['tamNhin'],
+    tamNhin: {
+      ...base.tamNhin,
+      ...(d.tamNhin || {}),
+      coreValues:
+        d.tamNhin?.coreValues && d.tamNhin.coreValues.length > 0
+          ? d.tamNhin.coreValues
+          : base.tamNhin.coreValues,
+    } as AboutContentResolved['tamNhin'],
     coSo: {
       ...base.coSo,
       ...(d.coSo || {}),

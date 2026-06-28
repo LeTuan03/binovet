@@ -11,7 +11,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useLocale } from '@/lib/i18n/LocaleProvider';
 import { localePath, switchLocalePath, type Locale } from '@/lib/i18n/config';
 import { localize } from '@/lib/i18n/localize';
-import { NavMenu, Category, Setting, AnimalTag } from '@/types';
+import { NavMenu, Category, Setting } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
@@ -24,7 +24,6 @@ export default function Header() {
 
   const [menus, setMenus] = useState<NavMenu[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [animalTags, setAnimalTags] = useState<AnimalTag[]>([]);
   const [settings, setSettings] = useState<Setting | null>(null);
 
   const switchLocale = (next: Locale) => {
@@ -49,22 +48,19 @@ export default function Header() {
 
     const fetchData = async () => {
       try {
-        const [menusRes, settingsRes, categoriesRes, animalTagsRes] = await Promise.all([
+        const [menusRes, settingsRes, categoriesRes] = await Promise.all([
           fetch('/api/data/menus'),
           fetch('/api/data/settings'),
           fetch('/api/data/categories'),
-          fetch('/api/data/animal-tags'),
         ]);
         const menusData = await menusRes.json();
         const settingsData = await settingsRes.json();
         const categoriesData = await categoriesRes.json();
-        const animalTagsData = await animalTagsRes.json();
         if (Array.isArray(menusData)) {
           setMenus(menusData.filter((m: any) => m.position === 'header' || m.position === 'both'));
         }
         setSettings(settingsData);
         if (Array.isArray(categoriesData)) setCategories(categoriesData);
-        if (Array.isArray(animalTagsData)) setAnimalTags(animalTagsData);
       } catch (error) {
         console.error('Failed to fetch header data', error);
       }
@@ -76,9 +72,9 @@ export default function Header() {
 
   const nameOf = (m: any) => localize(m, locale).name as string;
 
-  // Resolve the sub-items for a top-level menu. "Products" and "Know-How" pull
-  // their lists from the API (categories / animal-tags) instead of hard-coded
-  // child nav-menu rows; every other menu uses its explicit children.
+  // Resolve the sub-items for a top-level menu. "Products" pulls its list from
+  // the API (categories) instead of hard-coded child nav-menu rows; every other
+  // menu uses its explicit children (Cẩm nang & Tin tức are flat — no children).
   const childLinksFor = (menu: NavMenu): { id: string; href: string; label: string }[] => {
     const link = menu.link || '';
 
@@ -91,14 +87,8 @@ export default function Header() {
       }));
     }
 
-    // Cẩm nang → animal tags  (/cam-nang-chan-nuoi/{slug})
-    if (link.startsWith('/cam-nang-chan-nuoi')) {
-      return animalTags.map((tag) => ({
-        id: `tag-${tag.id}`,
-        href: localePath(locale, `/cam-nang-chan-nuoi/${tag.slug}`),
-        label: localize(tag, locale).name as string,
-      }));
-    }
+    // Cẩm nang and Tin tức are flat sections — they fall through to the
+    // (empty) explicit-children path below and render as plain links.
 
     // Everything else → explicit child nav-menu rows
     return menus
@@ -121,7 +111,7 @@ export default function Header() {
         <div className="container mx-auto px-4 flex justify-between items-center" suppressHydrationWarning>
           <div className="flex items-center gap-5 flex-wrap">
             <a
-              href={`tel:${(settings?.hotline1 || '02466861629').replace(/\s/g, '')}`}
+              href={`tel:${(settings?.hotline1 || '0915999831').replace(/\s/g, '')}`}
               className="flex items-center gap-2.5 group"
               title={t('header.consultBuy')}
               suppressHydrationWarning
@@ -135,9 +125,9 @@ export default function Header() {
               <span className="flex flex-col leading-[1.25]">
                 <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-secondary">{t('header.consultBuy')}</span>
                 <span className="text-[0.82rem] font-semibold text-white/95 group-hover:text-secondary transition-colors tracking-wide" suppressHydrationWarning>
-                  {settings?.hotline1 || '024 6686 1629'}
+                  {settings?.hotline1 || '0915 999 831'}
                   <span className="mx-1.5 text-white/30">·</span>
-                  {settings?.hotline2 || '097 499 9204'}
+                  {settings?.hotline2 || '024 3371 8653'}
                 </span>
               </span>
             </a>

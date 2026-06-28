@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Table, Button, Space, Tag, Input, Modal, Form, Select, Switch, Checkbox, Tooltip, Row, Col, App, DatePicker, Tabs } from 'antd';
+import { Table, Button, Space, Tag, Input, Modal, Form, Switch, Checkbox, Tooltip, Row, Col, App, DatePicker, Tabs } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, FileTextOutlined, CheckCircleOutlined, FormOutlined, StarOutlined } from '@ant-design/icons';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import AdminStatCard from '@/components/admin/AdminStatCard';
@@ -103,19 +103,6 @@ function AdminNewsPageContent() {
           </div>
         </div>
       ),
-    },
-    {
-      title: 'Chuyên mục',
-      dataIndex: 'category',
-      key: 'category',
-      render: (category: string) => {
-        const isInternal = category === 'tin-noi-bo';
-        return (
-          <Tag className={`font-semibold px-3 py-1 rounded-lg uppercase text-[10px] border-none m-0 tracking-wide shadow-sm ${isInternal ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'}`}>
-            {isInternal ? 'Tin nội bộ' : 'Tin ngành'}
-          </Tag>
-        );
-      },
     },
     {
       title: 'Nổi bật',
@@ -398,20 +385,13 @@ function AdminNewsPageContent() {
           layout="vertical"
           className="mt-6 px-4"
         >
+          {/* News is a single flat section now — no internal/industry split.
+              Category is fixed so the public feed keeps picking the article up. */}
+          <Form.Item name="category" initialValue="tin-noi-bo" hidden>
+            <Input />
+          </Form.Item>
           <Row gutter={24}>
-            <Col span={14}>
-              <Form.Item
-                name="category"
-                label="Chuyên mục tin tức"
-                rules={[{ required: true, message: 'Vui lòng chọn chuyên mục' }]}
-              >
-                <Select className="w-full" placeholder="Chọn loại tin...">
-                  <Select.Option value="tin-noi-bo">Tin nội bộ binovet</Select.Option>
-                  <Select.Option value="tin-nganh">Tin ngành chăn nuôi - thú y</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={6}>
+            <Col span={16}>
               <Form.Item
                 name="publishDate"
                 label="Ngày đăng bài"
@@ -420,7 +400,7 @@ function AdminNewsPageContent() {
                 <DatePicker className="w-full rounded-xl" format="DD/MM/YYYY" />
               </Form.Item>
             </Col>
-            <Col span={4}>
+            <Col span={8}>
               <Form.Item
                 name="featured"
                 label="Nổi bật"

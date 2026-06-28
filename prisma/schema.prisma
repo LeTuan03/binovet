@@ -41,7 +41,6 @@ model Article {
   title       String
   titleEn     String?
   category    String
-  animalTag   String?
   publishDate String
   thumbnail   String   @default("")
   excerpt     String   @default("")
@@ -105,18 +104,6 @@ model Setting {
   data  Json   @default("{}")
 
   @@map("settings")
-}
-
-model AnimalTag {
-  id            BigInt @id @default(autoincrement())
-  name          String
-  nameEn        String?
-  slug          String @unique
-  icon          String @default("")
-  description   String @default("")
-  descriptionEn String?
-
-  @@map("animal_tags")
 }
 
 model MediaImage {

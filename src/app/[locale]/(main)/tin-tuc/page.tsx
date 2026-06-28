@@ -5,7 +5,7 @@ import { articleService, settingService } from '@/services';
 import { ArticleSummary } from '@/types';
 // import { articles } from '@/lib/data'; // Removed static import
 import Reveal from '@/components/shared/Reveal';
-import { Calendar, ChevronRight, Newspaper, Users, Globe, Headset, Phone, Mail } from 'lucide-react';
+import { Calendar, ChevronRight, Headset, Phone, Mail } from 'lucide-react';
 import PageHero from '@/components/shared/PageHero';
 import { Metadata } from 'next';
 import { resolveLocale, localePath } from '@/lib/i18n/config';
@@ -44,11 +44,11 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
   const locale = resolveLocale(p.locale);
   const articles = await articleService.getAllSummary();
   const settings = (await settingService.get()) as any;
-  const publishedArticles = articles.filter((a: ArticleSummary) => !a.isDraft);
-  const newsInternal = publishedArticles.filter((a: ArticleSummary) => a.category === 'tin-noi-bo');
-  const newsIndustry = publishedArticles.filter((a: ArticleSummary) => a.category === 'tin-nganh');
+  // Single flat news feed — no internal / industry split.
   const allNews = localizeAll(
-    [...newsInternal, ...newsIndustry].sort((a: ArticleSummary, b: ArticleSummary) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()),
+    articles
+      .filter((a: ArticleSummary) => !a.isDraft && (a.category === 'tin-noi-bo' || a.category === 'tin-nganh'))
+      .sort((a: ArticleSummary, b: ArticleSummary) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()),
     locale,
   );
 
@@ -57,8 +57,8 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
       <PageHero
         locale={locale}
         eyebrow={locale === 'en' ? 'Newsroom' : 'Bản tin'}
-        title={locale === 'en' ? 'Binovet News' : 'Tin Tức binovet'}
-        subtitle={locale === 'en' ? 'The latest news on binovet activities, veterinary industry events and digital transformation trends in modern animal husbandry.' : 'Cập nhật tin tức mới nhất về các hoạt động của binovet, sự kiện ngành thú y và xu hướng chuyển đổi số trong chăn nuôi hiện đại.'}
+        title={locale === 'en' ? 'Binovet News' : 'Tin Tức Binovet'}
+        subtitle={locale === 'en' ? 'The latest news on Binovet activities, veterinary industry events and digital transformation trends in modern animal husbandry.' : 'Cập nhật tin tức mới nhất về các hoạt động của binovet, sự kiện ngành thú y và xu hướng chuyển đổi số trong chăn nuôi hiện đại.'}
         breadcrumb={[{ label: locale === 'en' ? 'News' : 'Tin tức' }]}
       />
 
@@ -71,13 +71,6 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
                <article className="card-elegant group flex flex-col md:flex-row gap-8 p-6">
                   <Link href={localePath(locale, `/bai-viet/${a.slug}`)} className="w-full md:w-2/5 aspect-[16/10] relative overflow-hidden rounded-2xl shrink-0">
                      <img src={a.thumbnail} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                     <div className="absolute top-4 left-4">
-                        <span className="bg-white/90 backdrop-blur text-ink text-[0.66rem] font-montserrat font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
-                           {a.category === 'tin-noi-bo'
-                             ? (locale === 'en' ? 'Internal' : 'Nội bộ')
-                             : (locale === 'en' ? 'Industry' : 'Ngành chăn nuôi')}
-                        </span>
-                     </div>
                   </Link>
                   <div className="flex flex-col justify-center py-2 flex-1">
                      <div className="flex items-center gap-2 text-ink-soft text-[0.7rem] font-montserrat font-semibold mb-4 uppercase tracking-[0.16em]">
@@ -100,37 +93,6 @@ export default async function NewsPage({ params }: { params: Promise<{ locale: s
 
           {/* Side Panels */}
           <Reveal direction="right" distance={56} className="lg:col-span-1 space-y-8 lg:sticky lg:top-28 lg:self-start">
-             {/* Category Stats */}
-             <div className="box-footer relative overflow-hidden p-8 rounded-2xl text-white">
-                <div className="bg-molecule absolute inset-0 opacity-50 pointer-events-none" />
-                <div className="relative z-10">
-                <h3 className="font-display font-semibold text-lg mb-6 border-b border-white/10 pb-4 text-white">{locale === 'en' ? 'Categories' : 'Chuyên mục'}</h3>
-                <div className="space-y-2">
-                   <Link href={localePath(locale, '/tin-tuc-noi-bo')} className="flex items-center justify-between gap-3 group rounded-xl px-3 py-2.5 -mx-3 hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-3.5">
-                         <span className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-primary transition-all"><Users size={18} /></span>
-                         <span className="font-medium text-sm">{locale === 'en' ? 'Internal news' : 'Tin nội bộ'}</span>
-                      </div>
-                      <span className="text-xs text-white/50 font-montserrat font-semibold">{newsInternal.length}</span>
-                   </Link>
-                   <Link href={localePath(locale, '/tin-tuc-nganh-chan-nuoi-thu-y')} className="flex items-center justify-between gap-3 group rounded-xl px-3 py-2.5 -mx-3 hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-3.5">
-                         <span className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-primary transition-all"><Globe size={18} /></span>
-                         <span className="font-medium text-sm">{locale === 'en' ? 'Industry news' : 'Tin ngành'}</span>
-                      </div>
-                      <span className="text-xs text-white/50 font-montserrat font-semibold">{newsIndustry.length}</span>
-                   </Link>
-                   <Link href={localePath(locale, '/benh-va-dieu-tri-benh')} className="flex items-center justify-between gap-3 group rounded-xl px-3 py-2.5 -mx-3 hover:bg-white/5 transition-colors">
-                      <div className="flex items-center gap-3.5">
-                         <span className="w-10 h-10 bg-secondary/20 text-secondary rounded-xl flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-all"><Newspaper size={18} /></span>
-                         <span className="font-medium text-sm">{locale === 'en' ? 'Diseases & Treatment' : 'Bệnh & Điều trị'}</span>
-                      </div>
-                      <span className="text-xs text-white/50 font-montserrat font-semibold">{publishedArticles.filter((a: ArticleSummary) => a.category === 'benh-dieu-tri').length}</span>
-                   </Link>
-                </div>
-                </div>
-             </div>
-
              {/* Media support */}
              <div className="card-elegant p-7">
                 <div className="flex items-center gap-3 mb-5">

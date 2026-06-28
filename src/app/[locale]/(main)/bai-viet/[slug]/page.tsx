@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import React from 'react';
-
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { articleService } from '@/services';
@@ -93,7 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       url: `https://binovet.com.vn${localePath(locale, `/bai-viet/${article.slug}`)}`,
       siteName: "BINOVET",
       publishedTime: article.publishDate,
-      authors: ["Biotechvet Team"],
+      authors: ["Binovet Team"],
       images: [
         {
           url: articleImage,

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Tabs, Space, Divider, Breadcrumb, Spin, App } from 'antd';
-import { SettingOutlined, PhoneOutlined, MailOutlined, HomeOutlined, FacebookOutlined, YoutubeOutlined, UserOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Tabs, Breadcrumb, Spin, App } from 'antd';
+import { PhoneOutlined, MailOutlined, HomeOutlined, FacebookOutlined, YoutubeOutlined, UserOutlined, GlobalOutlined } from '@ant-design/icons';
 import { adminFetch } from '@/lib/api';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
 
@@ -21,6 +21,7 @@ export default function AdminSettingsPage() {
         const data = await res.json();
         form.setFieldsValue(data);
       } catch (e) {
+        console.error(e);
         msg.error('Không thể tải cài đặt');
       } finally {
         setLoading(false);
@@ -41,9 +42,10 @@ export default function AdminSettingsPage() {
         if (res.ok) {
           msg.success('Lưu thay đổi thành công!');
         } else {
-          throw new Error();
+          throw new Error(`Lỗi khi lưu cài đặt`);
         }
       } catch (e) {
+        console.error(e);
         msg.error('Lỗi khi lưu cài đặt');
       } finally {
         setGlobalLoading(false);
@@ -91,6 +93,9 @@ export default function AdminSettingsPage() {
                     <Form.Item name="email" label="Email chính">
                       <Input size="large" className="rounded-xl" prefix={<MailOutlined />} />
                     </Form.Item>
+                    <Form.Item name="website" label="Website">
+                      <Input size="large" className="rounded-xl" prefix={<GlobalOutlined />} placeholder="https://binovet.com/" />
+                    </Form.Item>
                     <Button type="primary" size="large" htmlType="submit" className="rounded-xl px-10 font-semibold uppercase tracking-wide text-xs h-12 shadow-lg shadow-primary/20">Cập nhật ngay</Button>
                   </div>
                 )
@@ -122,6 +127,9 @@ export default function AdminSettingsPage() {
                     <h3 className="text-xl font-semibold mb-6 border-b pb-2 tracking-tight text-primary">Thông tin Bác sĩ thú y</h3>
                     <Form.Item name={['support', 'doctorName']} label="Họ tên BSTY">
                       <Input size="large" className="rounded-xl" />
+                    </Form.Item>
+                    <Form.Item name={['support', 'doctorRole']} label="Chức danh">
+                      <Input size="large" className="rounded-xl" placeholder="Giám đốc Kỹ thuật" />
                     </Form.Item>
                     <Form.Item name={['support', 'doctorPhone']} label="Số điện thoại hỗ trợ">
                       <Input size="large" className="rounded-xl" prefix={<PhoneOutlined />} />

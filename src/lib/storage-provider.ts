@@ -36,3 +36,22 @@ export async function uploadFile(file: File, bucket: string, onProgress?: (perce
   }
 }
 
+/**
+ * Xoá file đã upload khỏi storage (Supabase ở production, ổ đĩa local khi dev).
+ * Nhận chính URL mà uploadFile trả về.
+ */
+export async function deleteFile(url: string): Promise<void> {
+  if (!url) return;
+
+  const response = await adminFetch('/api/upload', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || 'Delete failed');
+  }
+}
+

@@ -34,8 +34,8 @@ export default function FloatingContact({ settings }: { settings: any }) {
     <>
       {/* Floating Action Buttons */}
       <div className="floating-contact hidden md:flex fixed bottom-6 right-6 flex-col gap-3 z-[999]" suppressHydrationWarning>
-        <a 
-          href="tel:0974999204" 
+        <a
+          href={`tel:${(settings?.hotline1 || '0915999831').replace(/\s/g, '')}`}
           className="w-[52px] h-[52px] rounded-full flex items-center justify-center text-white shadow-lg transition-transform hover:scale-110 active:scale-95 bg-gradient-to-br from-[#e53935] to-[#c62828] animate-bounce-slow"
           title="Gọi hotline"
         >
@@ -120,7 +120,7 @@ export default function FloatingContact({ settings }: { settings: any }) {
                </div>
                <div className="flex items-start gap-2.5 text-[0.9rem] text-gray-700">
                  <Globe size={16} className="mt-1 text-primary shrink-0" />
-                 <div><strong>Website:</strong> www.binovet.com.vn</div>
+                 <div><strong>Website:</strong> {(settings?.website || 'https://binovet.com/').replace(/^https?:\/\//, '').replace(/\/$/, '')}</div>
                </div>
                <div className="flex items-start gap-2.5 text-[0.9rem] text-gray-700">
                  <MapPin size={16} className="mt-1 text-primary shrink-0" />

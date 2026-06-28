@@ -50,7 +50,6 @@ export const SEO_CONFIG = {
     ABOUT: { path: "/gioi-thieu", keywords: ["giới thiệu", "về chúng tôi"] },
     NEWS: { path: "/tin-tuc", keywords: ["tin tức", "bài viết"] },
     HANDBOOK: { path: "/cam-nang-chan-nuoi", keywords: ["cẩm nang", "kỹ thuật"] },
-    DISEASES: { path: "/benh-va-dieu-tri-benh", keywords: ["bệnh", "điều trị"] },
     CONTACT: { path: "/lien-he", keywords: ["liên hệ", "tư vấn"] },
     GALLERY: { path: "/thu-vien", keywords: ["thư viện", "hình ảnh", "video"] },
   },

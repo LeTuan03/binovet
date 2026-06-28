@@ -14,7 +14,6 @@ export class ArticleService {
         title: true,
         titleEn: true,
         category: true,
-        animalTag: true,
         publishDate: true,
         thumbnail: true,
         excerpt: true,

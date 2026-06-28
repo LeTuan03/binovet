@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Phone, Mail, MapPin, Send, MessageSquare } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, MessageSquare, Globe } from 'lucide-react';
 import { FacebookOutlined, YoutubeOutlined } from '@ant-design/icons';
 import PageHero from '@/components/shared/PageHero';
 import Reveal from '@/components/shared/Reveal';
@@ -51,7 +51,7 @@ export default function ContactContent({ settings }: { settings: any }) {
          <PageHero
             locale={locale}
             eyebrow={locale === 'en' ? "Let's talk" : 'Kết nối'}
-            title={locale === 'en' ? 'Contact Biotechvet' : 'Liên Hệ Biotechvet'}
+            title={locale === 'en' ? 'Contact Binovet' : 'Liên Hệ Binovet'}
             subtitle={locale === 'en' ? 'We are always ready to listen and answer all your questions 24/7.' : 'Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn 24/7.'}
             breadcrumb={[{ label: locale === 'en' ? 'Contact' : 'Liên hệ' }]}
          />
@@ -82,7 +82,7 @@ export default function ContactContent({ settings }: { settings: any }) {
                         </div>
                         <div>
                            <h4 className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-2">{locale === 'en' ? 'Support phone' : 'Điện thoại hỗ trợ'}</h4>
-                           <p className="text-lg font-medium text-ink leading-relaxed">{settings?.hotline1 || '024 66861629'} / {settings?.hotline2 || '097 499 9204'}</p>
+                           <p className="text-lg font-medium text-ink leading-relaxed">{settings?.hotline1 || '0915 999 831'} | {settings?.hotline2 || '024 3371 8653'}</p>
                         </div>
                      </div>
 
@@ -93,6 +93,16 @@ export default function ContactContent({ settings }: { settings: any }) {
                         <div>
                            <h4 className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-2">{locale === 'en' ? 'Feedback email' : 'Email phản hồi'}</h4>
                            <p className="text-lg font-medium text-ink leading-relaxed link-underline inline-block">{settings?.email || 'pkd.binovet@gmail.com'}</p>
+                        </div>
+                     </div>
+
+                     <div className="flex gap-6 items-start group">
+                        <div className="w-14 h-14 rounded-2xl bg-primary/8 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+                           <Globe size={24} />
+                        </div>
+                        <div>
+                           <h4 className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-2">Website</h4>
+                           <a href={settings?.website || 'https://binovet.com/'} target="_blank" rel="noopener" className="text-lg font-medium text-ink leading-relaxed link-underline inline-block">{(settings?.website || 'https://binovet.com/').replace(/^https?:\/\//, '').replace(/\/$/, '')}</a>
                         </div>
                      </div>
                   </div>
@@ -117,8 +127,9 @@ export default function ContactContent({ settings }: { settings: any }) {
                               <Phone size={18} />
                            </div>
                            <div>
-                              <p className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-1">{locale === 'en' ? 'Product consultation' : 'Tư vấn sản phẩm'}</p>
-                              <p className="text-ink font-medium">{settings?.hotline1}</p>
+                              <p className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-1">{locale === 'en' ? 'Technical Director' : 'Giám đốc Kỹ thuật'}</p>
+                              <p className="text-ink font-medium">{settings?.support?.doctorName || 'ThS.BS Phùng Thanh Sơn'}</p>
+                              <p className="text-ink font-medium">{settings?.support?.doctorPhone || '0984 051 798'}</p>
                            </div>
                         </div>
                         <div className="flex gap-4 items-start">
@@ -127,7 +138,7 @@ export default function ContactContent({ settings }: { settings: any }) {
                            </div>
                            <div>
                               <p className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-1">{locale === 'en' ? 'Support email' : 'Email hỗ trợ'}</p>
-                              <p className="text-ink font-medium">{settings?.support?.doctorEmail}</p>
+                              <p className="text-ink font-medium">{settings?.support?.doctorEmail || 'thanhson256@gmail.com'}</p>
                            </div>
                         </div>
                      </div>
@@ -192,10 +203,10 @@ export default function ContactContent({ settings }: { settings: any }) {
                <div className="relative z-10 flex flex-col items-center">
                   <div className="divider-diamond mb-6"><span /></div>
                   <h3 className="text-3xl md:text-4xl font-semibold text-white leading-tight mb-4">
-                     {locale === 'en' ? 'Quality Is Our Commitment' : 'Chất lượng Là Cam Kết'}
+                     {locale === 'en' ? 'Partnering with the Global Livestock Industry' : 'Đồng hành cùng ngành chăn nuôi toàn cầu'}
                   </h3>
                   <p className="text-lg text-white/75">
-                     {locale === 'en' ? 'With BiotechVet - Enhancing the value of Vietnamese livestock farming' : 'Cùng BiotechVet - Nâng cao giá trị chăn nuôi Việt Nam'}
+                     {locale === 'en' ? 'BINOVET — high-quality animal health solutions to international standards.' : 'BINOVET — giải pháp chăm sóc sức khỏe vật nuôi chất lượng đạt chuẩn quốc tế.'}
                   </p>
                </div>
             </Reveal>

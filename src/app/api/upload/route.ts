@@ -121,3 +121,79 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 });
   }
 }
+
+/**
+ * Xoá file đã upload (ảnh/video) khỏi storage.
+ * Body: { url: string } — nhận chính URL mà POST đã trả về.
+ */
+export async function DELETE(req: NextRequest) {
+  try {
+    // Check authorization
+    const authHeader = req.headers.get('Authorization');
+    const token = authHeader?.split(' ')[1];
+    const expectedToken = process.env.NEXT_PUBLIC_ADMIN_SECRET_TOKEN || 'binovet-dev-token';
+
+    if (token !== expectedToken) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const url: string = typeof body?.url === 'string' ? body.url : '';
+
+    if (!url) {
+      return NextResponse.json({ message: 'Missing file url' }, { status: 400 });
+    }
+
+    // ── Production: Supabase Storage ────────────────────────────────
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const marker = '/storage/v1/object/public/';
+      const idx = url.indexOf(marker);
+      // Không phải URL của Supabase Storage (vd: ảnh ngoài) → bỏ qua, không lỗi.
+      if (idx === -1) {
+        return NextResponse.json({ success: true, skipped: true });
+      }
+
+      let objectPath = url.slice(idx + marker.length).split('?')[0].split('#')[0];
+      const prefix = `${STORAGE_BUCKET}/`;
+      if (objectPath.startsWith(prefix)) objectPath = objectPath.slice(prefix.length);
+      objectPath = decodeURIComponent(objectPath);
+
+      const { error } = await supabase.storage.from(STORAGE_BUCKET).remove([objectPath]);
+      if (error) {
+        console.error('Supabase Storage delete error:', error);
+        return NextResponse.json({ message: error.message }, { status: 500 });
+      }
+      return NextResponse.json({ success: true });
+    }
+
+    // ── Local dev: filesystem (public/uploads) ──────────────────────
+    const uploadsMarker = '/uploads/';
+    const uIdx = url.indexOf(uploadsMarker);
+    // URL không nằm trong /uploads (vd: ảnh ngoài) → bỏ qua, không lỗi.
+    if (uIdx === -1) {
+      return NextResponse.json({ success: true, skipped: true });
+    }
+
+    const relative = decodeURIComponent(
+      url.slice(uIdx + uploadsMarker.length).split('?')[0].split('#')[0],
+    );
+
+    // Chống path traversal: target bắt buộc nằm trong UPLOAD_DIR.
+    const targetPath = path.normalize(path.join(UPLOAD_DIR, relative));
+    const safeRoot = path.normalize(UPLOAD_DIR + path.sep);
+    if (!targetPath.startsWith(safeRoot)) {
+      return NextResponse.json({ message: 'Invalid path' }, { status: 400 });
+    }
+
+    if (fs.existsSync(targetPath)) {
+      fs.unlinkSync(targetPath);
+      console.log(`File deleted: ${targetPath}`);
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error('Delete API error:', error);
+    return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 });
+  }
+}

@@ -32,7 +32,6 @@ export interface Article {
   title: string;
   titleEn?: string | null;
   category: string;
-  animalTag?: string | null;
   publishDate: string;
   thumbnail: string;
   excerpt: string;
@@ -104,6 +103,8 @@ export interface AboutPageContent {
     visionText?: string;
     missionTitle?: string;
     missionText?: string;
+    coreTitle?: string;
+    coreValues?: { title: string; desc: string }[];
     quoteText?: string;
     quoteAuthor?: string;
     quoteRole?: string;
@@ -132,21 +133,14 @@ export interface Setting {
   hotline1?: string | null;
   hotline2?: string | null;
   email?: string | null;
+  website?: string | null;
   address?: string | null;
   intro_slogan?: string | null;
+  intro_sloganEn?: string | null;
+  support?: any;
   social?: any;
   /** Vietnamese (canonical) About page content. */
   aboutPage?: AboutPageContent;
   /** English About page content (edited independently in the admin). */
   aboutPageEn?: AboutPageContent;
-}
-
-export interface AnimalTag {
-  id: bigint;
-  name: string;
-  nameEn?: string | null;
-  slug: string;
-  icon: string;
-  description: string;
-  descriptionEn?: string | null;
 }

@@ -6,13 +6,16 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   Building2, History, Target, Award, Heart, Factory, Users,
-  ArrowRight, ShieldCheck, Quote,
+  ArrowRight, ShieldCheck, Quote, BadgeCheck, Sparkles, Leaf,
 } from 'lucide-react';
 import PageHero from '@/components/shared/PageHero';
 import SectionHeading from '@/components/shared/SectionHeading';
 import { aboutDefaults, aboutDefaultsEn, mergeAbout } from './aboutDefaults';
 import { useLocale } from '@/lib/i18n/LocaleProvider';
 import { localePath } from '@/lib/i18n/config';
+
+// Icons cycled across the core-value cards (order matches aboutDefaults).
+const VALUE_ICONS = [BadgeCheck, Sparkles, ShieldCheck, Users, Leaf] as const;
 
 const sectionDefs = [
   { id: 'gioi-thieu', label: 'Giới thiệu', labelEn: 'Overview', icon: Building2 },
@@ -113,10 +116,12 @@ export default function AboutContent() {
             : 'Hành trình 20 năm đồng hành cùng người chăn nuôi Việt Nam, kiến tạo những giá trị bền vững và mang lại giải pháp thú y toàn diện.'
         }
         breadcrumb={[{ label: en ? 'About' : 'Giới thiệu' }]}
+        sideImage="/images/gioithieu.webp"
+        sideImageAlt={en ? 'About Binovet' : 'Giới thiệu Binovet'}
       />
 
       {/* Sticky scrollspy section nav */}
-      <nav className="sticky top-0 z-30">
+      <nav className="sticky top-0 z-30 bg-white">
         <div className="glass border-y border-line/70">
           <div className="container mx-auto px-4">
             <div className="flex overflow-x-auto hide-scrollbar">
@@ -180,13 +185,13 @@ export default function AboutContent() {
             <motion.div {...anim('right', 0.15)} className="relative mb-10 lg:mb-0">
               <div className="relative rounded-2xl overflow-hidden border border-line shadow-elegant-lg group">
                 <img
-                  src="/images/about.svg"
+                  src="/images/about.webp"
                   alt="binovet"
                   className="w-full h-[360px] lg:h-[460px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#06243f]/55 via-[#06243f]/10 to-transparent" />
               </div>
-              <div className="absolute -bottom-6 left-4 sm:left-8 glass rounded-2xl shadow-elegant-lg px-6 py-5 flex items-center gap-4">
+              {/* <div className="absolute -bottom-6 left-4 sm:left-8 glass rounded-2xl shadow-elegant-lg px-6 py-5 flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-primary/8 text-primary flex items-center justify-center">
                   <ShieldCheck size={24} />
                 </div>
@@ -196,7 +201,7 @@ export default function AboutContent() {
                     {en ? 'Factory standard' : 'Tiêu chuẩn nhà máy'}
                   </div>
                 </div>
-              </div>
+              </div> */}
             </motion.div>
           </div>
         </div>
@@ -270,6 +275,35 @@ export default function AboutContent() {
             </motion.div>
           </div>
 
+          {/* Core values */}
+          {content.tamNhin.coreValues?.length > 0 && (
+            <div className="max-w-5xl mx-auto mt-16 lg:mt-20">
+              <motion.div {...anim('down')} className="text-center mb-10">
+                <span className="eyebrow eyebrow--center text-secondary justify-center">
+                  {content.tamNhin.coreTitle || (en ? 'Core Values' : 'Giá trị cốt lõi')}
+                </span>
+              </motion.div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+                {content.tamNhin.coreValues.map((value, i) => {
+                  const Icon = VALUE_ICONS[i % VALUE_ICONS.length];
+                  return (
+                    <motion.div
+                      key={`${value.title}-${i}`}
+                      {...anim('up', (i % 3) * 0.1)}
+                      className="glass-dark rounded-2xl p-7 lg:p-8 h-full flex flex-col"
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-secondary mb-5 shrink-0">
+                        <Icon size={24} />
+                      </div>
+                      <h4 className="text-lg font-semibold text-white mb-3 leading-snug">{value.title}</h4>
+                      <p className="text-sm text-white/70 leading-relaxed whitespace-pre-line">{value.desc}</p>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <motion.div {...anim('up')} className="max-w-3xl mx-auto text-center mt-16">
             <Quote className="w-10 h-10 text-secondary/70 mx-auto mb-5" />
             <p className="font-display text-xl lg:text-2xl text-white leading-relaxed whitespace-pre-line">{content.tamNhin.quoteText}</p>
@@ -287,13 +321,13 @@ export default function AboutContent() {
       {/* ── 4. Facilities ───────────────────────────────────────────── */}
       <section id="co-so" className="scroll-mt-32 py-16 lg:py-24 bg-white">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="">
             <motion.div {...anim('left', 0.05)} className="order-2 lg:order-1">
               <SectionHeading eyebrow={en ? 'Facilities' : 'Cơ sở'} title={content.coSo.title} />
               <div className="prose-editorial max-w-none mt-7">
                 <p className="whitespace-pre-line">{content.coSo.intro}</p>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden border border-line mt-9">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden border border-line my-9">
                 {content.coSo.stats.map((stat, i) => (
                   <div key={`${stat.label}-${i}`} className="bg-white p-5 lg:p-6 text-center">
                     <div className={`text-4xl lg:text-[2.6rem] font-display font-semibold mb-2 ${i % 2 === 0 ? 'text-primary' : 'text-ink'}`}>{stat.number}</div>
@@ -305,10 +339,10 @@ export default function AboutContent() {
 
             <motion.div {...anim('right', 0.15)} className="order-1 lg:order-2">
               <div className="relative rounded-2xl overflow-hidden border border-line shadow-elegant-lg group aspect-[4/3]">
-                <img src="/images/about.svg" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Nhà máy GMP" />
+                <img src="/images/coso.webp" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Nhà máy GMP" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#06243f] via-[#06243f]/35 to-transparent flex flex-col justify-end p-8 text-white">
                   <span className="w-12 h-px bg-secondary mb-4" />
-                  <h4 className="text-2xl font-semibold mb-2">{content.coSo.cardTitle}</h4>
+                  <h4 className="text-2xl text-white/80 font-semibold mb-2">{content.coSo.cardTitle}</h4>
                   <p className="text-sm text-white/80 whitespace-pre-line">{content.coSo.cardText}</p>
                 </div>
               </div>

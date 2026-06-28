@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, App as AntdApp } from 'antd';
 import { PlayCircleOutlined, DeleteOutlined, LoadingOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { uploadFile } from '@/lib/storage-provider';
+import { uploadFile, deleteFile } from '@/lib/storage-provider';
 
 interface VideoUploadProps {
   value?: string;
@@ -65,10 +65,19 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
     }
   };
 
-  const onRemove = (e: React.MouseEvent) => {
+  const onRemove = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    const urlToDelete = videoUrl;
     setVideoUrl(undefined);
     onChange?.('');
+    if (urlToDelete) {
+      try {
+        await deleteFile(urlToDelete);
+      } catch (error) {
+        console.error('Delete file error:', error);
+        messageApi.error('Xóa file trên máy chủ thất bại!');
+      }
+    }
   };
 
   return (

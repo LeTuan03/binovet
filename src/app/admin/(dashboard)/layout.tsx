@@ -16,7 +16,6 @@ import {
   LogoutOutlined,
   BellOutlined,
   InfoCircleOutlined,
-  FileTextOutlined,
   BookOutlined,
   NotificationOutlined,
   HomeOutlined,
@@ -86,7 +85,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const contentItems: any[] = [
     { key: '/admin/products',   icon: <ShoppingOutlined />,   label: 'Sản phẩm' },
     { key: '/admin/categories', icon: <AppstoreOutlined />,   label: 'Danh mục' },
-    { key: '/admin/articles',   icon: <FileTextOutlined />,   label: 'Bệnh học' },
     { key: '/admin/handbooks',  icon: <BookOutlined />,       label: 'Cẩm nang chăn nuôi' },
     { key: '/admin/news',       icon: <NotificationOutlined />, label: 'Tin tức' },
   ];

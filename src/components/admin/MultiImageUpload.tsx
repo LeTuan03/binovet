@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Upload, App as AntdApp, Image as AntImage } from 'antd';
 import { PlusOutlined, DeleteOutlined, LoadingOutlined, EyeOutlined } from '@ant-design/icons';
 import type { RcFile, UploadProps } from 'antd/es/upload/interface';
-import { uploadFile } from '@/lib/storage-provider';
+import { uploadFile, deleteFile } from '@/lib/storage-provider';
 
 interface MultiImageUploadProps {
   value?: string[];
@@ -145,11 +145,20 @@ const MultiImageUpload: React.FC<MultiImageUploadProps> = ({
     }
   };
 
-  const handleRemove = (index: number) => {
+  const handleRemove = async (index: number) => {
+    const urlToDelete = images[index];
     const newImages = images.filter((_, i) => i !== index);
     imagesRef.current = newImages;
     setImages(newImages);
     onChange?.(newImages);
+    if (urlToDelete) {
+      try {
+        await deleteFile(urlToDelete);
+      } catch (error) {
+        console.error('Delete file error:', error);
+        messageApi.error('Xóa file trên máy chủ thất bại!');
+      }
+    }
   };
 
   return (
