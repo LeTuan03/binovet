@@ -19,10 +19,10 @@ const VALUE_ICONS = [BadgeCheck, Sparkles, ShieldCheck, Users, Leaf] as const;
 
 const sectionDefs = [
   { id: 'gioi-thieu', label: 'Giới thiệu', labelEn: 'Overview', icon: Building2 },
-  { id: 'lich-su', label: 'Lịch sử', labelEn: 'History', icon: History },
+  // { id: 'lich-su', label: 'Lịch sử', labelEn: 'History', icon: History },
   { id: 'tam-nhin', label: 'Tầm nhìn', labelEn: 'Vision', icon: Target },
   { id: 'co-so', label: 'Cơ sở', labelEn: 'Facilities', icon: Factory },
-  { id: 'thanh-tuu', label: 'Thành tựu', labelEn: 'Achievements', icon: Award },
+  // { id: 'thanh-tuu', label: 'Thành tựu', labelEn: 'Achievements', icon: Award },
   { id: 'co-cau', label: 'Cơ cấu', labelEn: 'Structure', icon: Users },
 ];
 
@@ -207,43 +207,6 @@ export default function AboutContent() {
         </div>
       </section>
 
-      {/* ── 2. History (timeline) ───────────────────────────────────── */}
-      <section id="lich-su" className="scroll-mt-32 py-16 lg:py-24 bg-paper border-t border-line">
-        <div className="container mx-auto px-4">
-          <motion.div {...anim('down')}>
-            <SectionHeading
-              align="center"
-              divider
-              eyebrow={en ? 'Our journey' : 'Hành trình'}
-              title={content.lichSu.title}
-              subtitle={content.lichSu.intro}
-            />
-          </motion.div>
-
-          <div className="relative mt-14 lg:mt-20 max-w-5xl mx-auto pl-8 md:pl-0">
-            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-line -translate-x-1/2" />
-            <div className="md:hidden absolute left-[15px] top-0 bottom-0 w-px bg-line" />
-            <div className="space-y-12">
-              {content.lichSu.timeline.map((item, index) => (
-                <motion.div
-                  key={`${item.year}-${index}`}
-                  {...anim(index % 2 === 0 ? 'right' : 'left')}
-                  className={`relative flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
-                >
-                  <div className="absolute left-[-33px] md:left-1/2 w-4 h-4 rounded-full bg-secondary border-4 border-paper shadow-sm md:-translate-x-1/2 z-10" />
-                  <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12 md:text-right'}`}>
-                    <div className="card-elegant p-8 md:p-10 group">
-                      <div className="text-4xl font-display font-semibold text-primary mb-4 inline-block">{item.year}</div>
-                      <p className="text-ink-soft leading-relaxed group-hover:text-ink transition-colors whitespace-pre-line">{item.text}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── 3. Vision & Mission (dark centerpiece) ──────────────────── */}
       <section id="tam-nhin" className="scroll-mt-32 py-20 lg:py-28 bg-binovet-dark text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-molecule opacity-60 pointer-events-none" />
@@ -347,45 +310,6 @@ export default function AboutContent() {
                 </div>
               </div>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. Achievements ─────────────────────────────────────────── */}
-      <section id="thanh-tuu" className="scroll-mt-32 py-16 lg:py-24 bg-cream border-t border-line">
-        <div className="container mx-auto px-4">
-          <motion.div {...anim('down')}>
-            <SectionHeading
-              align="center"
-              divider
-              eyebrow={en ? 'Recognition' : 'Ghi nhận'}
-              title={content.thanhTuu.heading}
-              subtitle={content.thanhTuu.title}
-            />
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-14">
-            {content.thanhTuu.images.map((image, i) => (
-              <motion.div key={`${image.title}-${i}`} {...anim('up', (i % 3) * 0.1)} className="card-elegant p-8 flex flex-col items-center text-center">
-                <div className="w-full aspect-square flex items-center justify-center mb-6">
-                  {image.url ? (
-                    <img src={image.url} className="max-w-full max-h-full object-contain" alt={image.title || `Thành tựu ${i + 1}`} />
-                  ) : (
-                    <div className="w-24 h-24 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center">
-                      <Award size={44} />
-                    </div>
-                  )}
-                </div>
-                {image.subtitle && (
-                  <div className="flex justify-center mb-3">
-                    <span className="eyebrow eyebrow--center">{image.subtitle}</span>
-                  </div>
-                )}
-                {image.title && (
-                  <p className="font-display font-semibold text-primary text-lg leading-snug whitespace-pre-line">{image.title}</p>
-                )}
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
