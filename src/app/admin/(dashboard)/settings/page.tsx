@@ -76,6 +76,9 @@ export default function AdminSettingsPage() {
                     <Form.Item name="companyName" label="Tên công ty" rules={[{ required: true }]}>
                       <Input size="large" className="rounded-xl" />
                     </Form.Item>
+                    <Form.Item name="companyNameEn" label="Tên công ty (Tiếng Anh)">
+                      <Input size="large" className="rounded-xl" placeholder="BIOTECHNOLOGY VETERINARY.,J.S.C" />
+                    </Form.Item>
                     <Form.Item name="addressHN" label="Trụ sở chính (Hà Nội)" rules={[{ required: true }]}>
                       <Input size="large" className="rounded-xl" />
                     </Form.Item>

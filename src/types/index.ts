@@ -130,6 +130,9 @@ export interface AboutPageContent {
 }
 
 export interface Setting {
+  companyName?: string | null;
+  /** English company name (falls back to `companyName` when empty). */
+  companyNameEn?: string | null;
   hotline1?: string | null;
   hotline2?: string | null;
   email?: string | null;

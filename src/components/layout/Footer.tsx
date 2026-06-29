@@ -82,7 +82,7 @@ export default function Footer() {
             <Link href={localePath(locale, '/')} className="inline-flex mb-3">
               <img src="/images/logo.png" alt="BINOVET" className="h-12 brightness-0 invert" />
             </Link>
-            <p className="font-semibold text-white/90">{settings?.companyName || 'Công Ty CP Công Nghệ Sinh Học Thú Y'}</p>
+            <p className="font-semibold text-white/90">{locale === 'en' ? (settings?.companyNameEn || settings?.companyName || 'BIOTECHNOLOGY VETERINARY.,J.S.C') : (settings?.companyName || 'Công Ty CP Công Nghệ Sinh Học Thú Y')}</p>
             <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.headquarters')}:</strong> {settings?.addressHN || 'Cụm CN Liên Phương, Xã Hồng Vân, Hà Nội'}</p>
             <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.phone')}:</strong> <a href={`tel:${settings?.hotline1}`} className="hover:text-secondary transition-colors">{settings?.hotline1 || '0915 999 831'}</a> | <a href={`tel:${settings?.hotline2}`} className="hover:text-secondary transition-colors">{settings?.hotline2 || '024 3371 8653'}</a></p>
             <p className="text-white/70"><strong className="text-white/80 font-semibold">{t('footer.email')}:</strong> <a href={`mailto:${settings?.email}`} className="hover:text-secondary transition-colors">{settings?.email || 'pkd.binovet@gmail.com'}</a></p>
