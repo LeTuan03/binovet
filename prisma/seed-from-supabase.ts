@@ -40,12 +40,8 @@ function loadEnv() {
 }
 loadEnv();
 
-const SOURCE_URL =
-  process.env.SEED_SOURCE_URL || process.env.DIRECT_URL || process.env.DATABASE_URL || '';
-const TARGET_URL =
-  process.env.SEED_TARGET_URL ||
-  process.env.LOCAL_DATABASE_URL ||
-  'postgresql://postgres:123456@127.0.0.1:5432/binovet?schema=public';
+const SOURCE_URL = process.env.DIRECT_URL || '';
+const TARGET_URL = process.env.SEED_TARGET_URL;
 
 // Ẩn mật khẩu khi in log.
 const mask = (url: string) => url.replace(/:\/\/([^:]+):([^@]+)@/, '://$1:****@');
