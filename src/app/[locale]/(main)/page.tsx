@@ -62,8 +62,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   // Featured products — curated (featured first), topped up to a full grid.
   const featuredProducts = [
     ...products.filter((p) => p.featured),
-    ...products.filter((p) => !p.featured),
-  ].slice(0, 4);
+  ];
 
   const categoryName = (id: ProductSummary['categoryId']) =>
     categories.find((c) => String(c.id) === String(id))?.name || '';

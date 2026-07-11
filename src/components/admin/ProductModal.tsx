@@ -195,24 +195,6 @@ const ProductModal: React.FC<ProductModalProps> = ({
       cancelButtonProps={{ className: "rounded-xl h-11 px-8 font-bold uppercase tracking-widest text-[11px]" }}
     >
       <Form form={form} layout="vertical" className="mt-6 px-4 pb-8">
-        {/* ===== KHỐI 1: Nội dung theo ngôn ngữ ===== */}
-        <SectionLabel>Nội dung theo ngôn ngữ</SectionLabel>
-        <Tabs
-          items={[
-            {
-              key: 'vi',
-              label: <span className="font-bold">{LANG_CONFIG.vi.flag} {LANG_CONFIG.vi.tabLabel}</span>,
-              forceRender: true,
-              children: <LangPanel cfg={LANG_CONFIG.vi} />,
-            },
-            {
-              key: 'en',
-              label: <span className="font-bold">{LANG_CONFIG.en.flag} {LANG_CONFIG.en.tabLabel}</span>,
-              forceRender: true,
-              children: <LangPanel cfg={LANG_CONFIG.en} />,
-            },
-          ]}
-        />
 
         {/* ===== KHỐI 2: Thông tin chung (dùng chung cho cả 2 ngôn ngữ) ===== */}
         <SectionLabel hint="Dùng chung 2 ngôn ngữ">Thông tin chung</SectionLabel>
@@ -259,6 +241,26 @@ const ProductModal: React.FC<ProductModalProps> = ({
             </Form.Item>
           </Col>
         </Row>
+
+        {/* ===== KHỐI 1: Nội dung theo ngôn ngữ ===== */}
+        <SectionLabel>Nội dung theo ngôn ngữ</SectionLabel>
+        <Tabs
+          items={[
+            {
+              key: 'vi',
+              label: <span className="font-bold">{LANG_CONFIG.vi.flag} {LANG_CONFIG.vi.tabLabel}</span>,
+              forceRender: true,
+              children: <LangPanel cfg={LANG_CONFIG.vi} />,
+            },
+            {
+              key: 'en',
+              label: <span className="font-bold">{LANG_CONFIG.en.flag} {LANG_CONFIG.en.tabLabel}</span>,
+              forceRender: true,
+              children: <LangPanel cfg={LANG_CONFIG.en} />,
+            },
+          ]}
+        />
+
       </Form>
     </Modal>
   );
