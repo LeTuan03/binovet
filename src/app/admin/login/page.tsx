@@ -19,6 +19,7 @@ export default function AdminLoginPage() {
   const onFinish = (values: any) => {
     const user = values.username;
     const password = values.password;
+    console.log( process.env.NEXT_PUBLIC_ADMIN_PASSWORD)
     if (user === process.env.NEXT_PUBLIC_ADMIN_USERNAME && password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
       msg.success('Đăng nhập thành công!');
       localStorage.setItem('admin_token', process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET || '');
