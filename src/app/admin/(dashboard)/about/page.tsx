@@ -140,7 +140,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'lichSu', 'intro']}
                       label="Đoạn mở đầu"
                     >
-                      <TextArea rows={3} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                     </Form.Item>
 
                     <div className="mt-4">
@@ -168,7 +168,7 @@ export default function AdminAboutPage() {
                                     label="Mô tả"
                                     className="!mb-2 flex-1"
                                   >
-                                    <TextArea rows={2} className={inputCls} />
+                                    <TextArea autoSize={{ minRows: 6, maxRows: 10 }} className={inputCls} />
                                   </Form.Item>
                                   <Button
                                     danger
@@ -218,13 +218,13 @@ export default function AdminAboutPage() {
                       name={[prefix,'gioiThieu', 'paragraph1']}
                       label="Đoạn 1"
                     >
-                      <TextArea rows={4} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 14 }} className={inputCls} />
                     </Form.Item>
                     <Form.Item
                       name={[prefix,'gioiThieu', 'paragraph2']}
                       label="Đoạn 2"
                     >
-                      <TextArea rows={3} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-4">
                       <Form.Item
@@ -275,7 +275,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'tamNhin', 'visionText']}
                       label="Nội dung Tầm nhìn"
                     >
-                      <TextArea rows={4} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 14 }} className={inputCls} />
                     </Form.Item>
                     <Form.Item
                       name={[prefix,'tamNhin', 'missionTitle']}
@@ -287,7 +287,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'tamNhin', 'missionText']}
                       label="Nội dung Sứ mệnh"
                     >
-                      <TextArea rows={4} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 14 }} className={inputCls} />
                     </Form.Item>
 
                     <Form.Item
@@ -321,7 +321,7 @@ export default function AdminAboutPage() {
                                     label="Mô tả"
                                     className="!mb-0"
                                   >
-                                    <TextArea rows={3} className={inputCls} />
+                                    <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                                   </Form.Item>
                                 </div>
                                 <Button
@@ -350,7 +350,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'tamNhin', 'quoteText']}
                       label="Câu trích dẫn"
                     >
-                      <TextArea rows={3} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                     </Form.Item>
                     <div className="grid grid-cols-2 gap-4">
                       <Form.Item
@@ -389,7 +389,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'thanhTuu', 'title']}
                       label="Mô tả"
                     >
-                      <TextArea rows={4} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 14 }} className={inputCls} />
                     </Form.Item>
 
                     <div className="mt-4">
@@ -430,7 +430,7 @@ export default function AdminAboutPage() {
                                     className="!mb-0"
                                   >
                                     <TextArea
-                                      rows={3}
+                                      autoSize={{ minRows: 6, maxRows: 12 }}
                                       className={inputCls}
                                       placeholder='VD: "Doanh nghiệp Uy tín – Phát triển bền vững 2012"'
                                     />
@@ -481,7 +481,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'coSo', 'intro']}
                       label="Mô tả"
                     >
-                      <TextArea rows={3} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                     </Form.Item>
                     <Form.Item
                       name={[prefix,'coSo', 'cardTitle']}
@@ -569,7 +569,7 @@ export default function AdminAboutPage() {
                       name={[prefix,'coCau', 'intro']}
                       label="Mô tả"
                     >
-                      <TextArea rows={3} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className={inputCls} />
                     </Form.Item>
 
                     <div className="mt-4">
@@ -620,7 +620,7 @@ export default function AdminAboutPage() {
                       label="Câu trích dẫn"
                       className="mt-6"
                     >
-                      <TextArea rows={4} className={inputCls} />
+                      <TextArea autoSize={{ minRows: 6, maxRows: 14 }} className={inputCls} />
                     </Form.Item>
 
                     <SaveButton />

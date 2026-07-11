@@ -86,7 +86,7 @@ const LangPanel: React.FC<{ cfg: LangCfg }> = ({ cfg }) => (
     </Form.Item>
 
     <Form.Item name={cfg.descField} label={cfg.descLabel}>
-      <TextArea rows={3} className="rounded-xl" placeholder={cfg.descPlaceholder} />
+      <TextArea autoSize={{ minRows: 6, maxRows: 12 }} className="rounded-xl" placeholder={cfg.descPlaceholder} />
     </Form.Item>
 
     <Divider className="!my-6">
@@ -116,7 +116,7 @@ const LangPanel: React.FC<{ cfg: LangCfg }> = ({ cfg }) => (
                     label={cfg.specContentLabel}
                     rules={[{ required: true, message: cfg.specContentRequiredMsg }]}
                   >
-                    <TextArea rows={4} placeholder={cfg.specContentPlaceholder} className="rounded-xl" />
+                    <TextArea autoSize={{ minRows: 6, maxRows: 14 }} placeholder={cfg.specContentPlaceholder} className="rounded-xl" />
                   </Form.Item>
                 </Col>
               </Row>

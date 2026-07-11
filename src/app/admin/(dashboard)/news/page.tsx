@@ -439,7 +439,7 @@ function AdminNewsPageContent() {
                       name="excerpt"
                       label="Mô tả ngắn (Trích dẫn)"
                     >
-                      <Input.TextArea rows={3} className="rounded-xl p-3" placeholder="Nhập đoạn mô tả ngắn cho bài viết..." />
+                      <Input.TextArea autoSize={{ minRows: 6, maxRows: 12 }} className="rounded-xl p-3" placeholder="Nhập đoạn mô tả ngắn cho bài viết..." />
                     </Form.Item>
 
                     <Form.Item
@@ -468,7 +468,7 @@ function AdminNewsPageContent() {
                       name="excerptEn"
                       label="Mô tả ngắn (EN)"
                     >
-                      <Input.TextArea rows={3} className="rounded-xl p-3" placeholder="Short English excerpt..." />
+                      <Input.TextArea autoSize={{ minRows: 6, maxRows: 12 }} className="rounded-xl p-3" placeholder="Short English excerpt..." />
                     </Form.Item>
 
                     <Form.Item

@@ -374,7 +374,7 @@ function HandbookManagementContent() {
                     </Form.Item>
 
                     <Form.Item name="excerpt" label="Tóm tắt ngắn (Excerpt)">
-                      <Input.TextArea rows={2} className="rounded-xl p-4 font-medium" placeholder="Viết mô tả ngắn để thu hút người đọc..." />
+                      <Input.TextArea autoSize={{ minRows: 4, maxRows: 10 }} className="rounded-xl p-4 font-medium" placeholder="Viết mô tả ngắn để thu hút người đọc..." />
                     </Form.Item>
 
                     <Form.Item name="content" label="Nội dung chuyên sâu (Tối ưu SEO - CKEditor)">
@@ -394,7 +394,7 @@ function HandbookManagementContent() {
                     </Form.Item>
 
                     <Form.Item name="excerptEn" label="Tóm tắt ngắn (EN)">
-                      <Input.TextArea rows={2} className="rounded-xl p-4 font-medium" placeholder="Short English excerpt..." />
+                      <Input.TextArea autoSize={{ minRows: 4, maxRows: 10 }} className="rounded-xl p-4 font-medium" placeholder="Short English excerpt..." />
                     </Form.Item>
 
                     <Form.Item name="contentEn" label="Nội dung (EN)">
