@@ -7,7 +7,7 @@ export const SEO_CONFIG = {
   BASE_URL: "https://binovet.com.vn",
   SITE_NAME: "BINOVET",
   SITE_DESCRIPTION: "BINOVET - Tiên phong sản xuất dược thú y công nghệ USA tại Việt Nam",
-  COMPANY_NAME: "Công Ty CP Công Nghệ Sinh Học Thú Y",
+  COMPANY_NAME: "BIOTECHNOLOGY VETERINARY.,J.S.C",
   
   // Default Images
   DEFAULT_OG_IMAGE: "/images/about.svg",

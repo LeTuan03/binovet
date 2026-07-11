@@ -20,7 +20,7 @@ async function main() {
   // database actually refreshes the contact/slogan data (the old `update: {}`
   // silently kept stale values on any DB that already had a settings row).
   const settingsData = {
-    companyName: 'Công Ty CP Công Nghệ Sinh Học Thú Y',
+    companyName: 'BIOTECHNOLOGY VETERINARY.,J.S.C',
     companyNameEn: 'BIOTECHNOLOGY VETERINARY.,J.S.C',
     addressHN: 'Cụm CN Liên Phương, Xã Hồng Vân, Hà Nội',
     addressHCM: '',

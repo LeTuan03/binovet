@@ -50,7 +50,7 @@ export const aboutDefaults: AboutContentResolved = {
   gioiThieu: {
     title: 'Tổng quan về BINOVET',
     paragraph1:
-      'BINOVET là thương hiệu dược thú y thuộc Công Ty CP Công Nghệ Sinh Học Thú Y. Với hơn 20 năm phát triển, chúng tôi tự hào mang đến các giải pháp dược phẩm chất lượng cao, ứng dụng công nghệ hiện đại từ Hoa Kỳ.',
+      'BINOVET là thương hiệu dược thú y thuộc BIOTECHNOLOGY VETERINARY.,J.S.C. Với hơn 20 năm phát triển, chúng tôi tự hào mang đến các giải pháp dược phẩm chất lượng cao, ứng dụng công nghệ hiện đại từ Hoa Kỳ.',
     paragraph2:
       'Chúng tôi hướng đến việc liên tục đổi mới, cải tiến chất lượng và dịch vụ, đáp ứng nhu cầu ngày càng cao của ngành chăn nuôi trong và ngoài nước.',
     stat1Number: '200+',
@@ -65,7 +65,7 @@ export const aboutDefaults: AboutContentResolved = {
     timeline: [
       {
         year: '2002',
-        text: 'Công ty Cổ phần Công Nghệ Sinh Học Thú Y chính thức được thành lập, đặt nền móng cho sự ra đời của thương hiệu BINOVET.',
+        text: 'BIOTECHNOLOGY VETERINARY.,J.S.C chính thức được thành lập, đặt nền móng cho sự ra đời của thương hiệu BINOVET.',
       },
       {
         year: '2010',

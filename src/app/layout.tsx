@@ -26,7 +26,7 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "BINOVET - Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y",
+    default: "BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C",
     template: "%s | BINOVET"
   },
   description: "BINOVET tự hào là đơn vị tiên phong trong sản xuất và phân phối dược thú y trang trại tại Việt Nam với công nghệ tiên tiến từ Hoa Kỳ. Nhà máy đạt tiêu chuẩn GMP-WHO.",
@@ -49,20 +49,20 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     url: "https://binovet.com.vn",
     siteName: "BINOVET",
-    title: "BINOVET - Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y",
+    title: "BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C",
     description: "Tiên phong sản xuất dược thú y công nghệ USA tại Việt Nam. Nhà máy đạt chuẩn GMP-WHO.",
     images: [
       {
         url: "/images/about.svg",
         width: 1200,
         height: 630,
-        alt: "BINOVET - Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y",
+        alt: "BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BINOVET - Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y",
+    title: "BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C",
     description: "Tiên phong sản xuất dược thú y công nghệ USA tại Việt Nam.",
     images: ["/images/about.svg"],
   },

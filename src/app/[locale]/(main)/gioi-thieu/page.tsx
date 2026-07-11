@@ -7,10 +7,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const en = resolveLocale((await params).locale) === 'en';
   const title = en
     ? 'About - BINOVET | Veterinary Biotechnology JSC'
-    : 'Giới Thiệu - BINOVET | Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y';
+    : 'Giới Thiệu - BINOVET | BIOTECHNOLOGY VETERINARY.,J.S.C';
   const description = en
     ? 'Discover BINOVET - Veterinary Biotechnology JSC, a pioneer in USA-technology veterinary pharmaceutical manufacturing in Vietnam.'
-    : 'Tìm hiểu về BINOVET - Công Ty Cổ Phần Công Nghệ Sinh Học Thú Y, đơn vị tiên phong trong sản xuất dược thú y công nghệ USA tại Việt Nam.';
+    : 'Tìm hiểu về BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C, đơn vị tiên phong trong sản xuất dược thú y công nghệ USA tại Việt Nam.';
   return {
     title,
     description,
