@@ -328,7 +328,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
 
               {/* Menu content — scrollable middle section */}
-              <div className="admin-sider-scroll" style={{ padding: '8px 0 16px', flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+              <div className="admin-sider-scroll" style={{ padding: '8px 0 16px', flex: 1, overflow: 'auto', height: 'calc(100vh - 180px)' }}>
                 <ConfigProvider
                   theme={{
                     components: {
