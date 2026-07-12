@@ -522,8 +522,8 @@ mkdir -p "$BACKUP_DIR"
 pg_dump "postgresql://postgres:<mật-khẩu>@127.0.0.1:5432/binovet" \
   -Fc -f "$BACKUP_DIR/db-$TS.dump"
 
-# Giữ 14 bản gần nhất
-ls -t "$BACKUP_DIR"/db-*.dump | tail -n +15 | xargs -r rm -f
+# Giữ 3 bản gần nhất (3 ngày)
+ls -t "$BACKUP_DIR"/db-*.dump | tail -n +4 | xargs -r rm -f
 echo "DB backup: $BACKUP_DIR/db-$TS.dump"
 ```
 
@@ -540,8 +540,8 @@ mkdir -p "$BACKUP_DIR"
 
 tar czf "$BACKUP_DIR/uploads-$TS.tar.gz" -C /var/www/binovet/public uploads
 
-# Giữ 14 bản gần nhất
-ls -t "$BACKUP_DIR"/uploads-*.tar.gz | tail -n +15 | xargs -r rm -f
+# Giữ 3 bản gần nhất (3 ngày)
+ls -t "$BACKUP_DIR"/uploads-*.tar.gz | tail -n +4 | xargs -r rm -f
 echo "Uploads backup: $BACKUP_DIR/uploads-$TS.tar.gz"
 ```
 
