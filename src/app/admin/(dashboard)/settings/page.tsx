@@ -82,6 +82,9 @@ export default function AdminSettingsPage() {
                     <Form.Item name="addressHN" label="Trụ sở chính (Hà Nội)" rules={[{ required: true }]}>
                       <Input size="large" className="rounded-xl" />
                     </Form.Item>
+                    <Form.Item name="addressHNEn" label="Trụ sở chính (Hà Nội) - Tiếng Anh">
+                      <Input size="large" className="rounded-xl" placeholder="Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi" />
+                    </Form.Item>
                     <Form.Item name="addressHCM" label="Chi nhánh (Miền Nam)">
                       <Input size="large" className="rounded-xl" />
                     </Form.Item>

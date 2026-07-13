@@ -91,7 +91,7 @@ export default function ContactContent({ settings }: { settings: any }) {
                         </div>
                         <div>
                            <h4 className="text-xs font-montserrat font-semibold text-ink-soft uppercase tracking-[0.12em] mb-2">{locale === 'en' ? 'Head office address' : 'Địa chỉ trụ sở chính'}</h4>
-                           <p className="text-lg font-medium text-ink leading-relaxed">{settings?.addressHN || 'Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội'}</p>
+                           <p className="text-lg font-medium text-ink leading-relaxed">{locale === 'en' ? (settings?.addressHNEn || settings?.addressHN || 'Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi') : (settings?.addressHN || 'Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội')}</p>
                         </div>
                      </div>
 

@@ -23,6 +23,7 @@ async function main() {
     companyName: 'BIOTECHNOLOGY VETERINARY.,J.S.C',
     companyNameEn: 'BIOTECHNOLOGY VETERINARY.,J.S.C',
     addressHN: 'Cụm CN Liên Phương, Xã Hồng Vân, Hà Nội',
+    addressHNEn: 'Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi',
     addressHCM: '',
     hotline1: '0915 999 831',
     hotline2: '024 3371 8653',

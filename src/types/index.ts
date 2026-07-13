@@ -149,6 +149,12 @@ export interface Setting {
   email?: string | null;
   website?: string | null;
   address?: string | null;
+  /** Hanoi head office address (Vietnamese, canonical). */
+  addressHN?: string | null;
+  /** English Hanoi head office address (falls back to `addressHN` when empty). */
+  addressHNEn?: string | null;
+  /** Southern branch address. */
+  addressHCM?: string | null;
   intro_slogan?: string | null;
   intro_sloganEn?: string | null;
   support?: any;
