@@ -129,6 +129,17 @@ export interface AboutPageContent {
   };
 }
 
+export interface ContactRequest {
+  id: bigint;
+  fullName: string;
+  phoneNumber: string;
+  emailAddress?: string | null;
+  messageBox: string;
+  locale: string;
+  status: string; // "new" | "handled"
+  createdAt: string;
+}
+
 export interface Setting {
   companyName?: string | null;
   /** English company name (falls back to `companyName` when empty). */

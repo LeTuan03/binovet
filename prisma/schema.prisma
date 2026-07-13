@@ -128,3 +128,17 @@ model MediaVideo {
 
   @@map("media_videos")
 }
+
+model ContactRequest {
+  id           BigInt   @id @default(autoincrement())
+  fullName     String
+  phoneNumber  String
+  emailAddress String?
+  messageBox   String
+  locale       String   @default("vi")
+  status       String   @default("new") // "new" | "handled"
+  createdAt    DateTime @default(now())
+
+  @@index([status])
+  @@map("contact_requests")
+}

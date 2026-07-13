@@ -7,7 +7,8 @@ import {
   menuService,
   settingService,
   bannerService,
-  mediaService
+  mediaService,
+  contactService
 } from '@/services';
 
 export async function GET(
@@ -18,8 +19,14 @@ export async function GET(
   const url = new URL(request.url);
   const summary = url.searchParams.get('summary') === '1';
   const id = url.searchParams.get('id');
+  const count = url.searchParams.get('count');
 
   try {
+    // Lightweight count endpoint (e.g. sidebar badge for new contact requests)
+    if (type === 'contact-requests' && count === 'new') {
+      return NextResponse.json({ count: await contactService.getNewCount() });
+    }
+
     if (id) {
       let item;
       switch (type) {
@@ -57,6 +64,9 @@ export async function GET(
           images: await mediaService.getImages(),
           videos: await mediaService.getVideos()
         };
+        break;
+      case 'contact-requests':
+        data = await contactService.getAll();
         break;
       default:
         return NextResponse.json({ error: 'Invalid data type' }, { status: 400 });
@@ -104,6 +114,7 @@ export async function POST(
         case 'articles': return articleService;
         case 'menus': return menuService;
         case 'banners': return bannerService;
+        case 'contact-requests': return contactService;
         default: return null;
       }
     };

@@ -6,7 +6,6 @@ import {
   MenuUnfoldOutlined,
   ShoppingOutlined,
   AppstoreOutlined,
-  ReadOutlined,
   DashboardOutlined,
   PictureOutlined,
   VideoCameraOutlined,
@@ -14,13 +13,13 @@ import {
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
-  BellOutlined,
   InfoCircleOutlined,
   BookOutlined,
   NotificationOutlined,
   HomeOutlined,
+  MailOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, Badge, App } from 'antd';
+import { Button, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, App } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 import 'dayjs/locale/vi';
 import dayjs from 'dayjs';
@@ -87,6 +86,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { key: '/admin/categories', icon: <AppstoreOutlined />,   label: 'Danh mục' },
     { key: '/admin/handbooks',  icon: <BookOutlined />,       label: 'Cẩm nang chăn nuôi' },
     { key: '/admin/news',       icon: <NotificationOutlined />, label: 'Tin tức' },
+  ];
+
+  const interactionItems: any[] = [
+    { key: '/admin/contact-requests', icon: <MailOutlined />, label: "Yêu cầu liên hệ" },
   ];
 
   const systemItems: any[] = [
@@ -368,6 +371,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     className="admin-sider-menu"
                     selectedKeys={[pathname]}
                     items={contentItems}
+                    onClick={handleMenuClick}
+                    inlineIndent={12}
+                    style={{ border: 'none', background: 'transparent' }}
+                  />
+
+                  <SectionLabel label="Tương tác" collapsed={collapsed} />
+                  <Menu
+                    mode="inline"
+                    className="admin-sider-menu"
+                    selectedKeys={[pathname]}
+                    items={interactionItems}
                     onClick={handleMenuClick}
                     inlineIndent={12}
                     style={{ border: 'none', background: 'transparent' }}

@@ -2,6 +2,7 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MotionProvider from "@/components/shared/MotionProvider";
+import LeadPopup from "@/components/layout/LeadPopup";
 // import FloatingContact from "@/components/layout/FloatingContact";
 
 export default async function RootLayout({
@@ -15,6 +16,7 @@ export default async function RootLayout({
         <Header />
         <main className="flex-1 overflow-x-clip" suppressHydrationWarning>{children}</main>
         <Footer />
+        <LeadPopup />
         {/* <FloatingContact settings={settings} /> */}
       </div>
     </MotionProvider>

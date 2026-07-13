@@ -1,30 +1,28 @@
 import { NextResponse } from 'next/server';
+import { contactService } from '@/services';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { fullName, phoneNumber, emailAddress, messageBox } = body;
+    const { fullName, phoneNumber, emailAddress, messageBox, locale } = body;
 
-    // Validation
-    if (!fullName || !phoneNumber || !messageBox) {
+    // Validation — name + phone are required; message is optional (lead popup)
+    if (!fullName || !phoneNumber) {
       return NextResponse.json(
-        { error: 'Vui lòng điền đầy đủ thông tin bắt buộc.' },
+        { error: 'Vui lòng nhập họ tên và số điện thoại.' },
         { status: 400 }
       );
     }
 
-    // In a real application, you would send an email here using Nodemailer, SendGrid, etc.
-    // console.log('Sending email to admin...', { fullName, phoneNumber, emailAddress, messageBox });
-    // console.log('Sending confirmation email to user...', emailAddress);
-
-    // Simulate work
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Persist the request so it shows up in the admin dashboard
+    await contactService.create({ fullName, phoneNumber, emailAddress, messageBox, locale });
 
     return NextResponse.json({
       success: true,
       message: 'Yêu cầu của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ trong thời gian sớm nhất.'
     });
   } catch (error) {
+    console.error('Error saving contact request:', error);
     return NextResponse.json(
       { error: 'Đã có lỗi xảy ra. Vui lòng thử lại sau.' },
       { status: 500 }

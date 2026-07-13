@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Phone, Mail, MapPin, Send, MessageSquare, Globe } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, MessageSquare, Globe, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { FacebookOutlined, YoutubeOutlined } from '@ant-design/icons';
 import PageHero from '@/components/shared/PageHero';
 import Reveal from '@/components/shared/Reveal';
@@ -15,35 +15,54 @@ export default function ContactContent({ settings }: { settings: any }) {
       emailAddress: '',
       messageBox: '',
    });
+   const [status, setStatus] = React.useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+   const [feedback, setFeedback] = React.useState('');
 
    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
       setFormData(prev => ({ ...prev, [name]: value }));
+      if (status !== 'idle' && status !== 'submitting') setStatus('idle');
    };
 
-   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      if (status === 'submitting') return;
 
-      const { fullName, phoneNumber, emailAddress, messageBox } = formData;
-      const emailTo = settings?.email || 'pkd.binovet@gmail.com';
-      const subject = encodeURIComponent(
-         locale === 'en' ? `Request from ${fullName}` : `Yêu cầu từ ${fullName}`
-      );
-      const body = encodeURIComponent(
-         locale === 'en'
-            ? `Full name: ${fullName}\n` +
-              `Phone number: ${phoneNumber}\n` +
-              `Email: ${emailAddress}\n` +
-              `\n--- Message ---\n` +
-              `${messageBox}`
-            : `Họ tên: ${fullName}\n` +
-              `Số điện thoại: ${phoneNumber}\n` +
-              `Email: ${emailAddress}\n` +
-              `\n--- Nội dung yêu cầu ---\n` +
-              `${messageBox}`
-      );
+      setStatus('submitting');
+      setFeedback('');
 
-      window.location.href = `mailto:${emailTo}?subject=${subject}&body=${body}`;
+      try {
+         const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, locale }),
+         });
+         const result = await res.json();
+
+         if (res.ok) {
+            setStatus('success');
+            setFeedback(
+               result.message ||
+                  (locale === 'en'
+                     ? 'Your request has been sent successfully. We will contact you as soon as possible.'
+                     : 'Yêu cầu của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ trong thời gian sớm nhất.')
+            );
+            setFormData({ fullName: '', phoneNumber: '', emailAddress: '', messageBox: '' });
+         } else {
+            setStatus('error');
+            setFeedback(
+               result.error ||
+                  (locale === 'en' ? 'An error occurred. Please try again.' : 'Đã có lỗi xảy ra. Vui lòng thử lại sau.')
+            );
+         }
+      } catch {
+         setStatus('error');
+         setFeedback(
+            locale === 'en'
+               ? 'Unable to send your request. Please check your connection and try again.'
+               : 'Không thể gửi yêu cầu. Vui lòng kiểm tra kết nối và thử lại.'
+         );
+      }
    };
 
    return (
@@ -190,8 +209,28 @@ export default function ContactContent({ settings }: { settings: any }) {
                            <label htmlFor="messageBox" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Your message *' : 'Nội dung yêu cầu *'}</label>
                            <textarea id="messageBox" name="messageBox" rows={5} placeholder={locale === 'en' ? 'How can we help you?' : 'Bạn cần chúng tôi hỗ trợ gì?'} value={formData.messageBox} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required></textarea>
                         </div>
-                        <button type="submit" className="btn btn-primary w-full group">
-                           <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> {locale === 'en' ? 'Send request now' : 'Gửi yêu cầu ngay'}
+                        {status === 'success' && (
+                           <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
+                              <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-emerald-600" />
+                              <p className="text-sm leading-relaxed">{feedback}</p>
+                           </div>
+                        )}
+                        {status === 'error' && (
+                           <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
+                              <AlertCircle size={20} className="mt-0.5 shrink-0 text-red-500" />
+                              <p className="text-sm leading-relaxed">{feedback}</p>
+                           </div>
+                        )}
+                        <button type="submit" disabled={status === 'submitting'} className="btn btn-primary w-full group disabled:opacity-70 disabled:cursor-not-allowed">
+                           {status === 'submitting' ? (
+                              <>
+                                 <Loader2 size={18} className="animate-spin" /> {locale === 'en' ? 'Sending...' : 'Đang gửi...'}
+                              </>
+                           ) : (
+                              <>
+                                 <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> {locale === 'en' ? 'Send request now' : 'Gửi yêu cầu ngay'}
+                              </>
+                           )}
                         </button>
                      </form>
                </Reveal>
