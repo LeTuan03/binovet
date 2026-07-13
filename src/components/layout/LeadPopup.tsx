@@ -84,22 +84,20 @@ export default function LeadPopup() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, locale }),
       });
-      const result = await res.json();
 
       if (res.ok) {
         setStatus('success');
         setFeedback(
-          result.message ||
-            (en
-              ? 'Thank you! We have received your details and will contact you shortly.'
-              : 'Cảm ơn bạn! Chúng tôi đã nhận được thông tin và sẽ liên hệ trong thời gian sớm nhất.')
+          (en
+            ? 'Thank you! We have received your details and will contact you shortly.'
+            : 'Cảm ơn bạn! Chúng tôi đã nhận được thông tin và sẽ liên hệ trong thời gian sớm nhất.')
         );
         remember();
         setTimeout(() => setOpen(false), 2800);
       } else {
         setStatus('error');
         setFeedback(
-          result.error || (en ? 'An error occurred. Please try again.' : 'Đã có lỗi xảy ra. Vui lòng thử lại sau.')
+          (en ? 'An error occurred. Please try again.' : 'Đã có lỗi xảy ra. Vui lòng thử lại sau.')
         );
       }
     } catch {
