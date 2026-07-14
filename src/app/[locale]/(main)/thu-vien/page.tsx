@@ -15,11 +15,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title,
     description,
-    alternates: { canonical: 'https://binovet.com.vn/thu-vien' },
+    alternates: { canonical: 'https://binovet.com/thu-vien' },
     openGraph: {
       title,
       description,
-      url: 'https://binovet.com.vn/thu-vien',
+      url: 'https://binovet.com/thu-vien',
     },
   };
 }

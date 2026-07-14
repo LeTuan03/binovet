@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: en
         ? 'Discover BINOVET - a pioneer in USA-technology veterinary pharmaceutical manufacturing in Vietnam.'
         : 'Tìm hiểu về BINOVET - Đơn vị tiên phong sản xuất dược thú y công nghệ USA tại Việt Nam.',
-      url: 'https://binovet.com.vn/gioi-thieu',
+      url: 'https://binovet.com/gioi-thieu',
       images: [
         {
           url: '/images/about.svg',
