@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   },
   manifest: '/images/site.webmanifest',
   verification: {
-    google: 'CEwCXJkg_vbmN7CZRiFYNtmAqjlucXutX8DJ5ERM0X0',
+    google: 'chW742CBbHiq1N1wt4y4l9zpfbcqZhjEOaXaOTVDbcI',
   },
   alternates: {
     canonical: "https://binovet.com.vn",
