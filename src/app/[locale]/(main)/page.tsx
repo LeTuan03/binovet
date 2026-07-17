@@ -54,10 +54,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       };
     });
 
-  // Latest news — featured news first, topped up with most recent non-draft news.
-  const newsPool = articles.filter((a) => (a.category === 'tin-noi-bo' || a.category === 'tin-nganh') && !a.isDraft);
-  const featuredNews = newsPool.filter((a) => a.featured);
-  const latestNews = [...featuredNews, ...newsPool.filter((a) => !a.featured)].slice(0, 4);
+  // Latest news — every featured, non-draft handbook & news article, no item cap.
+  const latestNews = articles.filter(
+    (a) => (a.category === 'cam-nang' || a.category === 'tin-noi-bo' || a.category === 'tin-nganh') && !a.isDraft && a.featured,
+  );
 
   // Featured products — curated (featured first), topped up to a full grid.
   const featuredProducts = [
@@ -389,7 +389,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                   const href = localePath(locale, `/bai-viet/${a.slug}`);
                   return (
                     <Reveal key={a.id} direction="right" delay={i * 0.1} distance={56}>
-                      <article className={`group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 ${i === 0 ? 'pt-0' : ''} ${i === latestNews.length - 1 ? 'pb-0' : ''}`}>
+                      <article className={`group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 ${i === 0 ? 'pt-0' : ''} ${i === latestNews.length - 2 ? 'pb-0' : ''}`}>
                         <Link href={href} className="block aspect-[4/3] overflow-hidden rounded-xl shadow-elegant">
                           <img
                             src={a?.thumbnail || '/images/default-article.svg'}
