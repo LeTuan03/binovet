@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       description: en
         ? 'Contact BINOVET — technical support and consultation, 24/7.'
         : 'Liên hệ với BINOVET – Hỗ trợ kỹ thuật và tư vấn 24/7.',
-      url: 'https://binovet.com.vn/lien-he',
+      url: 'https://binovet.com/lien-he',
       images: [
         {
           url: '/images/about.svg',

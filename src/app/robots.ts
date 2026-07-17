@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://binovet.com.vn/sitemap.xml',
+    sitemap: 'https://binovet.com/sitemap.xml',
   };
 }

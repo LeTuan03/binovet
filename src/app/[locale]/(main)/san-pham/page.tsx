@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       title,
       description,
-      url: 'https://binovet.com.vn/san-pham',
+      url: 'https://binovet.com/san-pham',
       images: [
         {
           url: '/images/about.svg',

@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   },
   manifest: '/images/site.webmanifest',
   verification: {
-    google: 'CEwCXJkg_vbmN7CZRiFYNtmAqjlucXutX8DJ5ERM0X0',
+    google: 'chW742CBbHiq1N1wt4y4l9zpfbcqZhjEOaXaOTVDbcI',
   },
   alternates: {
     canonical: "https://binovet.com.vn",
@@ -144,7 +144,7 @@ export default function RootLayout({
               "name": "BINOVET",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://binovet.com.vn/search?q={search_term_string}",
+                "target": "https://binovet.com/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })
