@@ -55,9 +55,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     });
 
   // Latest news — every featured, non-draft handbook & news article, no item cap.
+  // Layout: 1 lead story + up to 4 stacked beside it; the rest flow into a compact grid below.
   const latestNews = articles.filter(
     (a) => (a.category === 'cam-nang' || a.category === 'tin-noi-bo' || a.category === 'tin-nganh') && !a.isDraft && a.featured,
   );
+  const sideNews = latestNews.slice(1, 5);
+  const gridNews = latestNews.slice(5);
 
   // Featured products — curated (featured first), topped up to a full grid.
   const featuredProducts = [
@@ -383,13 +386,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 );
               })()}
 
-              {/* Secondary stories — stacked list */}
+              {/* Secondary stories — stacked list (max 4, keeps the hero row balanced) */}
               <div className="flex flex-col divide-y divide-line">
-                {latestNews.slice(1).map((a, i) => {
+                {sideNews.map((a, i) => {
                   const href = localePath(locale, `/bai-viet/${a.slug}`);
                   return (
                     <Reveal key={a.id} direction="right" delay={i * 0.1} distance={56}>
-                      <article className={`group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 ${i === 0 ? 'pt-0' : ''} ${i === latestNews.length - 2 ? 'pb-0' : ''}`}>
+                      <article className={`group grid grid-cols-[7.5rem_1fr] sm:grid-cols-[10rem_1fr] gap-5 py-6 ${i === 0 ? 'pt-0' : ''} ${i === sideNews.length - 1 ? 'pb-0' : ''}`}>
                         <Link href={href} className="block aspect-[4/3] overflow-hidden rounded-xl shadow-elegant">
                           <img
                             src={a?.thumbnail || '/images/default-article.svg'}
@@ -412,6 +415,35 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 })}
               </div>
             </div>
+
+            {/* Remaining featured stories — compact card grid */}
+            {gridNews.length > 0 && (
+              <StaggerGroup className="mt-14 grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-7" stagger={0.08}>
+                {gridNews.map((a) => {
+                  const href = localePath(locale, `/bai-viet/${a.slug}`);
+                  return (
+                    <StaggerItem key={a.id}>
+                      <article className="group h-full flex flex-col">
+                        <Link href={href} className="block aspect-[16/10] overflow-hidden rounded-xl shadow-elegant">
+                          <img
+                            src={a?.thumbnail || '/images/default-article.svg'}
+                            alt={a.title}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            className="transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </Link>
+                        <h3 className="mt-4 font-display font-semibold text-[0.95rem] lg:text-base leading-snug text-ink line-clamp-2 transition-colors group-hover:text-primary">
+                          <Link href={href}>{a.title}</Link>
+                        </h3>
+                        <Link href={href} className="mt-auto pt-2.5 inline-flex items-center gap-1.5 font-montserrat text-[0.62rem] font-bold uppercase tracking-[0.16em] text-primary transition-colors hover:text-secondary">
+                          {en ? 'See more' : 'Chi tiết'} <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                      </article>
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerGroup>
+            )}
 
             <div className="text-center mt-16">
               <Link href={localePath(locale, '/tin-tuc')} className="btn btn-outline">
