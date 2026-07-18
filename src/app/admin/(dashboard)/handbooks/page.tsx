@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { Table, Button, Space, Modal, Form, Input, Select, Tag, Tooltip, Row, Col, Divider, Breadcrumb, DatePicker, Switch, Checkbox, App, Tabs } from 'antd';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, FileImageOutlined } from '@ant-design/icons';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 // import { articles, animalTags } from '@/lib/data'; // Removed static imports
@@ -22,6 +23,8 @@ function HandbookManagementContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const statusFilter = searchParams.get('status') || '';
+  const featuredFilter = searchParams.get('featured') || '';
 
   const [data, setData] = useState<ArticleSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,23 +57,28 @@ function HandbookManagementContent() {
 
   // Derived filtered data
   const filteredData = useMemo(() => {
-    return handbooksList.filter((item) =>
-      item.title.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [handbooksList, query]);
+    return handbooksList.filter((item) => {
+      const matchesQuery = item.title.toLowerCase().includes(query.toLowerCase());
+      const matchesStatus = !statusFilter || (statusFilter === 'draft' ? !!item.isDraft : !item.isDraft);
+      const matchesFeatured = !featuredFilter || (featuredFilter === 'yes' ? !!item.featured : !item.featured);
+      return matchesQuery && matchesStatus && matchesFeatured;
+    });
+  }, [handbooksList, query, statusFilter, featuredFilter]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
+    let resetPage = false;
 
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1'); // Reset to page 1 on search
-    }
-
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
@@ -288,15 +296,38 @@ function HandbookManagementContent() {
           { title: 'Admin', href: '/admin' },
           { title: 'Cẩm nang chăn nuôi' },
         ]}
-        onSearch={(val) => updateUrl({ q: val })}
-        primaryAction={{
-          label: 'Viết bài mới',
-          onClick: () => showModal(),
-          icon: <PlusOutlined />
-        }}
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'status',
+              placeholder: 'Trạng thái',
+              value: statusFilter || undefined,
+              options: [
+                { label: 'Đã đăng', value: 'published' },
+                { label: 'Bản nháp', value: 'draft' },
+              ],
+            },
+            {
+              key: 'featured',
+              placeholder: 'Nổi bật',
+              value: featuredFilter || undefined,
+              options: [
+                { label: 'Nổi bật', value: 'yes' },
+                { label: 'Thường', value: 'no' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{ defaultValue: query }}
+          primaryAction={{
+            label: 'Viết bài mới',
+            onClick: () => showModal(),
+            icon: <PlusOutlined />
+          }}
+        />
         <Table size="small" sticky
           columns={columns}
           dataSource={filteredData}

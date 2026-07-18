@@ -3,7 +3,8 @@
 import React, { useState, useMemo } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Table, Button, Space, Tag, Modal, Form, Input, Select, Breadcrumb, Avatar, Tooltip, App } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, LockOutlined, SafetyCertificateOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, LockOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
 
 const initialUsers = [
@@ -19,6 +20,7 @@ function AdminUsersPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const roleFilter = searchParams.get('role') || '';
 
   const [users, setUsers] = useState(initialUsers);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,31 +31,32 @@ function AdminUsersPageContent() {
 
   // Derived filtered data
   const filteredData = useMemo(() => {
-    return users.filter(item => 
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.email.toLowerCase().includes(query.toLowerCase()) ||
-      item.role.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [users, query]);
+    return users.filter(item => {
+      const matchesQuery =
+        item.name.toLowerCase().includes(query.toLowerCase()) ||
+        item.email.toLowerCase().includes(query.toLowerCase()) ||
+        item.role.toLowerCase().includes(query.toLowerCase());
+      const matchesRole = !roleFilter || item.role === roleFilter;
+      return matchesQuery && matchesRole;
+    });
+  }, [users, query, roleFilter]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
-    
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1'); // Reset to page 1 on search
-    }
-    
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    let resetPage = false;
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateUrl({ q: e.target.value });
   };
 
   const showModal = (record?: any) => {
@@ -186,24 +189,6 @@ function AdminUsersPageContent() {
           <Breadcrumb items={[{ title: 'Admin', href: '/admin' }, { title: 'Quản lý Người dùng' }]} className="text-[11px] text-[#94a3b8]" />
           <h1 className="font-display text-2xl font-semibold text-[#0c2236] tracking-tight">Tài khoản Quản trị viên</h1>
         </div>
-        <div className="flex gap-3">
-           <Input
-              prefix={<SearchOutlined className="text-[#94a3b8]" />}
-              placeholder="Tìm kiếm user..."
-              className="w-64 rounded-lg border-[#eef1f5]"
-              defaultValue={query}
-              onChange={handleSearch}
-           />
-           <Button
-             type="primary"
-             icon={<PlusOutlined />}
-             size="large"
-             className="rounded-lg font-semibold h-10 px-5"
-             onClick={() => showModal()}
-           >
-             Cấp tài khoản mới
-           </Button>
-        </div>
       </div>
 
       <div className="bg-white p-8 rounded-2xl shadow-[0_1px_2px_rgba(12,34,54,0.04),0_8px_24px_rgba(12,34,54,0.05)] border border-[#eef1f5]">
@@ -212,6 +197,30 @@ function AdminUsersPageContent() {
           <span className="font-medium text-sm">Cảnh báo: Chỉ SuperAdmin mới có quyền tạo mới hoặc phân quyền cho các tài khoản khác.</span>
         </div>
 
+        <AdminTableFilterBar
+          className="border border-[#eef1f5] rounded-xl mb-4"
+          filters={[
+            {
+              key: 'role',
+              placeholder: 'Phân quyền',
+              value: roleFilter || undefined,
+              options: [
+                { label: 'SuperAdmin', value: 'SuperAdmin' },
+                { label: 'Editor', value: 'Editor' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{
+            placeholder: 'Tìm kiếm user...',
+            defaultValue: query,
+          }}
+          primaryAction={{
+            label: 'Cấp tài khoản mới',
+            onClick: () => showModal(),
+            icon: <PlusOutlined />
+          }}
+        />
         <Table  size="small" sticky
           columns={columns}
           dataSource={filteredData}

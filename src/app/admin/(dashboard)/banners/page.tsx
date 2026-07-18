@@ -9,6 +9,7 @@ import {
   SearchOutlined, LinkOutlined
 } from '@ant-design/icons';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { motion } from 'framer-motion';
 import { adminFetch } from '@/lib/api';
@@ -25,6 +26,7 @@ function AdminBannersPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const statusFilter = searchParams.get('status') || '';
 
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,25 +55,30 @@ function AdminBannersPageContent() {
   // Derived filtered data
   const filteredData = useMemo(() => {
     return banners
-      .filter(item =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.link.toLowerCase().includes(query.toLowerCase())
-      )
+      .filter(item => {
+        const matchesQuery =
+          item.title.toLowerCase().includes(query.toLowerCase()) ||
+          item.link.toLowerCase().includes(query.toLowerCase());
+        const matchesStatus = !statusFilter || (statusFilter === 'on' ? !!item.status : !item.status);
+        return matchesQuery && matchesStatus;
+      })
       .sort((a, b) => a.order - b.order);
-  }, [banners, query]);
+  }, [banners, query, statusFilter]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
+    let resetPage = false;
 
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1'); // Reset to page 1 on search
-    }
-
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
@@ -252,15 +259,29 @@ function AdminBannersPageContent() {
           { title: 'Admin', href: '/admin' },
           { title: 'Banner / Slider' },
         ]}
-        onSearch={(val) => updateUrl({ q: val })}
-        primaryAction={{
-          label: 'Tải lên Banner',
-          onClick: handleAdd,
-          icon: <PlusOutlined />
-        }}
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'status',
+              placeholder: 'Trạng thái',
+              value: statusFilter || undefined,
+              options: [
+                { label: 'Đang hiển thị', value: 'on' },
+                { label: 'Đang ẩn', value: 'off' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{ defaultValue: query }}
+          primaryAction={{
+            label: 'Tải lên Banner',
+            onClick: handleAdd,
+            icon: <PlusOutlined />
+          }}
+        />
         <Table size="small" sticky
           columns={columns}
           dataSource={filteredData}

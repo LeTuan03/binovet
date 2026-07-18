@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { Table, Button, Space, Tag, Modal, Form, Input, Select, Breadcrumb, Divider, Row, Col, Tooltip, App } from 'antd';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import { PlusOutlined, EditOutlined, DeleteOutlined, MenuOutlined, GlobalOutlined, LinkOutlined, ArrowUpOutlined, ArrowDownOutlined, SearchOutlined } from '@ant-design/icons';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { adminFetch } from '@/lib/api';
@@ -15,6 +16,7 @@ function AdminMenusPageContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
+  const posFilter = searchParams.get('pos') || '';
 
   const [menus, setMenus] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,10 +44,13 @@ function AdminMenusPageContent() {
 
   // Derived filtered data
   const filteredData = useMemo(() => {
-    const rawFiltered = menus.filter(item => 
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.link.toLowerCase().includes(query.toLowerCase())
-    );
+    const rawFiltered = menus.filter(item => {
+      const matchesQuery =
+        item.name.toLowerCase().includes(query.toLowerCase()) ||
+        item.link.toLowerCase().includes(query.toLowerCase());
+      const matchesPos = !posFilter || item.position === posFilter;
+      return matchesQuery && matchesPos;
+    });
 
     const finalData: any[] = [];
     const rawFilteredIds = new Set(rawFiltered.map(item => item.id));
@@ -70,14 +75,14 @@ function AdminMenusPageContent() {
 
     buildTree(rootItems);
     return finalData;
-  }, [menus, query]);
+  }, [menus, query, posFilter]);
 
-  const updateUrl = (params: { q?: string }) => {
+  const updateUrl = (params: Record<string, string | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== '') newSearchParams.set(key, value);
+      else newSearchParams.delete(key);
+    });
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
 
@@ -167,12 +172,6 @@ function AdminMenusPageContent() {
         const labels: Record<string, string> = { header: 'Header Only', footer: 'Footer Only', both: 'Toàn bộ' };
         return <Tag color={colors[pos]} className="uppercase text-[9px] font-semibold tracking-wide px-2">{labels[pos]}</Tag>;
       },
-      filters: [
-        { text: 'Header', value: 'header' },
-        { text: 'Footer', value: 'footer' },
-        { text: 'Cả hai', value: 'both' },
-      ],
-      onFilter: (value: any, record: any) => record.position === value,
     },
     {
       title: 'Thứ tự',
@@ -237,21 +236,37 @@ function AdminMenusPageContent() {
 
   return (
     <div className="space-y-6">
-      <AdminPageHeader 
+      <AdminPageHeader
         title="Cơ cấu Điều hướng Web"
         breadcrumbItems={[
           { title: 'Admin' },
           { title: 'Quản lý Menu' },
         ]}
-        onSearch={(val) => updateUrl({ q: val })}
-        primaryAction={{
-          label: 'Thêm Menu mới',
-          onClick: handleAdd,
-          icon: <PlusOutlined />
-        }}
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 min-h-[500px] rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'pos',
+              placeholder: 'Vị trí hiển thị',
+              value: posFilter || undefined,
+              options: [
+                { label: 'Header Only', value: 'header' },
+                { label: 'Footer Only', value: 'footer' },
+                { label: 'Cả Header & Footer', value: 'both' },
+              ],
+              width: 200,
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{ defaultValue: query }}
+          primaryAction={{
+            label: 'Thêm Menu mới',
+            onClick: handleAdd,
+            icon: <PlusOutlined />
+          }}
+        />
         <Table size="small" sticky
           columns={columns} 
           dataSource={filteredData} 

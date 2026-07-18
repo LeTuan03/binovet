@@ -6,6 +6,7 @@ import { Table, Button, Space, Tag, Input, Modal, Form, Switch, Checkbox, Toolti
 import { PlusOutlined, EditOutlined, DeleteOutlined, FileTextOutlined, CheckCircleOutlined, FormOutlined, StarOutlined } from '@ant-design/icons';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 import AdminStatCard from '@/components/admin/AdminStatCard';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi';
 import { motion } from 'framer-motion';
@@ -23,6 +24,8 @@ function AdminNewsPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const statusFilter = searchParams.get('status') || '';
+  const featuredFilter = searchParams.get('featured') || '';
 
   const [allArticles, setAllArticles] = useState<ArticleSummary[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,24 +66,30 @@ function AdminNewsPageContent() {
 
   // Derived filtered data
   const filteredData = useMemo(() => {
-    return news.filter(item =>
-      item.title.toLowerCase().includes(query.toLowerCase()) ||
-      item.category.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [news, query]);
+    return news.filter(item => {
+      const matchesQuery =
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase());
+      const matchesStatus = !statusFilter || (statusFilter === 'draft' ? !!item.isDraft : !item.isDraft);
+      const matchesFeatured = !featuredFilter || (featuredFilter === 'yes' ? !!item.featured : !item.featured);
+      return matchesQuery && matchesStatus && matchesFeatured;
+    });
+  }, [news, query, statusFilter, featuredFilter]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
+    let resetPage = false;
 
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1'); // Reset to page 1 on search
-    }
-
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
@@ -285,12 +294,6 @@ function AdminNewsPageContent() {
           { title: 'Admin', href: '/admin' },
           { title: 'Quản lý Tin tức' },
         ]}
-        onSearch={(val) => updateUrl({ q: val })}
-        primaryAction={{
-          label: 'Thêm tin tức mới',
-          onClick: handleAdd,
-          icon: <PlusOutlined />
-        }}
       />
 
       <Row gutter={[20, 20]}>
@@ -337,6 +340,35 @@ function AdminNewsPageContent() {
       </Row>
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'status',
+              placeholder: 'Trạng thái',
+              value: statusFilter || undefined,
+              options: [
+                { label: 'Đã đăng', value: 'published' },
+                { label: 'Bản nháp', value: 'draft' },
+              ],
+            },
+            {
+              key: 'featured',
+              placeholder: 'Nổi bật',
+              value: featuredFilter || undefined,
+              options: [
+                { label: 'Nổi bật', value: 'yes' },
+                { label: 'Thường', value: 'no' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{ defaultValue: query }}
+          primaryAction={{
+            label: 'Thêm tin tức mới',
+            onClick: handleAdd,
+            icon: <PlusOutlined />
+          }}
+        />
         <Table size="small" sticky
           columns={columns}
           dataSource={filteredData}

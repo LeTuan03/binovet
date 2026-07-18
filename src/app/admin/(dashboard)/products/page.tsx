@@ -12,6 +12,7 @@ import {
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import ProductModal from '@/components/admin/ProductModal';
 import { motion } from 'framer-motion';
 import { adminFetch } from '@/lib/api';
@@ -26,6 +27,8 @@ function ProductManagementContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const catFilter = searchParams.get('cat') || '';
+  const featuredFilter = searchParams.get('featured') || '';
 
   const [data, setData] = useState<ProductSummary[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -62,25 +65,29 @@ function ProductManagementContent() {
   const filteredData = useMemo(() => {
     return data.filter(item => {
       const cat = categories.find(c => c.id === item.categoryId);
-      return (
+      const matchesQuery =
         item.name.toLowerCase().includes(query.toLowerCase()) ||
-        cat?.name.toLowerCase().includes(query.toLowerCase())
-      );
+        cat?.name.toLowerCase().includes(query.toLowerCase());
+      const matchesCat = !catFilter || item.categoryId?.toString() === catFilter;
+      const matchesFeatured = !featuredFilter || (featuredFilter === 'yes' ? !!item.featured : !item.featured);
+      return matchesQuery && matchesCat && matchesFeatured;
     });
-  }, [data, categories, query]);
+  }, [data, categories, query, catFilter, featuredFilter]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
+    let resetPage = false;
 
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1'); // Reset to page 1 on search
-    }
-
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
 
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
@@ -262,15 +269,36 @@ function ProductManagementContent() {
           { title: 'Admin', href: '/admin' },
           { title: 'Quản lý Sản phẩm' },
         ]}
-        onSearch={(val) => updateUrl({ q: val })}
-        primaryAction={{
-          label: 'Thêm Sản phẩm',
-          onClick: () => showModal(),
-          icon: <PlusOutlined />
-        }}
       />
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'cat',
+              placeholder: 'Danh mục',
+              value: catFilter || undefined,
+              options: categories.map((c: Category) => ({ label: c.name, value: c.id.toString() })),
+              width: 220,
+            },
+            {
+              key: 'featured',
+              placeholder: 'Nổi bật',
+              value: featuredFilter || undefined,
+              options: [
+                { label: 'Nổi bật', value: 'yes' },
+                { label: 'Thường', value: 'no' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{ defaultValue: query }}
+          primaryAction={{
+            label: 'Thêm Sản phẩm',
+            onClick: () => showModal(),
+            icon: <PlusOutlined />
+          }}
+        />
         <Table size="small" sticky
           columns={columns}
           dataSource={filteredData}

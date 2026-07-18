@@ -10,6 +10,7 @@ import {
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import AdminTableFilterBar from '@/components/admin/AdminTableFilterBar';
 import { adminFetch } from '@/lib/api';
 import { ContactRequest } from '@/types';
 import { useAdminLoading } from '@/lib/AdminLoadingContext';
@@ -22,6 +23,8 @@ function AdminContactRequestsPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const page = parseInt(searchParams.get('page') || '1');
+  const statusFilter = searchParams.get('status') || '';
+  const localeFilter = searchParams.get('locale') || '';
 
   const [requests, setRequests] = useState<ContactRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,26 +50,35 @@ function AdminContactRequestsPageContent() {
 
   const filteredData = useMemo(() => {
     const q = query.toLowerCase();
-    return requests.filter(item =>
-      item.fullName.toLowerCase().includes(q) ||
-      item.phoneNumber.toLowerCase().includes(q) ||
-      (item.emailAddress || '').toLowerCase().includes(q) ||
-      item.messageBox.toLowerCase().includes(q)
-    );
-  }, [requests, query]);
+    return requests.filter(item => {
+      const matchesQuery =
+        item.fullName.toLowerCase().includes(q) ||
+        item.phoneNumber.toLowerCase().includes(q) ||
+        (item.emailAddress || '').toLowerCase().includes(q) ||
+        item.messageBox.toLowerCase().includes(q);
+      const matchesStatus = !statusFilter || item.status === statusFilter;
+      const matchesLocale = !localeFilter || (localeFilter === 'en' ? item.locale === 'en' : item.locale !== 'en');
+      return matchesQuery && matchesStatus && matchesLocale;
+    });
+  }, [requests, query, statusFilter, localeFilter]);
 
   const newCount = useMemo(() => requests.filter(r => r.status === 'new').length, [requests]);
 
-  const updateUrl = (params: { q?: string; page?: number }) => {
+  const updateUrl = (params: Record<string, string | number | undefined>) => {
     const newSearchParams = new URLSearchParams(searchParams.toString());
-    if (params.q !== undefined) {
-      if (params.q) newSearchParams.set('q', params.q);
-      else newSearchParams.delete('q');
-      newSearchParams.set('page', '1');
-    }
-    if (params.page !== undefined) {
-      newSearchParams.set('page', params.page.toString());
-    }
+    let resetPage = false;
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key === 'page') {
+        newSearchParams.set('page', String(value));
+      } else {
+        if (value !== undefined && value !== '') newSearchParams.set(key, String(value));
+        else newSearchParams.delete(key);
+        resetPage = true; // Reset to page 1 on search/filter change
+      }
+    });
+    if (resetPage) newSearchParams.set('page', '1');
+
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
 
@@ -222,8 +234,6 @@ function AdminContactRequestsPageContent() {
           { title: 'Admin', href: '/admin' },
           { title: 'Yêu cầu liên hệ' },
         ]}
-        searchPlaceholder="Tìm theo tên, SĐT, email, nội dung..."
-        onSearch={(val) => updateUrl({ q: val })}
       />
 
       <div className="flex flex-wrap gap-4">
@@ -244,6 +254,33 @@ function AdminContactRequestsPageContent() {
       </div>
 
       <div className="bg-white overflow-hidden shadow-lg shadow-gray-200/50 border border-gray-100 rounded-2xl">
+        <AdminTableFilterBar
+          filters={[
+            {
+              key: 'status',
+              placeholder: 'Trạng thái',
+              value: statusFilter || undefined,
+              options: [
+                { label: 'Mới', value: 'new' },
+                { label: 'Đã xử lý', value: 'handled' },
+              ],
+            },
+            {
+              key: 'locale',
+              placeholder: 'Ngôn ngữ',
+              value: localeFilter || undefined,
+              options: [
+                { label: 'Tiếng Việt', value: 'vi' },
+                { label: 'Tiếng Anh', value: 'en' },
+              ],
+            },
+          ]}
+          onChange={(patch) => updateUrl(patch)}
+          search={{
+            placeholder: 'Tìm theo tên, SĐT, email, nội dung...',
+            defaultValue: query,
+          }}
+        />
         <Table size="small" sticky
           columns={columns}
           dataSource={filteredData}
