@@ -416,7 +416,7 @@ body {
 }
 
 .ant-table-container {
-  max-height: calc(100vh - 270px);
+  max-height: calc(100vh - 390px);
   overflow-y: scroll;
 }
 @media print {
