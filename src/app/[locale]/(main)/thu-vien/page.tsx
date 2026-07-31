@@ -29,7 +29,11 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
   const locale = resolveLocale((await params).locale);
   const en = locale === 'en';
 
-  const [documents, imgs, vids] = await Promise.all([catalogueService.getAll(), mediaService.getImages(), mediaService.getVideos()]);
+  const [documentsData, imgs, vids] = await Promise.all([catalogueService.getAll(), mediaService.getImages(), mediaService.getVideos()]);
+  const documents = (Array.isArray(documentsData) ? documentsData : []).map((doc: any) => ({
+    ...doc,
+    titleEn: doc.titleEn ?? undefined,
+  }));
 
   const videos: GalleryItem[] = (Array.isArray(vids) ? vids : [])
     .filter((v: any) => v.status === 'active')
