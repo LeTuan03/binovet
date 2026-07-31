@@ -3,8 +3,9 @@ export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
 import PageHero from '@/components/shared/PageHero';
 import GalleryGrid, { GalleryItem } from '@/components/shared/GalleryGrid';
-import { mediaService } from '@/services';
+import { catalogueService, mediaService } from '@/services';
 import { resolveLocale } from '@/lib/i18n/config';
+import DocumentList from './CatalogueClient';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const en = resolveLocale((await params).locale) === 'en';
@@ -28,7 +29,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
   const locale = resolveLocale((await params).locale);
   const en = locale === 'en';
 
-  const [imgs, vids] = await Promise.all([mediaService.getImages(), mediaService.getVideos()]);
+  const [documents, imgs, vids] = await Promise.all([catalogueService.getAll(), mediaService.getImages(), mediaService.getVideos()]);
 
   const videos: GalleryItem[] = (Array.isArray(vids) ? vids : [])
     .filter((v: any) => v.status === 'active')
@@ -51,7 +52,13 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
           : 'Hình ảnh và video về nhà máy, sản phẩm và các hoạt động nổi bật của BINOVET.'}
         breadcrumb={[{ label: en ? 'Slide Gallery' : 'Thư viện ảnh' }]}
       />
-
+      <div className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-6">
+            <DocumentList documents={documents} locale={locale} />
+          </div>
+        </div>
+      </div>
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <GalleryGrid items={items} emptyText={en ? 'No media yet.' : 'Chưa có hình ảnh hoặc video.'} />
       </div>
