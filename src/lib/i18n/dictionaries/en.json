@@ -86,5 +86,58 @@
     "connectWithUs": "Connect with us",
     "quickLinks": "Quick links",
     "copyright": "Copyright BINOVET - Veterinary Biotechnology JSC. All rights reserved."
+  },
+  "admin": {
+    "catalogue": {
+      "page": {
+        "title": "Catalogue & Documents Management",
+        "breadcrumb": "Catalogue Management",
+        "add": "Add new document",
+        "editTitle": "Edit document",
+        "addTitle": "Add new document"
+      },
+      "filter": {
+        "searchPlaceholder": "Search by document title...",
+        "type": "Format"
+      },
+      "table": {
+        "title": "Document title",
+        "type": "Format",
+        "size": "Size",
+        "link": "Link",
+        "action": "Actions",
+        "edit": "Edit",
+        "delete": "Delete",
+        "currentFile": "Current document"
+      },
+      "modal": {
+        "confirmDelete": "Confirm delete",
+        "deleteText": "Are you sure you want to delete \"{title}\"?",
+        "deleteSuccess": "Deleted successfully",
+        "deleteError": "Failed to delete document",
+        "updateSuccess": "Updated successfully",
+        "createSuccess": "Added successfully",
+        "saveError": "Error saving data",
+        "fetchError": "Unable to load catalogue data",
+        "uploadSuccess": "Upload successful",
+        "uploadError": "Document upload failed",
+        "titleLabel": "Document title",
+        "titleRequired": "Please enter the title",
+        "typeLabel": "Format",
+        "typeRequired": "Please select a format",
+        "sizeLabel": "Size",
+        "sizeRequired": "Please enter the size",
+        "uploadLabel": "Upload file (or enter the link below)",
+        "linkLabel": "Document link (URL)",
+        "linkRequired": "Please enter or upload a link",
+        "cancel": "Cancel",
+        "update": "Update",
+        "add": "Add new",
+        "chooseFile": "Choose file to upload",
+        "filePlaceholder": "Example: Biotechvet product catalogue 2026",
+        "sizePlaceholder": "Example: 24.5 MB",
+        "linkPlaceholder": "https://..."
+      }
+    }
   }
 }

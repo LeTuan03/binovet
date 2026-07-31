@@ -18,6 +18,7 @@ import {
   NotificationOutlined,
   HomeOutlined,
   MailOutlined,
+  FolderOpenOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme, ConfigProvider, Avatar, Dropdown, App } from 'antd';
 import viVN from 'antd/locale/vi_VN';
@@ -95,6 +96,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const systemItems: any[] = [
     { key: '/admin/banners',       icon: <PictureOutlined />,    label: 'Banner / Slider' },
     { key: '/admin/media-gallery', icon: <VideoCameraOutlined />, label: 'Video & Hình ảnh' },
+    { key: '/admin/catalogue',     icon: <FolderOpenOutlined />, label: 'Catalogue & Tài liệu' },
     { key: '/admin/menus',         icon: <MenuOutlined />,        label: 'Quản lý Menu' },
     { key: '/admin/settings',      icon: <SettingOutlined />,     label: 'Thông tin chung' },
     { key: '/admin/about',         icon: <InfoCircleOutlined />,  label: 'Trang Giới thiệu' },

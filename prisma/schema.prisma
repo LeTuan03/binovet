@@ -129,6 +129,19 @@ model MediaVideo {
   @@map("media_videos")
 }
 
+model Catalogue {
+  id        BigInt   @id @default(autoincrement())
+  title     String
+  titleEn   String?
+  size      String
+  type      String
+  link      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("catalogues")
+}
+
 model ContactRequest {
   id           BigInt   @id @default(autoincrement())
   fullName     String

@@ -86,5 +86,58 @@
     "connectWithUs": "Kết nối với chúng tôi",
     "quickLinks": "Liên kết nhanh",
     "copyright": "Bản quyền thuộc về BINOVET - BIOTECHNOLOGY VETERINARY.,J.S.C. Bảo lưu mọi quyền."
+  },
+  "admin": {
+    "catalogue": {
+      "page": {
+        "title": "Quản lý Catalogue & Tài liệu",
+        "breadcrumb": "Quản lý Catalogue",
+        "add": "Thêm tài liệu mới",
+        "editTitle": "Chỉnh sửa tài liệu",
+        "addTitle": "Thêm tài liệu mới"
+      },
+      "filter": {
+        "searchPlaceholder": "Tìm theo tiêu đề tài liệu...",
+        "type": "Định dạng"
+      },
+      "table": {
+        "title": "Tiêu đề tài liệu",
+        "type": "Định dạng",
+        "size": "Dung lượng",
+        "link": "Link",
+        "action": "Thao tác",
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "currentFile": "Tài liệu hiện tại"
+      },
+      "modal": {
+        "confirmDelete": "Xác nhận xóa",
+        "deleteText": "Bạn có chắc chắn muốn xóa \"{title}\" không?",
+        "deleteSuccess": "Đã xóa thành công",
+        "deleteError": "Lỗi khi xóa tài liệu",
+        "updateSuccess": "Cập nhật thành công",
+        "createSuccess": "Thêm mới thành công",
+        "saveError": "Lỗi khi lưu dữ liệu",
+        "fetchError": "Không thể tải dữ liệu catalogue",
+        "uploadSuccess": "Tải lên thành công",
+        "uploadError": "Lỗi tải lên tài liệu",
+        "titleLabel": "Tiêu đề tài liệu",
+        "titleRequired": "Vui lòng nhập tiêu đề",
+        "typeLabel": "Định dạng",
+        "typeRequired": "Vui lòng chọn định dạng",
+        "sizeLabel": "Dung lượng",
+        "sizeRequired": "Vui lòng nhập dung lượng",
+        "uploadLabel": "Upload File (hoặc nhập link bên dưới)",
+        "linkLabel": "Link tài liệu (URL)",
+        "linkRequired": "Vui lòng nhập hoặc upload để lấy link",
+        "cancel": "Hủy bỏ",
+        "update": "Cập nhật",
+        "add": "Thêm mới",
+        "chooseFile": "Chọn file tải lên",
+        "filePlaceholder": "VD: Catalogue Sản phẩm biotechvet 2026",
+        "sizePlaceholder": "VD: 24.5 MB",
+        "linkPlaceholder": "https://..."
+      }
+    }
   }
 }
