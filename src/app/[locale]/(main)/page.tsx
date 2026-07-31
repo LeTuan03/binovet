@@ -71,7 +71,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     categories.find((c) => String(c.id) === String(id))?.name || '';
 
   // Intro video — first active video (featured preferred).
-  const videos = Array.isArray(mediaVideos) ? mediaVideos.filter((v: any) => v.status === 'active') : [];
+  const videos = Array.isArray(mediaVideos) ? localizeAll(mediaVideos, locale).filter((v: any) => v.status === 'active') : [];
   const introVideo = (videos.find((v: any) => v.featured) || videos[0]) as any;
 
   // Representative image for each category = first product in that category.

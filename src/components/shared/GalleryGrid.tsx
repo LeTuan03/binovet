@@ -83,27 +83,27 @@ export default function GalleryGrid({ items, emptyText = 'Chưa có nội dung.'
               onClick={() => setSelected(null)}
               aria-label="Close"
             />
+            <button
+              onClick={() => setSelected(null)}
+              className="absolute top-4 right-4 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white flex items-center justify-center transition-all"
+              aria-label="Close"
+            >
+              <X size={20} />
+            </button>
             <motion.div
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-              className="relative z-10 w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl"
+              className="relative z-10 max-w-5xl overflow-hidden"
             >
-              <button
-                onClick={() => setSelected(null)}
-                className="absolute top-4 right-4 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white flex items-center justify-center transition-all"
-                aria-label="Close"
-              >
-                <X size={20} />
-              </button>
               {selected.type === 'video' ? (
-                <video className="w-full h-full aspect-video bg-black" controls autoPlay>
+                <video className="w-full h-full aspect-video" controls autoPlay>
                   <source src={selected.url} type="video/mp4" />
                   <track kind="captions" srcLang="vi" src="/empty-captions.vtt" label="Vietnamese captions" default />
                 </video>
               ) : (
-                <img src={selected.url} alt={selected.title || ''} className="w-full max-h-[85vh] object-contain bg-black" />
+                <img src={selected.url} alt={selected.title || ''} className="w-full max-h-[85vh] object-contain" />
               )}
               {selected.title && (
                 <div className="bg-white px-6 py-4 text-center">

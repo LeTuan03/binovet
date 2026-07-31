@@ -437,7 +437,7 @@ function AdminMediaGalleryPageContent() {
         <Form form={form} layout="vertical" className="mt-6 px-4">
           <Row gutter={24}>
             <Col span={14}>
-              <Form.Item name="title" label="Tiêu đề / Chú thích" rules={[{ required: true, message: 'Hãy nhập thông tin cho trường Tiêu đề / Ghi chú' }]}>
+              <Form.Item name="title" label="Tiêu đề / Chú thích (VI)" rules={[{ required: true, message: 'Hãy nhập thông tin cho trường Tiêu đề / Ghi chú' }]}>
                 <Input placeholder="Nhập tiêu đề cho item này..." className="rounded-xl py-2 px-4 font-bold" />
               </Form.Item>
             </Col>
@@ -455,6 +455,14 @@ function AdminMediaGalleryPageContent() {
               </Form.Item>
             </Col>
           </Row>
+
+          <Form.Item
+            name="titleEn"
+            label="Tiêu đề / Chú thích (EN)"
+            tooltip="Nội dung này sẽ được dùng khi giao diện đang ở ngôn ngữ tiếng Anh."
+          >
+            <Input placeholder="Enter the English title or caption..." className="rounded-xl py-2 px-4 font-bold" />
+          </Form.Item>
 
           <Form.Item
             name="featured"

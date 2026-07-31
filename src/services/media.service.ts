@@ -8,7 +8,7 @@ export class MediaService {
     return prisma.mediaImage.findMany({ orderBy: { order: 'asc' } });
   }
 
-  async addImage(data: { url: string; title: string; order?: number; featured?: boolean }) {
+  async addImage(data: { url: string; title: string; titleEn?: string | null; order?: number; featured?: boolean }) {
     const image = await prisma.mediaImage.create({ 
       data: {
         ...data,
@@ -62,7 +62,7 @@ export class MediaService {
     return prisma.mediaVideo.findMany({ orderBy: { order: 'asc' } });
   }
 
-  async addVideo(data: { id?: any, url: string; title: string; thumbnail?: string; order?: number; featured?: boolean }) {
+  async addVideo(data: { id?: any, url: string; title: string; titleEn?: string | null; thumbnail?: string; order?: number; featured?: boolean }) {
     const { id, ...createData } = data;
     const video = await prisma.mediaVideo.create({ 
       data: {

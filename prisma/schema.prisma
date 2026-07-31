@@ -110,6 +110,7 @@ model MediaImage {
   id       BigInt  @id @default(autoincrement())
   url      String
   title    String
+  titleEn  String?
   order    Int     @default(0)
   status   String  @default("active")
   featured Boolean @default(false)
@@ -121,6 +122,7 @@ model MediaVideo {
   id        BigInt  @id @default(autoincrement())
   url       String
   title     String
+  titleEn   String?
   thumbnail String  @default("")
   order     Int     @default(0)
   status    String  @default("active")

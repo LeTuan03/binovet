@@ -5,6 +5,7 @@ import PageHero from '@/components/shared/PageHero';
 import GalleryGrid, { GalleryItem } from '@/components/shared/GalleryGrid';
 import { catalogueService, mediaService } from '@/services';
 import { resolveLocale } from '@/lib/i18n/config';
+import { localizeAll } from '@/lib/i18n/localize';
 import DocumentList from './CatalogueClient';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -35,11 +36,11 @@ export default async function GalleryPage({ params }: { params: Promise<{ locale
     titleEn: doc.titleEn ?? undefined,
   }));
 
-  const videos: GalleryItem[] = (Array.isArray(vids) ? vids : [])
+  const videos: GalleryItem[] = (Array.isArray(vids) ? localizeAll(vids, locale) : [])
     .filter((v: any) => v.status === 'active')
     .map((v: any) => ({ id: `vid-${v.id}`, type: 'video', url: v.url, thumbnail: v.thumbnail || '/images/about.svg', title: v.title }));
 
-  const images: GalleryItem[] = (Array.isArray(imgs) ? imgs : [])
+  const images: GalleryItem[] = (Array.isArray(imgs) ? localizeAll(imgs, locale) : [])
     .filter((i: any) => i.status === 'active')
     .map((i: any) => ({ id: `img-${i.id}`, type: 'image', url: i.url, thumbnail: i.url, title: i.title }));
 
