@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Phone, Mail, MapPin, Send, MessageSquare, Globe, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, MessageSquare, Globe, CheckCircle2, AlertCircle, Loader2, Map } from 'lucide-react';
 import { FacebookOutlined, YoutubeOutlined } from '@ant-design/icons';
 import PageHero from '@/components/shared/PageHero';
 import Reveal from '@/components/shared/Reveal';
@@ -43,16 +43,16 @@ export default function ContactContent({ settings }: { settings: any }) {
             setStatus('success');
             setFeedback(
                result.message ||
-                  (locale === 'en'
-                     ? 'Your request has been sent successfully. We will contact you as soon as possible.'
-                     : 'Yêu cầu của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ trong thời gian sớm nhất.')
+               (locale === 'en'
+                  ? 'Your request has been sent successfully. We will contact you as soon as possible.'
+                  : 'Yêu cầu của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ trong thời gian sớm nhất.')
             );
             setFormData({ fullName: '', phoneNumber: '', emailAddress: '', messageBox: '' });
          } else {
             setStatus('error');
             setFeedback(
                result.error ||
-                  (locale === 'en' ? 'An error occurred. Please try again.' : 'Đã có lỗi xảy ra. Vui lòng thử lại sau.')
+               (locale === 'en' ? 'An error occurred. Please try again.' : 'Đã có lỗi xảy ra. Vui lòng thử lại sau.')
             );
          }
       } catch {
@@ -191,48 +191,48 @@ export default function ContactContent({ settings }: { settings: any }) {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                           <div>
-                              <label htmlFor="fullName" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Full name *' : 'Họ và tên *'}</label>
-                              <input id="fullName" name="fullName" type="text" placeholder={locale === 'en' ? 'Enter your full name' : 'Nhập họ tên của bạn'} value={formData.fullName} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required={true} />
-                           </div>
-                           <div>
-                              <label htmlFor="phoneNumber" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Phone number *' : 'Số điện thoại *'}</label>
-                              <input id="phoneNumber" name="phoneNumber" type="tel" placeholder={locale === 'en' ? 'Enter your phone number' : 'Nhập số điện thoại'} value={formData.phoneNumber} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required={true} />
-                           </div>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                           <label htmlFor="fullName" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Full name *' : 'Họ và tên *'}</label>
+                           <input id="fullName" name="fullName" type="text" placeholder={locale === 'en' ? 'Enter your full name' : 'Nhập họ tên của bạn'} value={formData.fullName} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required={true} />
                         </div>
                         <div>
-                           <label htmlFor="emailAddress" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Email address' : 'Địa chỉ Email'}</label>
-                           <input id="emailAddress" name="emailAddress" type="email" placeholder={locale === 'en' ? 'Enter your email address' : 'Nhập địa chỉ email'} value={formData.emailAddress} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" />
+                           <label htmlFor="phoneNumber" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Phone number *' : 'Số điện thoại *'}</label>
+                           <input id="phoneNumber" name="phoneNumber" type="tel" placeholder={locale === 'en' ? 'Enter your phone number' : 'Nhập số điện thoại'} value={formData.phoneNumber} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required={true} />
                         </div>
-                        <div>
-                           <label htmlFor="messageBox" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Your message *' : 'Nội dung yêu cầu *'}</label>
-                           <textarea id="messageBox" name="messageBox" rows={5} placeholder={locale === 'en' ? 'How can we help you?' : 'Bạn cần chúng tôi hỗ trợ gì?'} value={formData.messageBox} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required></textarea>
+                     </div>
+                     <div>
+                        <label htmlFor="emailAddress" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Email address' : 'Địa chỉ Email'}</label>
+                        <input id="emailAddress" name="emailAddress" type="email" placeholder={locale === 'en' ? 'Enter your email address' : 'Nhập địa chỉ email'} value={formData.emailAddress} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" />
+                     </div>
+                     <div>
+                        <label htmlFor="messageBox" className="block text-xs font-montserrat font-semibold uppercase text-ink-soft tracking-[0.12em] mb-2">{locale === 'en' ? 'Your message *' : 'Nội dung yêu cầu *'}</label>
+                        <textarea id="messageBox" name="messageBox" rows={5} placeholder={locale === 'en' ? 'How can we help you?' : 'Bạn cần chúng tôi hỗ trợ gì?'} value={formData.messageBox} onChange={handleInputChange} className="w-full bg-cream border border-line rounded-xl px-5 py-3.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 focus:bg-white transition-all placeholder:text-ink-soft/50" required></textarea>
+                     </div>
+                     {status === 'success' && (
+                        <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
+                           <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-emerald-600" />
+                           <p className="text-sm leading-relaxed">{feedback}</p>
                         </div>
-                        {status === 'success' && (
-                           <div className="flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
-                              <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-emerald-600" />
-                              <p className="text-sm leading-relaxed">{feedback}</p>
-                           </div>
+                     )}
+                     {status === 'error' && (
+                        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
+                           <AlertCircle size={20} className="mt-0.5 shrink-0 text-red-500" />
+                           <p className="text-sm leading-relaxed">{feedback}</p>
+                        </div>
+                     )}
+                     <button type="submit" disabled={status === 'submitting'} className="btn btn-primary w-full group disabled:opacity-70 disabled:cursor-not-allowed">
+                        {status === 'submitting' ? (
+                           <>
+                              <Loader2 size={18} className="animate-spin" /> {locale === 'en' ? 'Sending...' : 'Đang gửi...'}
+                           </>
+                        ) : (
+                           <>
+                              <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> {locale === 'en' ? 'Send request now' : 'Gửi yêu cầu ngay'}
+                           </>
                         )}
-                        {status === 'error' && (
-                           <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
-                              <AlertCircle size={20} className="mt-0.5 shrink-0 text-red-500" />
-                              <p className="text-sm leading-relaxed">{feedback}</p>
-                           </div>
-                        )}
-                        <button type="submit" disabled={status === 'submitting'} className="btn btn-primary w-full group disabled:opacity-70 disabled:cursor-not-allowed">
-                           {status === 'submitting' ? (
-                              <>
-                                 <Loader2 size={18} className="animate-spin" /> {locale === 'en' ? 'Sending...' : 'Đang gửi...'}
-                              </>
-                           ) : (
-                              <>
-                                 <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /> {locale === 'en' ? 'Send request now' : 'Gửi yêu cầu ngay'}
-                              </>
-                           )}
-                        </button>
-                     </form>
+                     </button>
+                  </form>
                </Reveal>
             </div>
 
@@ -251,8 +251,8 @@ export default function ContactContent({ settings }: { settings: any }) {
             </Reveal>
 
             {/* Google Maps */}
-            <Reveal direction="up" className="mt-20 lg:mt-28 w-full h-[500px] rounded-2xl overflow-hidden border border-line shadow-elegant">
-               <iframe
+            <Reveal direction="up" className="mt-20 lg:mt-28 w-full h-[500px] rounded-2xl overflow-hidden border border-line shadow-elegant map-section">
+               {/* <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3727.9957!2d105.8652!3d20.8305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCụm+CN+Li%C3%AAn+Ph%C6%B0%C6%A1ng%2C+X%C3%A3+H%E1%BB%93ng+V%C3%A2n%2C+Th%C6%B0%E1%BB%9Dng+T%C3%ADn%2C+H%C3%A0+N%E1%BB%99i!5e0!3m2!1svi!2svn!4v1700000000000"
                   width="100%"
                   height="100%"
@@ -261,7 +261,25 @@ export default function ContactContent({ settings }: { settings: any }) {
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title={locale === 'en' ? 'BiotechVet map - Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi' : 'Bản đồ BiotechVet - Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội'}
-               />
+               /> */}
+               <a
+                  href={settings.googleMapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block overflow-hidden cursor-pointer"
+                  title={locale === 'en' ? 'Open in Google Maps' : 'Mở Google Maps để chỉ đường'}
+               >
+                  <iframe
+                     src={settings.googleMapsEmbed}
+                     width="100%"
+                     height="450"
+                     style={{ border: 0, borderRadius: 'var(--radius-xl)' }}
+                     allowFullScreen
+                     loading="lazy"
+                     referrerPolicy="no-referrer-when-downgrade"
+                     title={locale === 'en' ? 'BiotechVet map - Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi' : 'Bản đồ BiotechVet - Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội'}
+                  />
+               </a>
             </Reveal>
          </div>
       </div>

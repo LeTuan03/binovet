@@ -102,6 +102,12 @@ export default function AdminSettingsPage() {
                     <Form.Item name="website" label="Website">
                       <Input size="large" className="rounded-xl" prefix={<GlobalOutlined />} placeholder="https://binovet.com/" />
                     </Form.Item>
+                    <Form.Item name="googleMapsLink" label="Link Google Maps">
+                      <Input size="large" className="rounded-xl" prefix={<GlobalOutlined />} placeholder="https://maps.app.goo.gl/..." />
+                    </Form.Item>
+                    <Form.Item name="googleMapsEmbed" label="Mã nhúng Google Maps">
+                      <Input.TextArea rows={4} className="rounded-xl" placeholder='' />
+                    </Form.Item>
                     <Button type="primary" size="large" htmlType="submit" className="rounded-xl px-10 font-semibold uppercase tracking-wide text-xs h-12 shadow-lg shadow-primary/20">Cập nhật ngay</Button>
                   </div>
                 )
