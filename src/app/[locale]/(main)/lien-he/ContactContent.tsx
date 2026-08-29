@@ -263,16 +263,16 @@ export default function ContactContent({ settings }: { settings: any }) {
                   title={locale === 'en' ? 'BiotechVet map - Lien Phuong Industrial Cluster, Hong Van, Thuong Tin, Hanoi' : 'Bản đồ BiotechVet - Cụm CN Liên Phương, Xã Hồng Vân, Thường Tín, Hà Nội'}
                /> */}
                <a
-                  href={settings.googleMapsLink}
+                  href={settings.googleMapsLink || "https://maps.app.goo.gl/p8Nbw6RqdTMXPVBaA"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative block overflow-hidden cursor-pointer"
+                  className="relative block overflow-hidden cursor-pointer h-full"
                   title={locale === 'en' ? 'Open in Google Maps' : 'Mở Google Maps để chỉ đường'}
                >
                   <iframe
-                     src={settings.googleMapsEmbed}
+                     src={settings.googleMapsEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6007.076767417964!2d105.72458297685907!3d20.93151888069375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3134527a3a6e8bed%3A0x5a2dd7517891760d!2zQ8O0bmcgVHkgQ3AgQ8O0bmcgTmdo4buHIFNpbmggSOG7jWMgVGjDuiBZ!5e1!3m2!1svi!2s!4v1787994357704!5m2!1svi!2s"}
                      width="100%"
-                     height="450"
+                     height="100%"
                      style={{ border: 0, borderRadius: 'var(--radius-xl)' }}
                      allowFullScreen
                      loading="lazy"
